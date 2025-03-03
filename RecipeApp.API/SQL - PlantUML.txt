@@ -11,6 +11,7 @@ Entity user_comment {
 *user_id
 *recipe_id
 msg
+created_at
 }
 
 Entity favourite_list {
@@ -50,11 +51,11 @@ Entity unit {
 name
 }
 
-Entity user_profile {
+Entity user {
 <u>id
 username
-registration_time
-last_login
+created_at
+updated_at
 }
 
 Entity user_credentials {
