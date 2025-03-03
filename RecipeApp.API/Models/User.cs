@@ -4,7 +4,12 @@
     {
         public int Id { get; set; }
         public string Username { get; set; }
+        public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public List<Recipe> Recipes { get; set; }
+        public List<Rating> Ratings { get; set; }
+        public List<UserComment> UserComments { get; set; }
+        public List<FavoriteList> FavoriteLists { get; set; }
     }
 }
