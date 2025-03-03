@@ -1,0 +1,89 @@
+@startuml
+skinparam linetype ortho
+
+Entity category {
+<u>id
+name
+}
+
+Entity user_comment {
+<u>id
+*user_id
+*recipe_id
+msg
+}
+
+Entity favourite_list {
+*<u>user_id
+*<u>recipe_id
+}
+
+Entity ingredient {
+<u>id
+name
+}
+
+Entity rating {
+*<u>user_id
+*<u>recipe_id
+score
+}
+
+Entity recipe {
+<u>id
+name
+description
+*category_id
+image_path
+*uploader_id
+}
+
+Entity recipe_ingredients {
+*<u>recipe_id
+*<u>ingredient_id
+amount
+*unit_id
+}
+
+Entity unit {
+<u>id
+name
+}
+
+Entity user_profile {
+<u>id
+username
+registration_time
+last_login
+}
+
+Entity user_credentials {
+*<u>user_id
+passwordHash
+}
+
+
+recipe }|-|| category
+
+recipe ||--|{ user_comment
+
+recipe }|--|| user_profile 
+
+user_profile ||--|{ user_comment
+
+user_profile ||--|| user_credentials
+
+recipe ||--|{ favourite_list
+
+user_profile ||--|{ favourite_list
+
+recipe ||--|{ rating
+
+rating }|-|| user_profile
+
+recipe ||--|{ recipe_ingredients
+
+unit ||--|{ recipe_ingredients
+
+ingredient ||--|{ recipe_ingredients
+@enduml
