@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
@@ -8,29 +7,29 @@ using RecipeApp.API.Repositories;
 
 namespace RecipeApp.API.Endpoints
 {
-    public static class CategoryEndpoints
+    public static class IngredientEndpoints
     {
-        public static void ConfigureCategories(this WebApplication app)
+        public static void ConfigureIngredients(this WebApplication app)
         {
-            var categories = app.MapGroup("/category");
+            var ingredients = app.MapGroup("/ingredient");
 
-            categories.MapPost("/", Insert);
-            categories.MapGet("/", Get);
-            categories.MapGet("/{categoryId}", GetById);
-            categories.MapDelete("/{categoryId}", Delete);
+            ingredients.MapPost("/", Insert);
+            ingredients.MapGet("/", Get);
+            ingredients.MapGet("/{ingredientId}", GetById);
+            ingredients.MapDelete("/{ingredientId}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> Insert(IRepository<Category> repository, IMapper mapper, CategoryPost category)
+        public static async Task<IResult> Insert(IRepository<Ingredient> repository, IMapper mapper, IngredientPost ingredient)
         {
             try
             {
-                var newCategory = mapper.Map<Category>(category);
+                var newIngredient = mapper.Map<Ingredient>(ingredient);
 
-                await repository.Insert(newCategory);
+                await repository.Insert(newIngredient);
 
-                return TypedResults.Created($"Category with id {newCategory.Id} created!");
+                return TypedResults.Created($"Ingredient with id {newIngredient.Id} created!");
             }
             catch (Exception ex)
             {
@@ -39,13 +38,13 @@ namespace RecipeApp.API.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> Get(IRepository<Category> repository, IMapper mapper)
+        public static async Task<IResult> Get(IRepository<Ingredient> repository, IMapper mapper)
         {
             try
             {
-                var categories = await repository.Get();
+                var ingredients = await repository.Get();
 
-                var response = mapper.Map<List<CategoryGet>>(categories);
+                var response = mapper.Map<List<IngredientGet>>(ingredients);
 
                 return TypedResults.Ok(response);
             }
@@ -57,16 +56,16 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<Category> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<Ingredient> repository, IMapper mapper, int id)
         {
             try
             {
-                var category = await repository.GetById(id);
+                var ingredient = await repository.GetById(id);
 
-                if (category == null)
+                if (ingredient == null)
                     return Results.NotFound();
 
-                var response = mapper.Map<CategoryGet>(category);
+                var response = mapper.Map<IngredientGet>(ingredient);
 
                 return TypedResults.Ok(response);
             }
@@ -79,7 +78,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(IRepository<Category> repository, int id)
+        public static async Task<IResult> Delete(IRepository<Ingredient> repository, int id)
         {
             try
             {

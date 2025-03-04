@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RecipeApp.API.Data;
@@ -11,9 +12,11 @@ using RecipeApp.API.Data;
 namespace RecipeApp.API.Migrations
 {
     [DbContext(typeof(RecipeContext))]
-    partial class RecipeContextModelSnapshot : ModelSnapshot
+    [Migration("20250304113551_4")]
+    partial class _4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace RecipeApp.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FavoriteLists");
+                    b.ToTable("FavoriteList");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.Ingredient", b =>
@@ -70,7 +73,7 @@ namespace RecipeApp.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredient");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.Rating", b =>
@@ -180,7 +183,7 @@ namespace RecipeApp.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units");
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.User", b =>
@@ -223,9 +226,8 @@ namespace RecipeApp.API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("msg")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -233,7 +235,7 @@ namespace RecipeApp.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserComments");
+                    b.ToTable("UserComment");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.FavoriteList", b =>

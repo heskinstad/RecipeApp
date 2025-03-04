@@ -17,6 +17,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+builder.Services.AddScoped<IRepository<User>, Repository<User>>();
+builder.Services.AddScoped<IRepository<Rating>, Repository<Rating>>();
+builder.Services.AddScoped<IRepository<UserComment>, Repository<UserComment>>();
+builder.Services.AddScoped<IRepository<FavoriteList>, Repository<FavoriteList>>();
+builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
+builder.Services.AddScoped<IRepository<Unit>, Repository<Unit>>();
+builder.Services.AddScoped<IRepository<RecipeIngredients>, Repository<RecipeIngredients>>();
 
 var app = builder.Build();
 
@@ -31,5 +38,12 @@ app.UseHttpsRedirection();
 
 app.ConfigureRecipes();
 app.ConfigureCategories();
+app.ConfigureUsers();
+app.ConfigureRatings();
+app.ConfigureUserComments();
+app.ConfigureFavoriteLists();
+app.ConfigureIngredients();
+app.ConfigureUnits();
+app.ConfigureRecipeIngredients();
 
 app.Run();

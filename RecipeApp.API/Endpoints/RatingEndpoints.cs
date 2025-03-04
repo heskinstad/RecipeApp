@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
@@ -8,29 +7,29 @@ using RecipeApp.API.Repositories;
 
 namespace RecipeApp.API.Endpoints
 {
-    public static class CategoryEndpoints
+    public static class RatingEndpoints
     {
-        public static void ConfigureCategories(this WebApplication app)
+        public static void ConfigureRatings(this WebApplication app)
         {
-            var categories = app.MapGroup("/category");
+            var ratings = app.MapGroup("/rating");
 
-            categories.MapPost("/", Insert);
-            categories.MapGet("/", Get);
-            categories.MapGet("/{categoryId}", GetById);
-            categories.MapDelete("/{categoryId}", Delete);
+            ratings.MapPost("/", Insert);
+            ratings.MapGet("/", Get);
+            ratings.MapGet("/{ratingId}", GetById);
+            ratings.MapDelete("/{ratingId}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> Insert(IRepository<Category> repository, IMapper mapper, CategoryPost category)
+        public static async Task<IResult> Insert(IRepository<Rating> repository, IMapper mapper, RatingPost rating)
         {
             try
             {
-                var newCategory = mapper.Map<Category>(category);
+                var newRating = mapper.Map<Rating>(rating);
 
-                await repository.Insert(newCategory);
+                await repository.Insert(newRating);
 
-                return TypedResults.Created($"Category with id {newCategory.Id} created!");
+                return TypedResults.Created($"Rating with id {newRating.Id} created!");
             }
             catch (Exception ex)
             {
@@ -39,13 +38,13 @@ namespace RecipeApp.API.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> Get(IRepository<Category> repository, IMapper mapper)
+        public static async Task<IResult> Get(IRepository<Rating> repository, IMapper mapper)
         {
             try
             {
-                var categories = await repository.Get();
+                var ratings = await repository.Get();
 
-                var response = mapper.Map<List<CategoryGet>>(categories);
+                var response = mapper.Map<List<RatingGet>>(ratings);
 
                 return TypedResults.Ok(response);
             }
@@ -57,16 +56,16 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<Category> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<Rating> repository, IMapper mapper, int id)
         {
             try
             {
-                var category = await repository.GetById(id);
+                var rating = await repository.GetById(id);
 
-                if (category == null)
+                if (rating == null)
                     return Results.NotFound();
 
-                var response = mapper.Map<CategoryGet>(category);
+                var response = mapper.Map<RatingGet>(rating);
 
                 return TypedResults.Ok(response);
             }
@@ -79,7 +78,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(IRepository<Category> repository, int id)
+        public static async Task<IResult> Delete(IRepository<Rating> repository, int id)
         {
             try
             {

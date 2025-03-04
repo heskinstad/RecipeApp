@@ -8,5 +8,6 @@
         public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; }
         public int Score { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

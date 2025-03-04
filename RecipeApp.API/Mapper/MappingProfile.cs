@@ -14,6 +14,27 @@ namespace RecipeApp.API.Mapper
 
             CreateMap<Category, CategoryGet>();
             CreateMap<CategoryPost, Category>();
+
+            CreateMap<User, UserGet>();
+            CreateMap<UserPost, User>();
+
+            CreateMap<Rating, RatingGet>();
+            CreateMap<RatingPost, Rating>();
+
+            CreateMap<UserComment, UserCommentGet>();
+            CreateMap<UserCommentPost, UserComment>();
+
+            CreateMap<FavoriteList, FavoriteListGet>();
+            CreateMap<FavoriteListPost, FavoriteList>();
+
+            CreateMap<Ingredient, IngredientGet>();
+            CreateMap<IngredientPost, Ingredient>();
+
+            CreateMap<Unit, UnitGet>();
+            CreateMap<UnitPost, Unit>();
+
+            CreateMap<RecipeIngredients, RecipeIngredientsGet>();
+            CreateMap<RecipeIngredientsPost, RecipeIngredients>();
         }
     }
 }

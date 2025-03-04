@@ -7,7 +7,7 @@
         public User User { get; set; }
         public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; }
-        public int msg { get; set; }
+        public string message { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
@@ -8,29 +7,29 @@ using RecipeApp.API.Repositories;
 
 namespace RecipeApp.API.Endpoints
 {
-    public static class CategoryEndpoints
+    public static class RecipeIngredientsEndpoints
     {
-        public static void ConfigureCategories(this WebApplication app)
+        public static void ConfigureRecipeIngredients(this WebApplication app)
         {
-            var categories = app.MapGroup("/category");
+            var recipeIngredients = app.MapGroup("/recipeIngredients");
 
-            categories.MapPost("/", Insert);
-            categories.MapGet("/", Get);
-            categories.MapGet("/{categoryId}", GetById);
-            categories.MapDelete("/{categoryId}", Delete);
+            recipeIngredients.MapPost("/", Insert);
+            recipeIngredients.MapGet("/", Get);
+            recipeIngredients.MapGet("/{recipeIngredientsId}", GetById);
+            recipeIngredients.MapDelete("/{recipeIngredientsId}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> Insert(IRepository<Category> repository, IMapper mapper, CategoryPost category)
+        public static async Task<IResult> Insert(IRepository<RecipeIngredients> repository, IMapper mapper, RecipeIngredientsPost recipeIngredients)
         {
             try
             {
-                var newCategory = mapper.Map<Category>(category);
+                var newRecipeIngredients = mapper.Map<RecipeIngredients>(recipeIngredients);
 
-                await repository.Insert(newCategory);
+                await repository.Insert(newRecipeIngredients);
 
-                return TypedResults.Created($"Category with id {newCategory.Id} created!");
+                return TypedResults.Created($"RecipeIngredients with id {newRecipeIngredients.Id} created!");
             }
             catch (Exception ex)
             {
@@ -39,13 +38,13 @@ namespace RecipeApp.API.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> Get(IRepository<Category> repository, IMapper mapper)
+        public static async Task<IResult> Get(IRepository<RecipeIngredients> repository, IMapper mapper)
         {
             try
             {
-                var categories = await repository.Get();
+                var recipeIngredients = await repository.Get();
 
-                var response = mapper.Map<List<CategoryGet>>(categories);
+                var response = mapper.Map<List<RecipeIngredientsGet>>(recipeIngredients);
 
                 return TypedResults.Ok(response);
             }
@@ -57,16 +56,16 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<Category> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<RecipeIngredients> repository, IMapper mapper, int id)
         {
             try
             {
-                var category = await repository.GetById(id);
+                var recipeIngredients = await repository.GetById(id);
 
-                if (category == null)
+                if (recipeIngredients == null)
                     return Results.NotFound();
 
-                var response = mapper.Map<CategoryGet>(category);
+                var response = mapper.Map<RecipeIngredientsGet>(recipeIngredients);
 
                 return TypedResults.Ok(response);
             }
@@ -79,7 +78,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(IRepository<Category> repository, int id)
+        public static async Task<IResult> Delete(IRepository<RecipeIngredients> repository, int id)
         {
             try
             {
