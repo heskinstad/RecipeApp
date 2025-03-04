@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\POST\" />
     <Folder Include="Endpoints\" />
   </ItemGroup>
 
