@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
@@ -42,7 +43,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newRecipe);
 
-                return TypedResults.Created($"tete");
+                return TypedResults.Created($"Recipe with id {newRecipe.Id} created!");
             }
             catch (Exception ex)
             {
@@ -69,7 +70,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetByid(IRepository<Recipe> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<Recipe> repository, IMapper mapper, int id)
         {
             try
             {
@@ -109,7 +110,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Update(target);
 
-                return TypedResults.Created("tete");
+                return TypedResults.Created($"Recipe with id {target.Id} updated!");
             }
             catch (Exception ex)
             {

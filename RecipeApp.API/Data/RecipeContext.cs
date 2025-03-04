@@ -80,5 +80,7 @@ namespace RecipeApp.API.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<Recipe> Recipes { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace RecipeApp.API.DTO.GET
 {
     public class UserCommentGet
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int msg { get; set; }
-        public DateTime CreatedAt { get; set; };
+        public DateTime CreatedAt { get; set; }
     }
 }

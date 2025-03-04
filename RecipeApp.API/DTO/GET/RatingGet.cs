@@ -9,7 +9,7 @@ namespace RecipeApp.API.DTO.GET
 {
     public class RatingGet
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int Score { get; set; }
     }
 }

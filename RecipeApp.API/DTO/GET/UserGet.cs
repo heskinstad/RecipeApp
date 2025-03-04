@@ -9,7 +9,7 @@ namespace RecipeApp.API.DTO.GET
 {
     public class UserGet
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
