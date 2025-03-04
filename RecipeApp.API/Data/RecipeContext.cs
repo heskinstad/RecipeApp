@@ -82,5 +82,6 @@ namespace RecipeApp.API.Data
         }
 
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

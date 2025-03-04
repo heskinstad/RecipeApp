@@ -5,10 +5,10 @@
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public string ImagePath { get; set; }
-        public int UploaderId { get; set; }
+        public Guid UploaderId { get; set; }
         public User Uploader { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

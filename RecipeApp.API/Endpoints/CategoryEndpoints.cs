@@ -26,10 +26,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                Category newCategory = new Category()
-                {
-                    Name = category.Name,
-                };
+                var newCategory = mapper.Map<Category>(category);
 
                 await repository.Insert(newCategory);
 

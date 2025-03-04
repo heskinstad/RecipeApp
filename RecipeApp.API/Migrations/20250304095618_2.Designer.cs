@@ -12,8 +12,8 @@ using RecipeApp.API.Data;
 namespace RecipeApp.API.Migrations
 {
     [DbContext(typeof(RecipeContext))]
-    [Migration("20250304091357_1")]
-    partial class _1
+    [Migration("20250304095618_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -39,22 +37,20 @@ namespace RecipeApp.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.FavoriteList", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -67,11 +63,9 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Ingredient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -84,20 +78,18 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Rating", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -110,14 +102,12 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Recipe", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -137,8 +127,8 @@ namespace RecipeApp.API.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UploaderId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UploaderId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -151,23 +141,21 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.RecipeIngredients", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -182,11 +170,9 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Unit", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -199,11 +185,9 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -226,20 +210,18 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.UserComment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("msg")
                         .HasColumnType("integer");

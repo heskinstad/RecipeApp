@@ -34,12 +34,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                Recipe newRecipe = new Recipe()
-                {
-                    Name = recipe.Name,
-                    Description = recipe.Description,
-                    ImagePath = recipe.ImagePath
-                };
+                var newRecipe = mapper.Map<Recipe>(recipe);
 
                 await repository.Insert(newRecipe);
 
