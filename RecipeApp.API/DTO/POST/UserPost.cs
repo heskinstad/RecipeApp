@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace RecipeApp.API.DTO.POST
 {
-    class UserPost
+    public class UserPost
     {
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
     }
 }

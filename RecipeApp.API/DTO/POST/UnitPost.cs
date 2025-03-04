@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace RecipeApp.API.DTO.POST
 {
-    class UnitPost
+    public class UnitPost
     {
+        public string Name { get; set; }
     }
 }
