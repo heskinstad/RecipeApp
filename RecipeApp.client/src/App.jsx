@@ -5,6 +5,7 @@ import Frontpage from './pages/frontpage/frontpage'
 
 import { createContext } from 'react';
 import Collapsible from './components/collapsible/collapsible';
+import Categories from './pages/categories/categories';
 const RecipeContext = createContext();
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
             <li className="category-link">Frontpage</li>
           </Link>
           <Collapsible label="Categories">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <Link to={`/category/${category.name}`.toLowerCase()}>
                 <li className="category-link">{category.name}</li>
               </Link>
@@ -57,6 +58,7 @@ function App() {
         <RecipeContext.Provider>
           <Routes>
             <Route path="/" element={<Frontpage />} />
+            <Route path="category/:name" element={<Categories />} />
           </Routes>
         </RecipeContext.Provider>
       </main>

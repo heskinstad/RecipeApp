@@ -87,7 +87,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Update(IRepository<Recipe> repository, int id, RecipePost recipe)
+        public static async Task<IResult> Update(IRepository<Recipe> repository, Guid id, RecipePost recipe)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(IRepository<Recipe> repository, int id)
+        public static async Task<IResult> Delete(IRepository<Recipe> repository, Guid id)
         {
             try
             {

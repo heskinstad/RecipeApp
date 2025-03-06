@@ -56,7 +56,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<Rating> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<Rating> repository, IMapper mapper, Guid id)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(IRepository<Rating> repository, int id)
+        public static async Task<IResult> Delete(IRepository<Rating> repository, Guid id)
         {
             try
             {

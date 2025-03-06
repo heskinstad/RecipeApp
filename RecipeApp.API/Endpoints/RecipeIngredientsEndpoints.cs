@@ -56,7 +56,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<RecipeIngredients> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<RecipeIngredients> repository, IMapper mapper, Guid id)
         {
             try
             {
