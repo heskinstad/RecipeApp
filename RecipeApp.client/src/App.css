@@ -11,9 +11,10 @@
     "aside main"
     "aside footer";
   grid-template-columns: 1fr 5fr;
-  grid-template-rows: 1fr 10fr 2fr;
+  grid-template-rows: 50px auto 100px;
   width: 100vw;
   height: 100vh;
+  background-color: #000;
 }
 
 header {
@@ -24,14 +25,47 @@ header {
 aside {
   grid-area: aside;
   background-color: #380;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-rows: 80px auto 100px;
 }
 
 main {
   grid-area: main;
   background-color: #222;
+  width: 50%;
+  min-width: 500px;
+  margin:auto;
+  height: 100%;
+}
+
+main > form {
+  margin: auto;
+  width: 400px;
 }
 
 footer {
   grid-area: footer;
   background-color: #333;
+}
+
+.aside-header {
+  padding-left: 15px;
+}
+
+.aside-categories {
+  list-style-type: none;
+}
+
+.category-link {
+  height: 65px;
+  padding: 15px;
+  background-color: red;
+  font-size: larger;
+  color: #fff;
+  user-select: none;
+}
+
+.category-link:hover {
+  background-color: blue;
 }

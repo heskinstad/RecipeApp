@@ -25,6 +25,8 @@ builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
 builder.Services.AddScoped<IRepository<Unit>, Repository<Unit>>();
 builder.Services.AddScoped<IRepository<RecipeIngredients>, Repository<RecipeIngredients>>();
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,5 +47,10 @@ app.ConfigureFavoriteLists();
 app.ConfigureIngredients();
 app.ConfigureUnits();
 app.ConfigureRecipeIngredients();
+
+app.UseCors(options =>
+    options.WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 
 app.Run();
