@@ -47,7 +47,7 @@ namespace RecipeApp.API.Repositories
             return entity;
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T> GetById(object id)
         {
             return _table.Find(id);
         }

@@ -1,12 +1,15 @@
 .category-link {
     height: 65px;
     padding: 15px;
-    background-color: red;
     font-size: larger;
     color: #fff;
     user-select: none;
   }
   
   .category-link:hover {
-    background-color: blue;
+    background-color: #4a0;
+  }
+
+  .category-link:active {
+    background-color: #270;
   }

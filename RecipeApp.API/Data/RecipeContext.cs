@@ -78,6 +78,17 @@ namespace RecipeApp.API.Data
                 .WithMany(r => r.FavoriteLists)
                 .HasForeignKey(fl => fl.RecipeId);
 
+            // Make fields unique
+            modelBuilder.Entity<Category>(entity => {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+            modelBuilder.Entity<Ingredient>(entity => {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+            modelBuilder.Entity<Unit>(entity => {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+
             base.OnModelCreating(modelBuilder);
         }
 

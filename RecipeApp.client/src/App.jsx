@@ -12,6 +12,9 @@ function App() {
   const categoriesUrl = "https://localhost:63516/category";
   const [categories, setCategories] = useState([]);
 
+  const recipesUrl = "https://localhost:63516/recipe";
+  const [recipes, setRecipes] = useState([]);
+
   const fetchCategories = () => {
     fetch(categoriesUrl)
     .then((res) => {
@@ -22,10 +25,20 @@ function App() {
     })
   };
 
+  const fetchRecipes = () => {
+    fetch(recipesUrl)
+    .then((res) => {
+      return res.json();
+    })
+    .then((jsonData) => {
+      setRecipes(jsonData);
+    })
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchRecipes();
   }, []);
-
 
   return (
     <div className="app">
@@ -55,10 +68,11 @@ function App() {
       </aside>
 
       <main>
-        <RecipeContext.Provider>
+        <RecipeContext.Provider value={{recipes, setRecipes }}>
           <Routes>
             <Route path="/" element={<Frontpage />} />
             <Route path="category/:name" element={<Categories />} />
+            <Route path="/recipe/:name" element={<Recipe />} />
           </Routes>
         </RecipeContext.Provider>
       </main>
@@ -70,4 +84,5 @@ function App() {
   )
 }
 
-export default App
+export { RecipeContext };
+export default App;
