@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,16 @@ namespace RecipeApp.API.Repositories
         public async Task<T> GetById(object id)
         {
             return _table.Find(id);
+        }
+
+        public async Task<IEnumerable<T>> GetQueryable(Expression<Func<T, bool>>? predicate = null)
+        {
+            IQueryable<T> query = _table;
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return await query.ToListAsync();
         }
     }
 }

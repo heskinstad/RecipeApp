@@ -15,7 +15,7 @@ using RecipeApp.API.Repositories;
 
 namespace RecipeApp.API.Endpoints
 {
-    public static class RecipesEndpoints
+    public static class RecipeEndpoints
     {
         public static void ConfigureRecipes(this WebApplication app)
         {
@@ -26,6 +26,9 @@ namespace RecipeApp.API.Endpoints
             recipes.MapGet("/{recipeId}", GetById);
             recipes.MapPut("/{recipeId}", Update);
             recipes.MapDelete("/{recipeId}", Delete);
+
+            recipes.MapGet("/search", Search);
+            recipes.MapGet("/category/{category}", GetByCategory);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -125,6 +128,47 @@ namespace RecipeApp.API.Endpoints
                 if (await repository.Delete(id) != null)
                     return TypedResults.Ok(target);
                 return TypedResults.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> Search(IRepository<Recipe> repository, IMapper mapper, string? name)
+        {
+            try
+            {
+                // Use the GetQueryable method to filter based on the name query parameter
+                var recipes = await repository.GetQueryable(r =>
+                    string.IsNullOrEmpty(name) || r.Name.ToLower().Contains(name.ToLower()));
+
+                var response = mapper.Map<List<RecipeGet>>(recipes);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> GetByCategory(IRepository<Recipe> repository, IMapper mapper, string? name)
+        {
+            try
+            {
+                var recipes = await repository.GetQueryable(r =>
+                    string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower()));
+
+                var response = mapper.Map<List<RecipeGet>>(recipes);
+
+                return TypedResults.Ok(response);
             }
             catch (Exception ex)
             {
