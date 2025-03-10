@@ -15,8 +15,8 @@ namespace RecipeApp.API.Endpoints
 
             userComments.MapPost("/", Insert);
             userComments.MapGet("/", Get);
-            userComments.MapGet("/{userCommentId}", GetById);
-            userComments.MapDelete("/{userCommentId}", Delete);
+            userComments.MapGet("/{id}", GetById);
+            userComments.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

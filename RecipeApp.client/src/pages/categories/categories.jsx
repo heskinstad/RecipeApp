@@ -1,24 +1,36 @@
 import { useParams } from 'react-router-dom';
 import './style.css';
-import { RecipeContext } from '../../App';
-import { useContext } from "react"
+import { useEffect, useState } from 'react'
+import RecipeItem from '../../components/recipeItem/recipeItem';
 
 function Categories() {
-    const { recipes } = useContext{RecipeContext};
     const { name } = useParams();
+
+    const recipesUrl = `https://localhost:63516/recipe/category?name=${name}`;
+    const [recipes, setRecipes] = useState([]);
+
+    const fetchRecipes = () => {
+        fetch(recipesUrl)
+        .then((res) => {
+          return res.json();
+        })
+        .then((jsonData) => {
+          setRecipes(jsonData);
+        })
+    };
+
+    useEffect(() => {
+        fetchRecipes();
+    }, [name]);
 
     return (
         <>
             <div className="content">
                 <h1 className="capitalize">{ name }</h1>
             </div>
-            <ul>
-                {recipes.map((category) => (
-                <Link to={`/category/${category.name}`.toLowerCase()}>
-                    <li className="category-link">{category.name}</li>
-                </Link>
-                ))}
-            </ul>
+            {recipes.map((recipe) => (
+                <RecipeItem recipe={recipe}/>
+            ))}
         </>
     )
 };

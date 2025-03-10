@@ -23,12 +23,12 @@ namespace RecipeApp.API.Endpoints
 
             recipes.MapPost("/", Insert);
             recipes.MapGet("/", Get);
-            recipes.MapGet("/{recipeId}", GetById);
-            recipes.MapPut("/{recipeId}", Update);
-            recipes.MapDelete("/{recipeId}", Delete);
+            recipes.MapGet("/{id}", GetById);
+            recipes.MapPut("/{id}", Update);
+            recipes.MapDelete("/{id}", Delete);
 
             recipes.MapGet("/search", Search);
-            recipes.MapGet("/category/{category}", GetByCategory);
+            recipes.MapGet("/category", GetByCategory);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -68,7 +68,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> GetById(IRepository<Recipe> repository, IMapper mapper, int id)
+        public static async Task<IResult> GetById(IRepository<Recipe> repository, IMapper mapper, Guid id)
         {
             try
             {
@@ -165,6 +165,9 @@ namespace RecipeApp.API.Endpoints
             {
                 var recipes = await repository.GetQueryable(r =>
                     string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower()));
+
+                if (string.IsNullOrEmpty(name))
+                    recipes = [];
 
                 var response = mapper.Map<List<RecipeGet>>(recipes);
 

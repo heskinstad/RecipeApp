@@ -15,8 +15,8 @@ namespace RecipeApp.API.Endpoints
 
             ingredients.MapPost("/", Insert);
             ingredients.MapGet("/", Get);
-            ingredients.MapGet("/{ingredientId}", GetById);
-            ingredients.MapDelete("/{ingredientId}", Delete);
+            ingredients.MapGet("/{id}", GetById);
+            ingredients.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

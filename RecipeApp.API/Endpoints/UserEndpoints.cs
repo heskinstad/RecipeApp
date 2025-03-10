@@ -15,9 +15,9 @@ namespace RecipeApp.API.Endpoints
 
             users.MapPost("/", Insert);
             users.MapGet("/", Get);
-            users.MapGet("/{userId}", GetById);
-            users.MapPut("/{userId}", Update);
-            users.MapDelete("/{userId}", Delete);
+            users.MapGet("/{id}", GetById);
+            users.MapPut("/{id}", Update);
+            users.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

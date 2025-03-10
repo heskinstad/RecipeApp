@@ -6,14 +6,12 @@ import Frontpage from './pages/frontpage/frontpage'
 import { createContext } from 'react';
 import Collapsible from './components/collapsible/collapsible';
 import Categories from './pages/categories/categories';
+import Recipe from './pages/recipe/recipe';
 const RecipeContext = createContext();
 
 function App() {
   const categoriesUrl = "https://localhost:63516/category";
   const [categories, setCategories] = useState([]);
-
-  const recipesUrl = "https://localhost:63516/recipe";
-  const [recipes, setRecipes] = useState([]);
 
   const fetchCategories = () => {
     fetch(categoriesUrl)
@@ -25,19 +23,9 @@ function App() {
     })
   };
 
-  const fetchRecipes = () => {
-    fetch(recipesUrl)
-    .then((res) => {
-      return res.json();
-    })
-    .then((jsonData) => {
-      setRecipes(jsonData);
-    })
-  };
 
   useEffect(() => {
     fetchCategories();
-    fetchRecipes();
   }, []);
 
   return (
@@ -59,7 +47,7 @@ function App() {
           </Link>
           <Collapsible label="Categories">
             {categories.map((category) => (
-              <Link to={`/category/${category.name}`.toLowerCase()}>
+              <Link to={`/category/${category.name}`.toLowerCase()} key={category.name}>
                 <li className="category-link">{category.name}</li>
               </Link>
             ))}
@@ -68,11 +56,11 @@ function App() {
       </aside>
 
       <main>
-        <RecipeContext.Provider value={{recipes, setRecipes }}>
+        <RecipeContext.Provider value={{}}>
           <Routes>
             <Route path="/" element={<Frontpage />} />
             <Route path="category/:name" element={<Categories />} />
-            <Route path="/recipe/:name" element={<Recipe />} />
+            <Route path="recipe/:id" element={<Recipe />} />
           </Routes>
         </RecipeContext.Provider>
       </main>

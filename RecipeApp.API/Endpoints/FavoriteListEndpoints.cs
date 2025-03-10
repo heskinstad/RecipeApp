@@ -15,8 +15,8 @@ namespace RecipeApp.API.Endpoints
 
             favoriteLists.MapPost("/", Insert);
             favoriteLists.MapGet("/", Get);
-            favoriteLists.MapGet("/{favoriteListId}", GetById);
-            favoriteLists.MapDelete("/{favoriteListId}", Delete);
+            favoriteLists.MapGet("/{id}", GetById);
+            favoriteLists.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

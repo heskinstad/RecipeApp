@@ -15,8 +15,8 @@ namespace RecipeApp.API.Endpoints
 
             units.MapPost("/", Insert);
             units.MapGet("/", Get);
-            units.MapGet("/{unitId}", GetById);
-            units.MapDelete("/{unitId}", Delete);
+            units.MapGet("/{id}", GetById);
+            units.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]

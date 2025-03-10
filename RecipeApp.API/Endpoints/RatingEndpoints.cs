@@ -15,8 +15,8 @@ namespace RecipeApp.API.Endpoints
 
             ratings.MapPost("/", Insert);
             ratings.MapGet("/", Get);
-            ratings.MapGet("/{ratingId}", GetById);
-            ratings.MapDelete("/{ratingId}", Delete);
+            ratings.MapGet("/{id}", GetById);
+            ratings.MapDelete("/{id}", Delete);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
