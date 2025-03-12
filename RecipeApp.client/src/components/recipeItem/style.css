@@ -1,3 +1,44 @@
-.upperDiv {
-    margin: 20px;
+.recipeItemGrid {
+    display: grid;
+    grid-template-areas:
+      "title image"
+      "desc image"
+      "rating uploader";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 50px auto auto;
+    padding: 20px;
+}
+
+.title {
+    grid-area: title;
+}
+
+.desc {
+    grid-area: desc;
+}
+
+.recipeImage {
+    height: 100%;
+    width: 100%;
+    grid-area: image;
+    object-fit: contain;
+}
+
+.uploader {
+    grid-area: uploader;
+}
+
+.rating {
+    grid-area: rating;
+}
+
+.link:hover {
+    color: inherit;
+    background-color: #333;
+}
+
+.link a {
+    color: inherit;
+    text-decoration: none;
+    user-select: none;
 }

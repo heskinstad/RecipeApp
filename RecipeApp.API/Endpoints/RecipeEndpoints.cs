@@ -29,6 +29,9 @@ namespace RecipeApp.API.Endpoints
 
             recipes.MapGet("/search", Search);
             recipes.MapGet("/category", GetByCategory);
+
+            recipes.MapGet("/{id}/ratingsCount", GetRatingsCountById);
+            recipes.MapGet("/{id}/averageRating", GetAverageRatingById);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -172,6 +175,51 @@ namespace RecipeApp.API.Endpoints
                 var response = mapper.Map<List<RecipeGet>>(recipes);
 
                 return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        public static async Task<IResult> GetRatingsCountById(IRepository<Recipe> repository, Guid id)
+        {
+            try
+            {
+                var recipe = await repository.GetById(id);
+                if (recipe == null)
+                    return Results.NotFound();
+
+                if (recipe.Ratings == null)
+                    return TypedResults.Ok(0);
+
+                int ratingsCount = recipe.Ratings.Count;
+
+                return TypedResults.Ok(ratingsCount);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        public static async Task<IResult> GetAverageRatingById(IRepository<Recipe> repository, Guid id)
+        {
+            try
+            {
+                var recipe = await repository.GetById(id);
+                if (recipe == null)
+                    return Results.NotFound();
+
+                // If no ratings has been made
+                if (recipe.Ratings == null)
+                    return TypedResults.Ok(0);
+                if (recipe.Ratings.Count == 0)
+                    return TypedResults.Ok(0);
+
+                double averageRating = recipe.Ratings.Average(r => r.Score);
+
+                return TypedResults.Ok(averageRating);
             }
             catch (Exception ex)
             {
