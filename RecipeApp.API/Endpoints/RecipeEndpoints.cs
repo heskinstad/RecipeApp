@@ -182,7 +182,7 @@ namespace RecipeApp.API.Endpoints
             }
         }
 
-        public static async Task<IResult> GetRatingsCountById(IRepository<Recipe> repository, Guid id)
+        public static async Task<IResult> GetRatingsCountById(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
         {
             try
             {
@@ -190,10 +190,9 @@ namespace RecipeApp.API.Endpoints
                 if (recipe == null)
                     return Results.NotFound();
 
-                if (recipe.Ratings == null)
-                    return TypedResults.Ok(0);
+                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id);
 
-                int ratingsCount = recipe.Ratings.Count;
+                int ratingsCount = ratings.Count();
 
                 return TypedResults.Ok(ratingsCount);
             }
@@ -203,7 +202,7 @@ namespace RecipeApp.API.Endpoints
             }
         }
 
-        public static async Task<IResult> GetAverageRatingById(IRepository<Recipe> repository, Guid id)
+        public static async Task<IResult> GetAverageRatingById(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
         {
             try
             {
@@ -211,13 +210,14 @@ namespace RecipeApp.API.Endpoints
                 if (recipe == null)
                     return Results.NotFound();
 
-                // If no ratings has been made
-                if (recipe.Ratings == null)
-                    return TypedResults.Ok(0);
-                if (recipe.Ratings.Count == 0)
+                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id);
+
+                int ratingsCount = ratings.Count();
+
+                if (ratingsCount == 0)
                     return TypedResults.Ok(0);
 
-                double averageRating = recipe.Ratings.Average(r => r.Score);
+                double averageRating = Math.Round(ratings.Average(r => r.Score), 1);
 
                 return TypedResults.Ok(averageRating);
             }

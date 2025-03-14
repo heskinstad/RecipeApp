@@ -39,3 +39,17 @@
 }
 
 /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
+
+.upperDiv {
+    display: grid;
+    grid-area: auto;
+    grid-template-rows: 5px 25px;
+    grid-template-columns: 170px;
+    margin: -10px -30px -30px -30px;
+}
+
+.upperDiv p {
+    color: #aaa;
+    font-size: small;
+    text-align: center;
+}

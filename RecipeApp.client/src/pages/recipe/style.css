@@ -1,0 +1,26 @@
+.recipeUpperDiv {
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "ingredients image"
+      "ingredients description";
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 100px auto auto;
+    padding: 20px;
+}
+
+.recipeTitle {
+    grid-area: title;
+    text-align: center;
+}
+
+.recipeImageLarge {
+    height: 100%;
+    width: 100%;
+    grid-area: image;
+    object-fit: contain;
+}
+
+.recipeIngredientsBox {
+    grid-area: ingredients
+}

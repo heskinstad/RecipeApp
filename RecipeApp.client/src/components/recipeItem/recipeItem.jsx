@@ -62,7 +62,7 @@ function RecipeItem({recipe}) {
                         <h4 >Uploader: {uploader.username}</h4>
                     </div>
                     <div className="rating">
-                        <StarRatingDisplay recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
+                        <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
                     </div>
                 </div>
             </Link>

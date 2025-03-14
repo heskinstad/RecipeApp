@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './style.css';
 
 function Recipe() {
     const { id } = useParams();
@@ -22,9 +23,14 @@ function Recipe() {
     }, []);
 
     return (
-        <>
-            <h1>{recipe.name}</h1>
-        </>
+        <div className="recipeUpperDiv">
+            <div recipeTitle className="recipeTitle">
+                <h1>{recipe.name}</h1>
+                <br />
+                <hr />
+            </div>
+            <img src={recipe.imagePath} className="recipeImageLarge" />
+        </div>
     )
 };
 
