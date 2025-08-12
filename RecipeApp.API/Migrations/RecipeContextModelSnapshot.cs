@@ -139,21 +139,27 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.RecipeIngredients", b =>
                 {
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IngredientId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("RecipeId", "IngredientId");
+                    b.HasKey("Id");
 
                     b.HasIndex("IngredientId");
+
+                    b.HasIndex("RecipeId");
 
                     b.HasIndex("UnitId");
 

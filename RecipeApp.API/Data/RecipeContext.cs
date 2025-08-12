@@ -30,9 +30,6 @@ namespace RecipeApp.API.Data
                 .HasKey(r => new { r.UserId, r.RecipeId });
 
             modelBuilder.Entity<RecipeIngredients>()
-                .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
-
-            modelBuilder.Entity<RecipeIngredients>()
                 .HasOne(ri => ri.Unit)
                 .WithMany(u => u.RecipeIngredients)
                 .HasForeignKey(ri => ri.UnitId);

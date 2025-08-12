@@ -67,6 +67,9 @@ namespace RecipeApp.API.Data
 
             context.SaveChanges();
 
+            RecipeIngredients ri1 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 4, UnitId = unit1.Id };
+            RecipeIngredients ri2 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 2, UnitId = unit2.Id };
+
             Favorites fav1 = new Favorites() { UserId = user1.Id, RecipeId = recipe1.Id };
 
             Rating rating1 = new Rating() { UserId = user1.Id, RecipeId = recipe1.Id, Score = 2 };
@@ -74,6 +77,12 @@ namespace RecipeApp.API.Data
             Rating rating3 = new Rating() { UserId = user1.Id, RecipeId = recipe2.Id, Score = 1 };
 
             UserComment userComment1 = new UserComment() { UserId = user1.Id, RecipeId = recipe1.Id, message = "Mamma mia this is better than mama's spaghetti-a!" };
+
+            if (!context.RecipeIngredients.Any())
+            {
+                context.RecipeIngredients.Add(ri1);
+                context.RecipeIngredients.Add(ri2);
+            }
 
             if (!context.Favorites.Any())
             {

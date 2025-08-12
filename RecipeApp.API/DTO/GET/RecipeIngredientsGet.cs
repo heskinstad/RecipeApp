@@ -9,6 +9,7 @@ namespace RecipeApp.API.DTO.GET
 {
     public class RecipeIngredientsGet
     {
+        public Guid Id { get; set; }
         public Guid RecipeId { get; set; }
         public Guid IngredientId { get; set; }
         public float Amount { get; set; }
