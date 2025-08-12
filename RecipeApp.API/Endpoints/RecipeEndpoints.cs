@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
@@ -154,7 +155,7 @@ namespace RecipeApp.API.Endpoints
             {
                 // Use the GetQueryable method to filter based on the name query parameter
                 var recipes = await repository.GetQueryable(r =>
-                    string.IsNullOrEmpty(name) || r.Name.ToLower().Contains(name.ToLower()));
+                    string.IsNullOrEmpty(name) || r.Name.ToLower().Contains(name.ToLower())).ToListAsync();
 
                 var response = mapper.Map<List<RecipeGet>>(recipes);
 
@@ -173,7 +174,7 @@ namespace RecipeApp.API.Endpoints
             try
             {
                 var recipes = await repository.GetQueryable(r =>
-                    string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower()));
+                    string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower())).ToListAsync();
 
                 if (string.IsNullOrEmpty(name))
                     recipes = [];
@@ -215,7 +216,11 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id);
+                var recipeIngredients = await repository
+                    .GetQueryable(r => r.RecipeId == id)
+                    .Include(r => r.Ingredient)
+                    .Include(r => r.Unit)
+                    .ToListAsync();
 
                 var response = mapper.Map<List<RecipeIngredientsGet>>(recipeIngredients);
 
@@ -235,7 +240,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id);
+                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id).ToListAsync();
 
                 var target = await repository.GetById(id);
 
@@ -277,7 +282,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id);
+                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id).ToListAsync();
 
                 var response = mapper.Map<List<RatingGet>>(recipeRatings);
 
@@ -297,7 +302,7 @@ namespace RecipeApp.API.Endpoints
                 if (recipe == null)
                     return Results.NotFound();
 
-                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id);
+                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id).ToListAsync();
 
                 int ratingsCount = ratings.Count();
 
@@ -317,7 +322,7 @@ namespace RecipeApp.API.Endpoints
                 if (recipe == null)
                     return Results.NotFound();
 
-                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id);
+                var ratings = await ratingRepository.GetQueryable(r => r.RecipeId == id).ToListAsync();
 
                 int ratingsCount = ratings.Count();
 

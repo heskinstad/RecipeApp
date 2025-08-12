@@ -9,6 +9,6 @@ namespace RecipeApp.API.Repositories
         Task<T> Update(T entity);
         Task<T> Delete(object id);
         Task<T> GetById(object id);
-        Task<IEnumerable<T>> GetQueryable(Expression<Func<T, bool>>? predicate = null);
+        IQueryable<T> GetQueryable(Expression<Func<T, bool>>? predicate = null);
     }
 }

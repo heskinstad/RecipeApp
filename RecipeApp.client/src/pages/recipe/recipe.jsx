@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import IngredientListItem from '../../components/ingredientListItem/ingredientListItem';
 import './style.css';
 
 function Recipe() {
@@ -51,7 +52,9 @@ function Recipe() {
             </div>
             <img src={recipe.imagePath} className="recipeImageLarge" />
             <div className="recipeIngredientsBox">
-                {ingredients.length}
+                {ingredients.map((ingredient, index) => (
+                    <IngredientListItem ingredient={ingredient} key={index} />
+                ))}
             </div>
             <div className="recipeDescription">
                 {recipe.description}

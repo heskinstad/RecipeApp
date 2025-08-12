@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using RecipeApp.API.Data;
+using RecipeApp.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using RecipeApp.API.Data;
 
 namespace RecipeApp.API.Repositories
 {
@@ -53,14 +54,14 @@ namespace RecipeApp.API.Repositories
             return _table.Find(id);
         }
 
-        public async Task<IEnumerable<T>> GetQueryable(Expression<Func<T, bool>>? predicate = null)
+        public IQueryable<T> GetQueryable(Expression<Func<T, bool>>? predicate = null)
         {
             IQueryable<T> query = _table;
 
             if (predicate != null)
                 query = query.Where(predicate);
 
-            return await query.ToListAsync();
+            return query;
         }
     }
 }

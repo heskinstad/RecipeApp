@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
@@ -154,7 +155,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var favorites = await repository.GetQueryable(f => f.UserId == id);
+                var favorites = await repository.GetQueryable(f => f.UserId == id).ToListAsync();
 
                 var response = mapper.Map<List<FavoritesGet>>(favorites);
 
@@ -170,7 +171,7 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id);
+                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id).ToListAsync();
 
                 var response = mapper.Map<List<RatingGet>>(recipeRatings);
 
