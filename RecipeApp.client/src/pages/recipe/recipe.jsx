@@ -8,6 +8,9 @@ function Recipe() {
     const recipesUrl = `https://localhost:63516/recipe/${id}`;
     const [recipe, setRecipe] = useState([]);
 
+    const ingredientsUrl = `https://localhost:63516/recipe/${id}/ingredients`;
+    const [ingredients, setIngredients] = useState([]);
+
     const fetchRecipes = () => {
         fetch(recipesUrl)
         .then((res) => {
@@ -18,18 +21,41 @@ function Recipe() {
         })
     };
 
+    const fetchIngredients = () => {
+        fetch(ingredientsUrl)
+        .then((res) => {
+            return res.json();
+        })
+        .then((jsonData) => {
+            setIngredients(jsonData);
+        })
+    };
+
     useEffect(() => {
         fetchRecipes();
+        fetchIngredients();
     }, []);
 
     return (
         <div className="recipeUpperDiv">
-            <div recipeTitle className="recipeTitle">
+            <div className="recipeTitle">
                 <h1>{recipe.name}</h1>
                 <br />
                 <hr />
             </div>
+            <div className="recipeSummary">
+                <p>
+                    {recipe.summary}
+                </p>
+                <br />
+            </div>
             <img src={recipe.imagePath} className="recipeImageLarge" />
+            <div className="recipeIngredientsBox">
+                {ingredients.length}
+            </div>
+            <div className="recipeDescription">
+                {recipe.description}
+            </div>
         </div>
     )
 };

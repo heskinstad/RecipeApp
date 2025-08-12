@@ -13,18 +13,18 @@
   grid-template-columns: 1fr 5fr;
   grid-template-rows: 50px auto 100px;
   width: 100vw;
-  height: 100vh;
-  background-color: #000;
+  min-height: 100vh;
+  background-color: #f3f3f3;
 }
 
 header {
   grid-area: header;
-  background-color: #4a0;
+  background-color: #aaa;
 }
 
 aside {
   grid-area: aside;
-  background-color: #380;
+  background-color: #aaa;
   display: grid;
   grid-template-rows: auto;
   grid-template-rows: 80px auto 100px;
@@ -32,10 +32,10 @@ aside {
 
 main {
   grid-area: main;
-  background-color: #222;
+  background-color: #fff;
   width: 50%;
   min-width: 500px;
-  margin:auto;
+  margin: auto;
   height: 100%;
 }
 
@@ -46,7 +46,7 @@ main > form {
 
 footer {
   grid-area: footer;
-  background-color: #333;
+  background-color: #bbb;
 }
 
 .aside-header {
@@ -66,9 +66,9 @@ footer {
 }
 
 .category-link:hover {
-  background-color: #4a0;
+  background-color: #6c8;
 }
 
 .category-link:active {
-  background-color: #270;
+  background-color: #4a6;
 }

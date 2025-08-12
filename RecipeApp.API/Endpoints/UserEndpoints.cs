@@ -18,6 +18,10 @@ namespace RecipeApp.API.Endpoints
             users.MapGet("/{id}", GetById);
             users.MapPut("/{id}", Update);
             users.MapDelete("/{id}", Delete);
+
+            users.MapPost("/{id}/AddFavorite", InsertFavorite);
+            users.MapGet("/{id}/GetFavorites", GetFavorites);
+            users.MapDelete("/{id}/Unfavorite", DeleteFavorite);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -107,6 +111,81 @@ namespace RecipeApp.API.Endpoints
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> Delete(IRepository<User> repository, Guid id)
+        {
+            try
+            {
+                var target = await repository.GetById(id);
+
+                if (await repository.Delete(id) != null)
+                    return TypedResults.Ok(target);
+                return TypedResults.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        ///////////////
+        // Favorites //
+        ///////////////
+        
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> InsertFavorite(IRepository<Favorites> repository, IMapper mapper, FavoritesPost favoriteList)
+        {
+            try
+            {
+                var newFavorites = mapper.Map<Favorites>(favoriteList);
+
+                await repository.Insert(newFavorites);
+
+                return TypedResults.Created($"Recipe added to favorites!");
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetFavorites(IRepository<Favorites> repository, IMapper mapper, Guid id)
+        {
+            try
+            {
+                var favorites = await repository.GetQueryable(f => f.UserId == id);
+
+                var response = mapper.Map<List<FavoritesGet>>(favorites);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        public static async Task<IResult> GetRatings(IRepository<Rating> repository, IMapper mapper, Guid id)
+        {
+            try
+            {
+                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id);
+
+                var response = mapper.Map<List<RatingGet>>(recipeRatings);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> DeleteFavorite(IRepository<Favorites> repository, Guid id)
         {
             try
             {

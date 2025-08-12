@@ -63,17 +63,17 @@ recipe }|-|| category
 
 recipe ||--|{ user_comment
 
-recipe }|--|| user_profile 
+recipe }|--|| user 
 
-user_profile ||--|{ user_comment
+user ||---|{ user_comment
 
 recipe ||--|{ favourite_list
 
-user_profile ||--|{ favourite_list
+user ||--|{ favourite_list
 
 recipe ||--|{ rating
 
-rating }|-|| user_profile
+rating }|-|| user
 
 recipe ||--|{ recipe_ingredients
 

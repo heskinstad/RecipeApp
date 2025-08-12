@@ -16,6 +16,6 @@
         public List<RecipeIngredients> RecipeIngredients { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<UserComment> UserComments { get; set; }
-        public List<FavoriteList> FavoriteLists { get; set; }
+        public List<Favorites> FavoriteLists { get; set; }
     }
 }

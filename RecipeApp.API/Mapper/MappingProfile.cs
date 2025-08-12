@@ -24,8 +24,8 @@ namespace RecipeApp.API.Mapper
             CreateMap<UserComment, UserCommentGet>();
             CreateMap<UserCommentPost, UserComment>();
 
-            CreateMap<FavoriteList, FavoriteListGet>();
-            CreateMap<FavoriteListPost, FavoriteList>();
+            CreateMap<Favorites, FavoritesGet>();
+            CreateMap<FavoritesPost, Favorites>();
 
             CreateMap<Ingredient, IngredientGet>();
             CreateMap<IngredientPost, Ingredient>();

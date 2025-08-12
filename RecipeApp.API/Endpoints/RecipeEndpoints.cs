@@ -30,8 +30,14 @@ namespace RecipeApp.API.Endpoints
             recipes.MapGet("/search", Search);
             recipes.MapGet("/category", GetByCategory);
 
-            recipes.MapGet("/{id}/ratingsCount", GetRatingsCountById);
-            recipes.MapGet("/{id}/averageRating", GetAverageRatingById);
+            recipes.MapPost("{id}/ingredients", InsertIngredient);
+            recipes.MapGet("{id}/ingredients", GetIngredients);
+            recipes.MapDelete("{id}/ingredients/{ingredientId}", DeleteIngredient);
+
+            recipes.MapPost("/{id}/ratings", InsertRating);
+            recipes.MapGet("/{id}/ratings", GetRatings);
+            recipes.MapGet("/{id}/ratingsCount", GetRatingsCount);
+            recipes.MapGet("/{id}/averageRating", GetAverageRating);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -182,7 +188,108 @@ namespace RecipeApp.API.Endpoints
             }
         }
 
-        public static async Task<IResult> GetRatingsCountById(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
+        /////////////////
+        // Ingredients //
+        /////////////////
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> InsertIngredient(IRepository<RecipeIngredients> repository, IMapper mapper, RecipeIngredientsPost recipeIngredients)
+        {
+            try
+            {
+                var newRecipeIngredients = mapper.Map<RecipeIngredients>(recipeIngredients);
+
+                await repository.Insert(newRecipeIngredients);
+
+                return TypedResults.Created($"New RecipeIngredients combination created!");
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetIngredients(IRepository<RecipeIngredients> repository, IMapper mapper, Guid id)
+        {
+            try
+            {
+                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id);
+
+                var response = mapper.Map<List<RecipeIngredientsGet>>(recipeIngredients);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        //UNFINISHED
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> DeleteIngredient(IRepository<RecipeIngredients> repository, Guid id, Guid ingredientId)
+        {
+            try
+            {
+                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id);
+
+                var target = await repository.GetById(id);
+
+                if (await repository.Delete(id) != null)
+                    return TypedResults.Ok(target);
+                return TypedResults.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        /////////////
+        // Ratings //
+        /////////////
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> InsertRating(IRepository<Rating> repository, IMapper mapper, RatingPost rating, Guid id)
+        {
+            try
+            {
+                var newRating = mapper.Map<Rating>(rating);
+
+                await repository.Insert(newRating);
+
+                return TypedResults.Created($"New UserRecipeRating combination created!");
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetRatings(IRepository<Rating> repository, IMapper mapper, Guid id)
+        {
+            try
+            {
+                var recipeRatings = await repository.GetQueryable(r => r.RecipeId == id);
+
+                var response = mapper.Map<List<RatingGet>>(recipeRatings);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        public static async Task<IResult> GetRatingsCount(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
         {
             try
             {
@@ -202,7 +309,7 @@ namespace RecipeApp.API.Endpoints
             }
         }
 
-        public static async Task<IResult> GetAverageRatingById(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
+        public static async Task<IResult> GetAverageRating(IRepository<Recipe> repository, IRepository<Rating> ratingRepository, Guid id)
         {
             try
             {

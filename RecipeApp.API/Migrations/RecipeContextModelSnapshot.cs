@@ -17,7 +17,7 @@ namespace RecipeApp.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -40,25 +40,19 @@ namespace RecipeApp.API.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("RecipeApp.API.Models.FavoriteList", b =>
+            modelBuilder.Entity("RecipeApp.API.Models.Favorites", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("RecipeId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RecipeId");
 
                     b.HasIndex("RecipeId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FavoriteLists");
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("RecipeApp.API.Models.Ingredient", b =>
@@ -81,27 +75,21 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.Rating", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RecipeId");
 
                     b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
                 });
@@ -151,27 +139,21 @@ namespace RecipeApp.API.Migrations
 
             modelBuilder.Entity("RecipeApp.API.Models.RecipeIngredients", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IngredientId")
                         .HasColumnType("uuid");
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("IngredientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("RecipeId", "IngredientId");
 
                     b.HasIndex("IngredientId");
-
-                    b.HasIndex("RecipeId");
 
                     b.HasIndex("UnitId");
 
@@ -249,7 +231,7 @@ namespace RecipeApp.API.Migrations
                     b.ToTable("UserComments");
                 });
 
-            modelBuilder.Entity("RecipeApp.API.Models.FavoriteList", b =>
+            modelBuilder.Entity("RecipeApp.API.Models.Favorites", b =>
                 {
                     b.HasOne("RecipeApp.API.Models.Recipe", "Recipe")
                         .WithMany("FavoriteLists")

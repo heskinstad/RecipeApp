@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RecipeApp.API.Data;
 using RecipeApp.API.Endpoints;
+using RecipeApp.API.Mapper;
 using RecipeApp.API.Models;
 using RecipeApp.API.Repositories;
 
@@ -13,14 +15,17 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RecipeContext>();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile(new MappingProfile());
+});
 
 builder.Services.AddScoped<IRepository<Recipe>, Repository<Recipe>>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddScoped<IRepository<Rating>, Repository<Rating>>();
 builder.Services.AddScoped<IRepository<UserComment>, Repository<UserComment>>();
-builder.Services.AddScoped<IRepository<FavoriteList>, Repository<FavoriteList>>();
+builder.Services.AddScoped<IRepository<Favorites>, Repository<Favorites>>();
 builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
 builder.Services.AddScoped<IRepository<Unit>, Repository<Unit>>();
 builder.Services.AddScoped<IRepository<RecipeIngredients>, Repository<RecipeIngredients>>();
@@ -41,16 +46,21 @@ app.UseHttpsRedirection();
 app.ConfigureRecipes();
 app.ConfigureCategories();
 app.ConfigureUsers();
-app.ConfigureRatings();
 app.ConfigureUserComments();
-app.ConfigureFavoriteLists();
 app.ConfigureIngredients();
 app.ConfigureUnits();
-app.ConfigureRecipeIngredients();
 
-app.UseCors(options =>
-    options.WithOrigins("http://localhost:5173")
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+// Initializer to seed db for empty tables
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<RecipeContext>();
+    DbInitializer.Initialize(context);
+}
+
+    app.UseCors(options =>
+        options.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 
 app.Run();

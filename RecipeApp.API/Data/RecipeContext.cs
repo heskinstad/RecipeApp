@@ -23,6 +23,15 @@ namespace RecipeApp.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Favorites>()
+                .HasKey(f => new { f.UserId, f.RecipeId });
+
+            modelBuilder.Entity<Rating>()
+                .HasKey(r => new { r.UserId, r.RecipeId });
+
+            modelBuilder.Entity<RecipeIngredients>()
+                .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
+
             modelBuilder.Entity<RecipeIngredients>()
                 .HasOne(ri => ri.Unit)
                 .WithMany(u => u.RecipeIngredients)
@@ -68,12 +77,12 @@ namespace RecipeApp.API.Data
                 .WithMany(r => r.UserComments)
                 .HasForeignKey(uc => uc.RecipeId);
 
-            modelBuilder.Entity<FavoriteList>()
+            modelBuilder.Entity<Favorites>()
                 .HasOne(fl => fl.User)
                 .WithMany(u => u.FavoriteLists)
                 .HasForeignKey(fl => fl.UserId);
 
-            modelBuilder.Entity<FavoriteList>()
+            modelBuilder.Entity<Favorites>()
                 .HasOne(fl => fl.Recipe)
                 .WithMany(r => r.FavoriteLists)
                 .HasForeignKey(fl => fl.RecipeId);
@@ -97,7 +106,7 @@ namespace RecipeApp.API.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<UserComment> UserComments { get; set; }
-        public DbSet<FavoriteList> FavoriteLists { get; set; }
+        public DbSet<Favorites> Favorites { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<RecipeIngredients> RecipeIngredients { get; set; }
