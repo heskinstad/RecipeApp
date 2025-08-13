@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import IngredientListItem from '../../components/ingredientListItem/ingredientListItem';
 import StarRatingDisplay from '../../components/starRatingDisplay/starRatingDisplay';
+import CommentBlock from '../../components/commentBlock/commentBlock';
 import './style.css';
 import Collapsible from '../../components/collapsible/collapsible';
 
@@ -19,6 +20,9 @@ function Recipe() {
 
     const recipeRatingCountUrl = `https://localhost:63516/recipe/${id}/ratingsCount`;
     const [recipeRatingCount, setRecipeRatingCount] = useState([]);
+
+    const commentsUrl = `https://localhost:63516/recipe/${id}/comments`;
+    const [comments, setComments] = useState([]);
 
     const fetchRecipes = () => {
         fetch(recipesUrl)
@@ -60,11 +64,22 @@ function Recipe() {
         })
     };
 
+    const fetchComments = () => {
+        fetch(commentsUrl)
+        .then((res) => {
+            return res.json();
+        })
+        .then((jsonData) => {
+            setComments(jsonData);
+        })
+    };
+
     useEffect(() => {
         fetchRecipes();
         fetchIngredients();
         fetchRecipeRating();
         fetchRecipeRatingCount();
+        fetchComments();
     }, []);
 
     return (
@@ -97,7 +112,9 @@ function Recipe() {
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">
-                    <p>tete</p>
+                    {comments.map((comment, index) => (
+                        <CommentBlock comment={comment} key={index} />
+                    ))}
                 </Collapsible>
             </div>
         </div>

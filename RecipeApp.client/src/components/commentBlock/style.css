@@ -1,0 +1,27 @@
+.commentBlock {
+    display: grid;
+    grid-template-areas:
+        "user date"
+        "comment comment";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 3em 3em;
+    background-color: #eee;
+    margin: 1em 0;
+    padding: 1em;
+}
+
+.user {
+    grid-area: user;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.date {
+    grid-area: date;
+    text-align: right;
+    color: #666;
+}
+
+.comment {
+    grid-area: comment;
+}
