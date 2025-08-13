@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import IngredientListItem from '../../components/ingredientListItem/ingredientListItem';
+import StarRatingDisplay from '../../components/starRatingDisplay/starRatingDisplay';
 import './style.css';
+import Collapsible from '../../components/collapsible/collapsible';
 
 function Recipe() {
     const { id } = useParams();
@@ -11,6 +13,12 @@ function Recipe() {
 
     const ingredientsUrl = `https://localhost:63516/recipe/${id}/ingredients`;
     const [ingredients, setIngredients] = useState([]);
+
+    const recipeRatingUrl = `https://localhost:63516/recipe/${id}/averageRating`;
+    const [recipeRating, setRecipeRating] = useState([]);
+
+    const recipeRatingCountUrl = `https://localhost:63516/recipe/${id}/ratingsCount`;
+    const [recipeRatingCount, setRecipeRatingCount] = useState([]);
 
     const fetchRecipes = () => {
         fetch(recipesUrl)
@@ -32,9 +40,31 @@ function Recipe() {
         })
     };
 
+    const fetchRecipeRating = () => {
+        fetch(recipeRatingUrl)
+        .then((res) => {
+            return res.json();
+        })
+        .then((jsonData) => {
+            setRecipeRating(jsonData);
+        })
+    };
+
+    const fetchRecipeRatingCount = () => {
+        fetch(recipeRatingCountUrl)
+        .then((res) => {
+            return res.json();
+        })
+        .then((jsonData) => {
+            setRecipeRatingCount(jsonData);
+        })
+    };
+
     useEffect(() => {
         fetchRecipes();
         fetchIngredients();
+        fetchRecipeRating();
+        fetchRecipeRatingCount();
     }, []);
 
     return (
@@ -58,6 +88,17 @@ function Recipe() {
             </div>
             <div className="recipeDescription">
                 {recipe.description}
+            </div>
+            <div className="recipeRating">
+                <p>
+                    Give this recipe a rating!
+                </p>
+                <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
+            </div>
+            <div className="recipeComments">
+                <Collapsible label="Comments">
+                    <p>tete</p>
+                </Collapsible>
             </div>
         </div>
     )

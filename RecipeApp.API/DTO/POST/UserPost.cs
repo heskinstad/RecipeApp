@@ -8,7 +8,7 @@ namespace RecipeApp.API.DTO.POST
 {
     public class UserPost
     {
-        public string Username { get; set; }
+        public string Name { get; set; }
         public string PasswordHash { get; set; }
     }
 }

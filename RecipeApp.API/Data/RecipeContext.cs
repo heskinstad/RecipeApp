@@ -94,6 +94,9 @@ namespace RecipeApp.API.Data
             modelBuilder.Entity<Unit>(entity => {
                 entity.HasIndex(e => e.Name).IsUnique();
             });
+            modelBuilder.Entity<User>(entity => {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
 
             base.OnModelCreating(modelBuilder);
         }

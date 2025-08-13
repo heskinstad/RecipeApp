@@ -19,12 +19,12 @@
 
 header {
   grid-area: header;
-  background-color: #aaa;
+  background-color: #ccc;
 }
 
 aside {
   grid-area: aside;
-  background-color: #aaa;
+  background-color: #ccc;
   display: grid;
   grid-template-rows: auto;
   grid-template-rows: 80px auto 100px;

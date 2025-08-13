@@ -9,8 +9,8 @@ namespace RecipeApp.API.Data
         {
             context.Database.EnsureCreated();
 
-            User user1 = new User() { Username = "Carl", PasswordHash = "string" };
-            User user2 = new User() { Username = "Chris", PasswordHash = "string" };
+            User user1 = new User() { Name = "Carl", PasswordHash = "string" };
+            User user2 = new User() { Name = "Chris", PasswordHash = "string" };
 
             Unit unit1 = new Unit() { Name = "kg" };
             Unit unit2 = new Unit() { Name = "l" };

@@ -39,6 +39,8 @@ namespace RecipeApp.API.Endpoints
             recipes.MapGet("/{id}/ratings", GetRatings);
             recipes.MapGet("/{id}/ratingsCount", GetRatingsCount);
             recipes.MapGet("/{id}/averageRating", GetAverageRating);
+
+            recipes.MapGet("/{id}/comments", GetComments);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -332,6 +334,31 @@ namespace RecipeApp.API.Endpoints
                 double averageRating = Math.Round(ratings.Average(r => r.Score), 1);
 
                 return TypedResults.Ok(averageRating);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        //////////////
+        // Comments //
+        //////////////
+        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetComments(IRepository<UserComment> repository, IMapper mapper, Guid id)
+        {
+            try
+            {
+                var comments = await repository
+                    .GetQueryable(c => c.RecipeId == id)
+                    .Include(c => c.User)
+                    .ToListAsync();
+
+                var response = mapper.Map<List<UserCommentGet>>(comments);
+
+                return TypedResults.Ok(response);
             }
             catch (Exception ex)
             {

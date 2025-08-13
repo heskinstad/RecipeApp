@@ -4,7 +4,9 @@
       "title title"
       "summary summary"
       "image image"
-      "ingredients description";
+      "ingredients description"
+      "rating rating"
+      "comments comments";
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 100px auto auto;
     padding: 20px;
@@ -37,4 +39,37 @@
 
 .recipeDescription {
     grid-area: description;
+}
+
+.recipeRating {
+    grid-area: rating;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    margin-bottom: 4em;
+}
+
+.recipeComments {
+    grid-area: comments;
+}
+
+.category-link {
+  height: 65px;
+  padding: 15px;
+  font-size: larger;
+  color: #000;
+  user-select: none;
+}
+
+.category-link {
+    background-color: #eee;
+}
+
+.category-link:hover {
+  background-color: #ddd;
+}
+
+.category-link:active {
+  background-color: #ccc;
 }

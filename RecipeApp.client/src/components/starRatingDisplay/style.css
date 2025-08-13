@@ -49,7 +49,11 @@
     margin: -10px -30px -30px -30px;
 }
 
-.upperDiv p {
+.starRatingTextOuter {
+    margin-left: 45px;
+}
+
+.upperDiv div p {
     color: #aaa;
     font-size: small;
     text-align: center;

@@ -92,8 +92,8 @@ namespace RecipeApp.API.Endpoints
 
                 if (target == null)
                     return Results.NotFound();
-                if (user.Username != null)
-                    target.Username = user.Username;
+                if (user.Name != null)
+                    target.Name = user.Name;
                 if (user.PasswordHash != null)
                     target.PasswordHash = user.PasswordHash;
                 target.UpdatedAt = DateTime.UtcNow;

@@ -72,7 +72,9 @@ function StarRatingDisplay({recipeRatingCount, recipeRating, name}) {
                 </label>
             </div>
             <br />
-            <p className="starRatingText">({recipeRating} from {recipeRatingCount} ratings)</p>
+            <div className="starRatingTextOuter">
+                <p className="starRatingText">({recipeRating} from {recipeRatingCount} ratings)</p>
+            </div>
         </div>
     )
 };
