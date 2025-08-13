@@ -10,5 +10,6 @@
         public float Amount { get; set; }
         public Guid UnitId { get; set; }
         public Unit Unit { get; set; }
+        public string? Section { get; set; } // E.g., if the ingredients have been split into different segments
     }
 }

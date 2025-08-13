@@ -58,8 +58,8 @@ footer {
 }
 
 .category-link {
-  height: 65px;
-  padding: 15px;
+  height: 5em;
+  padding: 1em;
   font-size: larger;
   color: #fff;
   user-select: none;

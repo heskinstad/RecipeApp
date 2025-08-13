@@ -82,6 +82,15 @@ function Recipe() {
         fetchComments();
     }, []);
 
+    const groupedIngredients = ingredients.reduce((groups, ingredient) => {
+        const section = ingredient.section || 'Uncategorized';
+        if (!groups[section]) {
+            groups[section] = [];
+        }
+        groups[section].push(ingredient);
+        return groups;
+    }, {});
+
     return (
         <div className="recipeUpperDiv">
             <div className="recipeTitle">
@@ -97,8 +106,14 @@ function Recipe() {
             </div>
             <img src={recipe.imagePath} className="recipeImageLarge" />
             <div className="recipeIngredientsBox">
-                {ingredients.map((ingredient, index) => (
-                    <IngredientListItem ingredient={ingredient} key={index} />
+                <h2>Ingredients</h2>
+                {Object.entries(groupedIngredients).map(([section, items]) => (
+                    <div key={section}>
+                        <h4>{section}</h4>
+                        {items.map((ingredient, index) => (
+                            <IngredientListItem ingredient={ingredient} key={index} />
+                        ))}
+                    </div>
                 ))}
             </div>
             <div className="recipeDescription">
@@ -112,8 +127,8 @@ function Recipe() {
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">
-                    {comments.map((comment, index) => (
-                        <CommentBlock comment={comment} key={index} />
+                    {comments.map((comment) => (
+                        <CommentBlock comment={comment} key={comment.id} />
                     ))}
                 </Collapsible>
             </div>

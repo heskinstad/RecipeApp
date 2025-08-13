@@ -2,7 +2,7 @@ function IngredientListItem({ingredient}) {
 
     return (
         <p>
-            {ingredient.ingredientName} {ingredient.amount} {ingredient.unitName}
+            {ingredient.ingredientName}, {ingredient.amount} {ingredient.unitName}
         </p>
     )
 };

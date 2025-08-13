@@ -28,8 +28,8 @@ function Categories() {
             <div className="content">
                 <h1 className="capitalize">{ name }</h1>
             </div>
-            {recipes.map((recipe, index) => (
-                <RecipeItem recipe={recipe} key={index} />
+            {recipes.map((recipe) => (
+                <RecipeItem recipe={recipe} key={recipe.id} />
             ))}
         </>
     )

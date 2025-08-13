@@ -15,5 +15,6 @@ namespace RecipeApp.API.DTO.GET
         public string IngredientName { get; set; }
         public float Amount { get; set; }
         public string UnitName { get; set; }
+        public string? Section { get; set; }
     }
 }

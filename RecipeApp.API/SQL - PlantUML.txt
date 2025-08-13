@@ -44,6 +44,7 @@ Entity recipe_ingredients {
 *<u>ingredient_id
 amount
 *unit_id
+segment
 }
 
 Entity unit {
@@ -53,7 +54,7 @@ name
 
 Entity user {
 <u>id
-username
+name
 created_at
 updated_at
 }

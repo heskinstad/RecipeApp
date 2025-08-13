@@ -13,5 +13,6 @@ namespace RecipeApp.API.DTO.POST
         public Guid IngredientId { get; set; }
         public float Amount { get; set; }
         public Guid UnitId { get; set; }
+        public string? Section { get; set; }
     }
 }

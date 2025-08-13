@@ -152,6 +152,9 @@ namespace RecipeApp.API.Migrations
                     b.Property<Guid>("RecipeId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Section")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uuid");
 

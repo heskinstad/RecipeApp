@@ -67,8 +67,9 @@ namespace RecipeApp.API.Data
 
             context.SaveChanges();
 
-            RecipeIngredients ri1 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 4, UnitId = unit1.Id };
-            RecipeIngredients ri2 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 2, UnitId = unit2.Id };
+            RecipeIngredients ri1 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 4, UnitId = unit1.Id, Section = "Sauce" };
+            RecipeIngredients ri2 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 2, UnitId = unit2.Id, Section = "Other" };
+            RecipeIngredients ri3 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient2.Id, Amount = 2, UnitId = unit2.Id, Section = "Sauce" };
 
             Favorites fav1 = new Favorites() { UserId = user1.Id, RecipeId = recipe1.Id };
 
@@ -82,6 +83,7 @@ namespace RecipeApp.API.Data
             {
                 context.RecipeIngredients.Add(ri1);
                 context.RecipeIngredients.Add(ri2);
+                context.RecipeIngredients.Add(ri3);
             }
 
             if (!context.Favorites.Any())
