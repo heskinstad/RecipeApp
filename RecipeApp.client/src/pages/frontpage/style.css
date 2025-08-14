@@ -1,0 +1,22 @@
+.content {
+    display: grid;
+    grid-template-areas:
+    "header_recipe header_recipe header_recipe"
+    "quote quote quote";
+    grid-template-columns: 1 1 1;
+    grid-template-rows: 100px auto;
+    padding: 20px;
+}
+
+.header_recipe {
+    grid-area: header_recipe;
+    text-align: center;
+}
+
+.quote {
+    grid-area: quote;
+    text-align: center;
+    color: #666;
+    font-size: large;
+    font-style: italic;
+}

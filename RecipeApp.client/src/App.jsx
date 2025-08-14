@@ -45,6 +45,9 @@ function App() {
           <Link to="/">
             <li className="category-link">Frontpage</li>
           </Link>
+          <Link to="/">
+            <li className="category-link">All recipes</li>
+          </Link>
           <Collapsible label="Categories">
             {categories.map((category) => (
               <Link to={`/category/${category.name}`.toLowerCase()} key={category.name}>

@@ -28,6 +28,9 @@ namespace RecipeApp.API.Endpoints
             recipes.MapPut("/{id}", Update);
             recipes.MapDelete("/{id}", Delete);
 
+            recipes.MapGet("/random", GetRandom);
+            recipes.MapGet("/randomMultiple", GetRandomMultiple);
+
             recipes.MapGet("/search", Search);
             recipes.MapGet("/category", GetByCategory);
 
@@ -182,6 +185,80 @@ namespace RecipeApp.API.Endpoints
                     recipes = [];
 
                 var response = mapper.Map<List<RecipeGet>>(recipes);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetRandom(IRepository<Recipe> repository, IMapper mapper)
+        {
+            try
+            {
+                var queryable = repository.GetQueryable();
+                int count = await queryable.CountAsync();
+
+                if (count == 0)
+                    return Results.NotFound();
+
+                var random = new Random();
+                int skip = random.Next(count);
+
+                var randomRecipe = await queryable.Skip(skip).Take(1).FirstOrDefaultAsync();
+
+                if (randomRecipe == null)
+                    return Results.NotFound();
+
+                var response = mapper.Map<RecipeGet>(randomRecipe);
+
+                return TypedResults.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> GetRandomMultiple(IRepository<Recipe> repository, IMapper mapper, int count)
+        {
+            try
+            {
+                if (count <= 0)
+                    return TypedResults.BadRequest("Count must be a positive integer.");
+
+                var queryable = repository.GetQueryable();
+                int totalCount = await queryable.CountAsync();
+
+                if (totalCount == 0)
+                    return TypedResults.NotFound("No recipes found.");
+
+                int actualCount = Math.Min(count, totalCount);
+
+                var random = new Random();
+                var skipIndices = new HashSet<int>();
+                while (skipIndices.Count < actualCount)
+                {
+                    skipIndices.Add(random.Next(totalCount));
+                }
+
+                var randomRecipes = new List<Recipe>();
+
+                // Run queries sequentially to avoid DbContext concurrency
+                foreach (int index in skipIndices)
+                {
+                    var recipe = await queryable.Skip(index).Take(1).FirstOrDefaultAsync();
+                    if (recipe != null)
+                        randomRecipes.Add(recipe);
+                }
+
+                var response = mapper.Map<List<RecipeGet>>(randomRecipes);
 
                 return TypedResults.Ok(response);
             }
