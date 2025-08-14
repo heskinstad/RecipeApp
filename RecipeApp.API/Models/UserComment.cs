@@ -8,6 +8,8 @@
         public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; }
         public string message { get; set; }
+        public int upvotes { get; set; }
+        public int downvotes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

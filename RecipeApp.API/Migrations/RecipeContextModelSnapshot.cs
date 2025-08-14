@@ -230,9 +230,15 @@ namespace RecipeApp.API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("downvotes")
+                        .HasColumnType("integer");
+
                     b.Property<string>("message")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("upvotes")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

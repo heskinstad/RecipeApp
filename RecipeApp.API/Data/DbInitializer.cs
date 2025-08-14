@@ -77,7 +77,7 @@ namespace RecipeApp.API.Data
             Rating rating2 = new Rating() { UserId = user2.Id, RecipeId = recipe1.Id, Score = 5 };
             Rating rating3 = new Rating() { UserId = user1.Id, RecipeId = recipe2.Id, Score = 1 };
 
-            UserComment userComment1 = new UserComment() { UserId = user1.Id, RecipeId = recipe1.Id, message = "Mamma mia this is better than mama's spaghetti-a!" };
+            UserComment userComment1 = new UserComment() { UserId = user1.Id, RecipeId = recipe1.Id, message = "Mamma mia this is better than mama's spaghetti-a!", upvotes = 3, downvotes = 0 };
 
             if (!context.RecipeIngredients.Any())
             {

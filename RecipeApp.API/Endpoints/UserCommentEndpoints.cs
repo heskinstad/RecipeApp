@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
@@ -17,6 +18,9 @@ namespace RecipeApp.API.Endpoints
             userComments.MapGet("/", Get);
             userComments.MapGet("/{id}", GetById);
             userComments.MapDelete("/{id}", Delete);
+
+            userComments.MapPut("/{id}/upvote", Upvote);
+            userComments.MapPut("/{id}/downvote", Downvote);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -60,7 +64,10 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var userComment = await repository.GetById(id);
+                var userComment = await repository
+                    .GetQueryable(uc => uc.Id == id)
+                    .Include(uc => uc.User)
+                    .FirstOrDefaultAsync();
 
                 if (userComment == null)
                     return Results.NotFound();
@@ -87,6 +94,54 @@ namespace RecipeApp.API.Endpoints
                 if (await repository.Delete(id) != null)
                     return TypedResults.Ok(target);
                 return TypedResults.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> Upvote(IRepository<UserComment> repository, Guid id)
+        {
+            try
+            {
+                var userComment = await repository.GetById(id);
+
+                if (userComment == null)
+                    return Results.NotFound();
+
+                userComment.upvotes = userComment.upvotes + 1;
+
+                await repository.Update(userComment);
+
+                return TypedResults.Created("Comment upvoted!");
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> Downvote(IRepository<UserComment> repository, Guid id)
+        {
+            try
+            {
+                var userComment = await repository.GetById(id);
+
+                if (userComment == null)
+                    return Results.NotFound();
+
+                userComment.downvotes += 1;
+
+                await repository.Update(userComment);
+
+                return TypedResults.Created("Comment upvoted!");
             }
             catch (Exception ex)
             {
