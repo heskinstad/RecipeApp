@@ -4,24 +4,11 @@ import { useEffect, useState } from 'react'
 import StarRatingDisplay from '../starRatingDisplay/starRatingDisplay';
 
 function RecipeItem({recipe}) {
-    const uploaderUrl = `https://localhost:63516/user/${recipe.uploaderId}`;
-    const [uploader, setUploader] = useState([]);
-
     const recipeRatingUrl = `https://localhost:63516/recipe/${recipe.id}/averageRating`;
     const [recipeRating, setRecipeRating] = useState([]);
 
     const recipeRatingCountUrl = `https://localhost:63516/recipe/${recipe.id}/ratingsCount`;
     const [recipeRatingCount, setRecipeRatingCount] = useState([]);
-
-    const fetchUploader = () => {
-        fetch(uploaderUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((jsonData) => {
-            setUploader(jsonData);
-        })
-    };
 
     const fetchRecipeRating = () => {
         fetch(recipeRatingUrl)
@@ -44,7 +31,6 @@ function RecipeItem({recipe}) {
     };
 
     useEffect(() => {
-        fetchUploader();
         fetchRecipeRating();
         fetchRecipeRatingCount();
     }, [recipe]);
@@ -59,7 +45,7 @@ function RecipeItem({recipe}) {
                     <img src={recipe.imagePath} className="recipeImage" />
                     <div className="uploader">
                         <br />
-                        <h4 >Uploader: {uploader.username}</h4>
+                        <h4 >Uploader: {recipe.uploaderName}</h4>
                     </div>
                     <div className="rating">
                         <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
