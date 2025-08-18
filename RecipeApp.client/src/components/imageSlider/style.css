@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: 15rem;
     overflow: hidden;
 }
 
@@ -16,45 +16,130 @@
     z-index: 1;
 }
 
-.right-arrow {
+.right-arrow, .left-arrow {
     position: absolute;
     top: 50%;
-    right: 32px;
     font-size: 3rem;
     width: 0.5em;
     color: #000;
     z-index: 10;
     cursor: pointer;
     user-select: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.right-arrow {
+    right: 0.25em;
 }
 
 .left-arrow {
-    position: absolute;
-    top: 50%;
-    left: 32px;
-    font-size: 3rem;
-    width: 0.5em;
-    color: #000;
-    z-index: 10;
-    cursor: pointer;
-    user-select: none;
+    left: 0.25em;
+}
+
+.slider:hover .right-arrow, .slider:hover .left-arrow {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s, visibility 0.3s;
 }
 
 .slide {
-    position: relative;
-    opacity: 0;
-    transition-duration: 1s ease;
+  position: absolute;
+  top: -15rem;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: transform 1s ease, opacity 1s ease;
+  z-index: 1;
 }
 
-.slide.active {
-    opacity: 1;
-    transition-duration: 1s;
-    /* transform: scale(1.08); */
+/* Incoming slides */
+.slide-in-from-right {
+  transform: translateX(100%);
+  opacity: 1;
+  animation: slideInFromRight 1s forwards;
+  z-index: 2;
 }
+
+.slide-in-from-left {
+  transform: translateX(-100%);
+  opacity: 1;
+  animation: slideInFromLeft 1s forwards;
+  z-index: 2;
+}
+
+/* Outgoing slides */
+.slide-out-to-left {
+  transform: translateX(0%);
+  opacity: 1;
+  animation: slideOutToLeft 1s forwards;
+  z-index: 1;
+}
+
+.slide-out-to-right {
+  transform: translateX(0%);
+  opacity: 1;
+  animation: slideOutToRight 1s forwards;
+  z-index: 1;
+}
+
+/* Animations */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 
 .text-content {
     position: absolute;
     z-index: 10;
     color: #000;
-    background-color: red;
+    background-image: linear-gradient(to right, #fff, #0000);
+    top: 26rem;
+    width: 20rem;
+    text-align: left;
+    text-indent: 2rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
 }
