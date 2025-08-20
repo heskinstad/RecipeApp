@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import './style.css';
 import ImageSlider from '../../components/imageSlider/imageSlider';
 
 function Frontpage() {
     const recipesUrl = `https://localhost:63516/recipe/randomMultiple?count=6`;
     const [recipes, setRecipe] = useState([]);
+
+    const categoriesUrl = "https://localhost:63516/category";
+    const [categories, setCategories] = useState([]);
 
     const fetchRecipes = () => {
         fetch(recipesUrl)
@@ -16,8 +20,19 @@ function Frontpage() {
         })
     };
 
+    const fetchCategories = () => {
+        fetch(categoriesUrl)
+        .then((res) => {
+        return res.json();
+        })
+        .then((jsonData) => {
+        setCategories(jsonData);
+        })
+    };
+
     useEffect(() => {
         fetchRecipes();
+        fetchCategories();
     }, []);
 
     return (
@@ -27,6 +42,23 @@ function Frontpage() {
             </div>
             <div className="quote">
                 <p>Cooking quote of some sorts...</p>
+            </div>
+            <div className="all_recipes">
+                <Link to="/recipes">
+                    <h2>All Recipes</h2>
+                </Link>
+            </div>
+            <div className="categories">
+                <h2>Categories</h2>
+                <div className="categories_list">
+                    {categories.map((category) => (
+                    <Link to={`/category/${category.name}`.toLowerCase()} key={category.name}>
+                        <div className="category_list_item">
+                            <h3>{category.name}</h3>
+                        </div>
+                    </Link>
+                    ))}
+                </div>
             </div>
         </div>
     )

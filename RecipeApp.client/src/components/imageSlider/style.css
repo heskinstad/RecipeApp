@@ -46,7 +46,7 @@
 
 .slide {
   position: absolute;
-  top: -15rem;
+  top: -16rem;
   left: 0;
   width: 100%;
   opacity: 0;
@@ -135,7 +135,7 @@
     z-index: 10;
     color: #000;
     background-image: linear-gradient(to right, #fff, #0000);
-    top: 26rem;
+    top: 27rem;
     width: 20rem;
     text-align: left;
     text-indent: 2rem;
