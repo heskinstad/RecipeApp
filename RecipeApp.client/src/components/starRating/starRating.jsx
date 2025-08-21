@@ -1,8 +1,8 @@
-import './style.css';
+import './starRating.css';
 
 function StarRating() {
     return (
-        <div class="rate">
+        <div class="starRating_rate">
             <input type="radio" id="star5" name="rate" value="5" />
             <label for="star5" title="text">5 stars</label>
             <input type="radio" id="star4" name="rate" value="4" />

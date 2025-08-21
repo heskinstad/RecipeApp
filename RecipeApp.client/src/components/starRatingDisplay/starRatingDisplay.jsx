@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import './style.css';
+import { useEffect, useState } from "react";
+import './starRatingDisplay.css';
 
 function StarRatingDisplay({recipeRatingCount, recipeRating, name}) {
     const [selectedRating, setSelectedRating] = useState(recipeRating);
@@ -9,8 +9,8 @@ function StarRatingDisplay({recipeRatingCount, recipeRating, name}) {
       }, [recipeRating]);
 
     return (
-        <div className="upperDiv">
-            <div className="rate">
+        <div className="starRatingDisplay_upperDiv">
+            <div className="starRatingDisplay_rate">
                 <input
                 type="radio"
                 id={`${name}-star5`}
@@ -72,8 +72,8 @@ function StarRatingDisplay({recipeRatingCount, recipeRating, name}) {
                 </label>
             </div>
             <br />
-            <div className="starRatingTextOuter">
-                <p className="starRatingText">({recipeRating} from {recipeRatingCount} ratings)</p>
+            <div className="starRatingDisplay_starRatingTextOuter">
+                <p className="starRatingDisplay_starRatingText">({recipeRating} from {recipeRatingCount} ratings)</p>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import './style.css';
+import './frontpage.css';
 import ImageSlider from '../../components/imageSlider/imageSlider';
 
 function Frontpage() {
@@ -36,24 +36,24 @@ function Frontpage() {
     }, []);
 
     return (
-        <div className="content">
-            <div className="header_recipe">
+        <div className="frontpage_content">
+            <div className="frontpage_header-recipe">
                 <ImageSlider recipes={recipes} />
             </div>
-            <div className="quote">
+            <div className="frontpage_quote">
                 <p>Cooking quote of some sorts...</p>
             </div>
-            <div className="all_recipes">
+            <div className="frontpage_all-recipes">
                 <Link to="/recipes">
                     <h2>All Recipes</h2>
                 </Link>
             </div>
-            <div className="categories">
+            <div className="frontpage_categories">
                 <h2>Categories</h2>
-                <div className="categories_list">
+                <div className="frontpage_categories-list">
                     {categories.map((category) => (
                     <Link to={`/category/${category.name}`.toLowerCase()} key={category.name}>
-                        <div className="category_list_item">
+                        <div className="frontpage_category-list-item">
                             <h3>{category.name}</h3>
                         </div>
                     </Link>

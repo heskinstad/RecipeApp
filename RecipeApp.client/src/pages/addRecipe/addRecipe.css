@@ -1,0 +1,60 @@
+.addRecipe_form {
+    width: 100%;
+    display: grid;
+    grid-template-areas:
+    "header header header"
+    "name name ingredients"
+    "summary summary ingredients"
+    "desc desc ingredients"
+    "uploadImg uploadImg uploadImg"
+    "submit submit submit";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto auto;
+    gap: 30px;
+    padding: 20px;
+}
+
+.addRecipe_header {
+    grid-area: header;
+    text-align: center;
+}
+
+.addRecipe_name {
+    grid-area: name;
+}
+
+.addRecipe_name h3,
+.addRecipe_summary h3,
+.addRecipe_desc h3,
+.addRecipe_uploadImg h3 {
+    line-height: 0px;
+}
+
+.addRecipe_ingredients {
+    grid-area: ingredients;
+    background-color: #eee;
+}
+
+.addRecipe_summary {
+    grid-area: summary;
+}
+
+.addRecipe_desc {
+    grid-area: desc;
+}
+
+.addRecipe_uploadImg {
+    grid-area: uploadImg;
+}
+
+.addRecipe_submit {
+    grid-area: submit;
+}
+
+.addRecipe_name input,
+.addRecipe_summary textarea,
+.addRecipe_desc textarea {
+    resize: none;
+    background-color: #eee;
+    border-radius: 5px;
+}

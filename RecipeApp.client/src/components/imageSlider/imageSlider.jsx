@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import './style.css';
+import './imageSlider.css';
 import arrow_left from "../../resources/buttons/arrow_left.png"
 import arrow_right from "../../resources/buttons/arrow_right.png"
 
@@ -36,26 +36,26 @@ const ImageSlider = ({ recipes }) => {
   }
 
   return (
-    <section className='slider'>
-      <img src={arrow_left} className='left-arrow' onClick={prevSlide} />
-      <img src={arrow_right} className='right-arrow' onClick={nextSlide} />
+    <section className='imageSlider_slider'>
+      <img src={arrow_left} className='imageSlider_left-arrow' onClick={prevSlide} />
+      <img src={arrow_right} className='imageSlider_right-arrow' onClick={nextSlide} />
 
       {recipes.map((recipe, index) => {
-        let className = 'slide';
+        let className = 'imageSlider_slide';
         if (index === current) {
-          className += direction === 'next' ? ' slide-in-from-right' : ' slide-in-from-left';
+          className += direction === 'next' ? ' imageSlider_slide-in-from-right' : ' imageSlider_slide-in-from-left';
         } else if (index === prev) {
-          className += direction === 'next' ? ' slide-out-to-left' : ' slide-out-to-right';
+          className += direction === 'next' ? ' imageSlider_slide-out-to-left' : ' imageSlider_slide-out-to-right';
         }
 
         return (
           <Link to={`/recipe/${recipe.id}`.toLowerCase()}>
             <div className={className} key={recipe.id}>
-              <div className='text-content'>
+              <div className='imageSlider_text-content'>
                 <h2>{recipe.name}</h2>
               </div>
               <div>
-                <img src={recipe.imagePath} alt={recipe.name} className='image' />
+                <img src={recipe.imagePath} alt={recipe.name} className='imageSlider_image' />
               </div>
             </div>
           </Link>

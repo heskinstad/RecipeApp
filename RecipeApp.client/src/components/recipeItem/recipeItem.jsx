@@ -1,4 +1,4 @@
-import './style.css';
+import './recipeItem.css';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import StarRatingDisplay from '../starRatingDisplay/starRatingDisplay';
@@ -36,23 +36,21 @@ function RecipeItem({recipe}) {
     }, [recipe]);
 
     return (
-        <div className="link">
-            <Link to={`/recipe/${recipe.id}`.toLowerCase()}>
-                <hr />
-                <div className="recipeItemGrid">
-                    <h2 className="title">{recipe.name}</h2>
-                    <p className="desc">{recipe.summary}</p>
-                    <img src={recipe.imagePath} className="recipeImage" />
-                    <div className="uploader">
-                        <br />
-                        <h4 >Uploader: {recipe.uploaderName}</h4>
-                    </div>
-                    <div className="rating">
-                        <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
-                    </div>
+        <Link to={`/recipe/${recipe.id}`.toLowerCase()}>
+            <hr />
+            <div className="recipeItem_link">
+                <h2 className="recipeItem_title">{recipe.name}</h2>
+                <p className="recipeItem_desc">{recipe.summary}</p>
+                <img src={recipe.imagePath} className="recipeItem_recipeImage" />
+                <div className="recipeItem_uploader">
+                    <br />
+                    <h4 >Uploader: {recipe.uploaderName}</h4>
                 </div>
-            </Link>
-        </div>
+                <div className="recipeItem_rating">
+                    <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
+                </div>
+            </div>
+        </Link>
     )
 };
 

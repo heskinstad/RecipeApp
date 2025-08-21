@@ -1,4 +1,4 @@
-.commentBlock {
+.commentBlock_commentBlock {
     display: grid;
     grid-template-areas:
         "user date"
@@ -11,23 +11,23 @@
     padding: 1em;
 }
 
-.user {
+.commentBlock_user {
     grid-area: user;
     font-size: larger;
     font-weight: bold;
 }
 
-.date {
+.commentBlock_date {
     grid-area: date;
     text-align: right;
     color: #666;
 }
 
-.comment {
+.commentBlock_comment {
     grid-area: comment;
 }
 
-.votes {
+.commentBlock_votes {
     grid-area: votes;
     display: grid;
     grid-template-areas:
@@ -35,18 +35,18 @@
     width: fit-content;
 }
 
-.votes > div {
+.commentBlock_votes > div {
     margin: 0 0.5em;
     padding: 0 0.5em;
     display: flex;
 }
 
-.upvotes {
+.commentBlock_upvotes {
     color: #43a047;
     grid-area: upvote;
 }
 
-.downvotes {
+.commentBlock_downvotes {
     color: #e53935;
     grid-area: downvote;
 }

@@ -58,17 +58,18 @@ footer {
 }
 
 .category-link {
-  height: 5em;
+  height: 3.5em;
   padding: 1em;
   font-size: larger;
-  color: #fff;
+  background-color: #eee;
+  color: #000;
   user-select: none;
 }
 
 .category-link:hover {
-  background-color: #6c8;
+  background-color: #ddd;
 }
 
 .category-link:active {
-  background-color: #4a6;
+  background-color: #ccc;
 }

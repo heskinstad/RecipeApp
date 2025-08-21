@@ -1,4 +1,4 @@
-.recipeItemGrid {
+.recipeItem_link {
     display: grid;
     grid-template-areas:
       "title image"
@@ -7,38 +7,37 @@
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 50px auto auto;
     padding: 20px;
+    color: #000;
 }
 
-.title {
+.recipeItem_title {
     grid-area: title;
 }
 
-.desc {
+.recipeItem_desc {
     grid-area: desc;
 }
 
-.recipeImage {
+.recipeItem_recipeImage {
     height: 100%;
     width: 100%;
     grid-area: image;
     object-fit: contain;
 }
 
-.uploader {
+.recipeItem_uploader {
     grid-area: uploader;
 }
 
-.rating {
+.recipeItem_rating {
     grid-area: rating;
 }
 
-.link:hover {
-    color: inherit;
+.recipeItem_link:hover {
     background-color: #eee;
 }
 
-.link a {
-    color: inherit;
+.recipeItem_link a {
     text-decoration: none;
     user-select: none;
 }

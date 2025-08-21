@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './style.css';
+import './commentBlock.css';
 import upvote_svg from "../../resources/buttons/upvote.svg"
 import downvote_svg from "../../resources/buttons/downvote.svg"
 
@@ -52,22 +52,22 @@ function CommentBlock({comment}) {
     };
 
     return (
-        <div className="commentBlock">
-            <div className="user">
+        <div className="commentBlock_commentBlock">
+            <div className="commentBlock_user">
                 {localComment.userName} says:
             </div>
-            <div className="date">
+            <div className="commentBlock_date">
                 {datetime}
             </div>
-            <div className="comment">
+            <div className="commentBlock_comment">
                 {localComment.message}
             </div>
-            <div className="votes">
-                <div className="upvotes" onClick={upvote}>
+            <div className="commentBlock_votes">
+                <div className="commentBlock_upvotes" onClick={upvote}>
                     <img src={upvote_svg} alt="upvotes: " width="30" height="30" />
                     <h3>&nbsp;{localComment.upvotes}</h3>
                 </div>
-                <div className="downvotes" onClick={downvote}>
+                <div className="commentBlock_downvotes" onClick={downvote}>
                     <img src={downvote_svg} alt="downvotes: " width="30" height="30" />
                     <h3>&nbsp;{localComment.downvotes}</h3>
                 </div>

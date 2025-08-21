@@ -33,6 +33,7 @@ score
 Entity recipe {
 <u>id
 name
+summary
 description
 *category_id
 image_path

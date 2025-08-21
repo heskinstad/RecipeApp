@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import IngredientListItem from '../../components/ingredientListItem/ingredientListItem';
 import StarRatingDisplay from '../../components/starRatingDisplay/starRatingDisplay';
 import CommentBlock from '../../components/commentBlock/commentBlock';
-import './style.css';
+import './recipe.css';
 import Collapsible from '../../components/collapsible/collapsible';
 
 function Recipe() {

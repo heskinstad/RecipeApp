@@ -1,0 +1,64 @@
+.starRatingDisplay_upperDiv *{
+    margin: 0;
+    padding: 0;
+}
+.starRatingDisplay_rate {
+    float: left;
+    height: 46px;
+    padding: 0 20px 0 0;
+    width: 120%;
+}
+.starRatingDisplay_rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.starRatingDisplay_rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.starRatingDisplay_rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.starRatingDisplay_rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.starRatingDisplay_rate:not(:checked) > label:hover,
+.starRatingDisplay_rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.starRatingDisplay_rate > input:checked + label:hover,
+.starRatingDisplay_rate > input:checked + label:hover ~ label,
+.starRatingDisplay_rate > input:checked ~ label:hover,
+.starRatingDisplay_rate > input:checked ~ label:hover ~ label,
+.starRatingDisplay_rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
+
+.starRatingDisplay_upperDiv {
+    display: grid;
+    grid-area: auto;
+    grid-template-rows: 5px 25px;
+    grid-template-columns: 170px;
+    margin: -10px -30px -30px -30px;
+}
+
+.starRatingDisplay_starRatingTextOuter {
+    margin-left: 45px;
+}
+
+.starRatingDisplay_upperDiv div p {
+    color: #aaa;
+    font-size: small;
+    text-align: center;
+}
+
+.starRatingDisplay_starRatingText {
+    color: red;
+}

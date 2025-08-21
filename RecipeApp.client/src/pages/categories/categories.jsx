@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import './style.css';
+import './categories.css';
 import { useEffect, useState } from 'react'
 import RecipeItem from '../../components/recipeItem/recipeItem';
 
@@ -25,7 +25,7 @@ function Categories() {
 
     return (
         <>
-            <div className="content">
+            <div className="category_content">
                 <h1 className="capitalize">{ name }</h1>
             </div>
             {recipes.map((recipe) => (
