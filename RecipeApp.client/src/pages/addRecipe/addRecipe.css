@@ -33,6 +33,7 @@
 .addRecipe_ingredients {
     grid-area: ingredients;
     background-color: #eee;
+    padding: 10px;
 }
 
 .addRecipe_summary {
@@ -56,5 +57,5 @@
 .addRecipe_desc textarea {
     resize: none;
     background-color: #eee;
-    border-radius: 5px;
+    border: 1px solid #aaa;
 }
