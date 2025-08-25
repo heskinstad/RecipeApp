@@ -7,13 +7,18 @@
     overflow: hidden;
 }
 
-.imageSlider_image {
+.imageSlider_image, .imageSlider_missing-image {
     position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
     z-index: 1;
+}
+
+.imageSlider_missing-image {
+  z-index: 0;
+  bottom: calc(-120px);
 }
 
 .imageSlider_right-arrow, .imageSlider_left-arrow {

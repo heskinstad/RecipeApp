@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import './imageSlider.css';
-import arrow_left from "../../resources/buttons/arrow_left.png"
-import arrow_right from "../../resources/buttons/arrow_right.png"
+import arrow_left from "../../resources/buttons/arrow_left.png";
+import arrow_right from "../../resources/buttons/arrow_right.png";
+import missing_image from "../../resources/buttons/missing_image.png";
 
 const ImageSlider = ({ recipes }) => {
   const [current, setCurrent] = useState(0);
@@ -56,6 +57,7 @@ const ImageSlider = ({ recipes }) => {
               </div>
               <div>
                 <img src={recipe.imagePath} alt={recipe.name} className='imageSlider_image' />
+                <img src={missing_image} className='imageSlider_missing-image' />
               </div>
             </div>
           </Link>

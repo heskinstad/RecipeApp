@@ -60,6 +60,11 @@ function Frontpage() {
                     ))}
                 </div>
             </div>
+            <div className="frontpage_new-recipe">
+                <Link to="/addrecipe">
+                    <h2>Add new recipe</h2>
+                </Link>
+            </div>
         </div>
     )
 };

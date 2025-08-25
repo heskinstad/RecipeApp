@@ -6,11 +6,10 @@
     "name name ingredients"
     "summary summary ingredients"
     "desc desc ingredients"
-    "category category ingredients"
-    "uploadImg uploadImg uploadImg"
+    "category uploadImg ingredients"
     "submit submit submit";
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
     gap: 30px;
     padding: 20px;
 }
@@ -22,6 +21,10 @@
 
 .addRecipe_name {
     grid-area: name;
+}
+
+.addRecipe_name input {
+    width: 50%;
 }
 
 .addRecipe_name h3,

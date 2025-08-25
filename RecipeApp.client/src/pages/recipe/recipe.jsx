@@ -5,6 +5,7 @@ import StarRatingDisplay from '../../components/starRatingDisplay/starRatingDisp
 import CommentBlock from '../../components/commentBlock/commentBlock';
 import './recipe.css';
 import Collapsible from '../../components/collapsible/collapsible';
+import missing_image from "../../resources/buttons/missing_image.png";
 
 function Recipe() {
     const { id } = useParams();
@@ -104,7 +105,14 @@ function Recipe() {
                 </p>
                 <br />
             </div>
-            <img src={recipe.imagePath} className="recipeImageLarge" />
+            <img
+            src={recipe.imagePath}
+            className="recipeImageLarge"
+            onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = missing_image;
+            }}
+            />
             <div className="recipeIngredientsBox">
                 <h2>Ingredients</h2>
                 {Object.entries(groupedIngredients).map(([section, items]) => (
