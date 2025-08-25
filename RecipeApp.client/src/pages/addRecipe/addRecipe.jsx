@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './addRecipe.css';
 import { useNavigate } from 'react-router-dom';
+import { RecipeContext } from '../../App';
 
 function AddRecipe() {
     const navigate = useNavigate();
@@ -9,8 +10,12 @@ function AddRecipe() {
         name: "",
         summary: "",
         description: "",
+        categoryId: "",
         imagePath: "",
+        uploaderId: "0198a3ae-a9d7-7dfe-9031-12e95619f54f",
     });
+
+    const { fetchData, recipes, setRecipes } = useContext(RecipeContext);
 
     const url = "https://localhost:63516/recipe"
 
@@ -36,6 +41,23 @@ function AddRecipe() {
         postRecipe();
         navigate(`/`);
     }
+
+    const categoriesUrl = "https://localhost:63516/category";
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = () => {
+        fetch(categoriesUrl)
+        .then((res) => {
+        return res.json();
+        })
+        .then((jsonData) => {
+        setCategories(jsonData);
+        })
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     return (
         <form className="addRecipe_form" onSubmit={handleSubmit}>
@@ -83,6 +105,23 @@ function AddRecipe() {
                     onChange={handleChange}
                     value={formData.description}
                     />
+                </label>
+            </div>
+            <div className="addRecipe_category">
+                <label>
+                    <h3>Category:</h3>
+                    <br />
+                    <select
+                    name="categoryId"
+                    onChange={handleChange}
+                    value={formData.categoryId}
+                    >
+                        {categories.map((category) => (
+                            <option value={category.id} key={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
                 </label>
             </div>
             <div className="addRecipe_uploadImg">

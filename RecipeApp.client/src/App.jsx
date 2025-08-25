@@ -25,7 +25,6 @@ function App() {
     })
   };
 
-
   useEffect(() => {
     fetchCategories();
   }, []);
