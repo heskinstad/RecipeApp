@@ -115,10 +115,16 @@ namespace RecipeApp.API.Endpoints
                     return Results.NotFound();
                 if (recipe.Name != null)
                     target.Name = recipe.Name;
+                if (recipe.Summary != null)
+                    target.Summary = recipe.Summary;
                 if (recipe.Description != null)
                     target.Description = recipe.Description;
                 if (recipe.ImagePath != null)
                     target.ImagePath = recipe.ImagePath;
+                if (recipe.CategoryId != null)
+                    target.CategoryId = recipe.CategoryId;
+                if (recipe.UploaderId != null)
+                    target.UploaderId = recipe.UploaderId;
                 target.UpdatedAt = DateTime.UtcNow;
 
                 await repository.Update(target);

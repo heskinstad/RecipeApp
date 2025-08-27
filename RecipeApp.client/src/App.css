@@ -22,6 +22,18 @@ header {
   background-color: #ccc;
 }
 
+.header_searchbar {
+  width: 30em;
+  height: 2.1em;
+  padding: 0.5em;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 25%);
+  border: 0px;
+  font-size: medium;
+}
+
 aside {
   grid-area: aside;
   background-color: #ccc;
@@ -34,7 +46,7 @@ main {
   grid-area: main;
   background-color: #fff;
   width: 50%;
-  min-width: 500px;
+  min-width: 800px;
   margin: auto;
   height: 100%;
 }

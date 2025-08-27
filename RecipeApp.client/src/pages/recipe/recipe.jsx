@@ -6,6 +6,7 @@ import CommentBlock from '../../components/commentBlock/commentBlock';
 import './recipe.css';
 import Collapsible from '../../components/collapsible/collapsible';
 import missing_image from "../../resources/buttons/missing_image.png";
+import { Link } from "react-router-dom";
 
 function Recipe() {
     const { id } = useParams();
@@ -139,6 +140,9 @@ function Recipe() {
                         <CommentBlock comment={comment} key={comment.id} />
                     ))}
                 </Collapsible>
+            </div>
+            <div>
+                <Link to={`/editRecipe/${recipe.id}`}>Edit Recipe</Link>
             </div>
         </div>
     )

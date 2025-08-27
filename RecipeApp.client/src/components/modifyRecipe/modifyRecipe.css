@@ -1,0 +1,80 @@
+.modifyRecipe_form {
+    width: 100%;
+    display: grid;
+    grid-template-areas:
+    "header header header"
+    "name name ingredients"
+    "summary summary ingredients"
+    "desc desc ingredients"
+    "category uploadImg ingredients"
+    "submit submit submit";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto auto;
+    gap: 30px;
+    padding: 20px;
+}
+
+.modifyRecipe_header {
+    grid-area: header;
+    text-align: center;
+}
+
+.modifyRecipe_name {
+    grid-area: name;
+}
+
+.modifyRecipe_name input {
+    width: 50%;
+}
+
+.modifyRecipe_name h3,
+.modifyRecipe_summary h3,
+.modifyRecipe_desc h3,
+.modifyRecipe_category h3,
+.modifyRecipe_uploadImg h3 {
+    line-height: 0px;
+}
+
+.modifyRecipe_ingredients {
+    grid-area: ingredients;
+    background-color: #eee;
+    padding: 10px;
+}
+
+.modifyRecipe_summary {
+    grid-area: summary;
+}
+
+.modifyRecipe_summary textarea {
+    width: 100%;
+    height: 5em;
+}
+
+.modifyRecipe_desc {
+    grid-area: desc;
+}
+
+.modifyRecipe_desc textarea {
+    width: 100%;
+    height: 15em;
+}
+
+.modifyRecipe_category {
+    grid-area: category;
+}
+
+.modifyRecipe_uploadImg {
+    grid-area: uploadImg;
+}
+
+.modifyRecipe_submit {
+    grid-area: submit;
+}
+
+.modifyRecipe_name input,
+.modifyRecipe_summary textarea,
+.modifyRecipe_desc textarea {
+    resize: none;
+    background-color: #eee;
+    border: 1px solid #aaa;
+}

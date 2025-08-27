@@ -16,5 +16,7 @@ namespace RecipeApp.API.DTO.GET
         public string ImagePath { get; set; }
         public Guid UploaderId { get; set; }
         public string UploaderName { get; set; }
+        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; }
     }
 }

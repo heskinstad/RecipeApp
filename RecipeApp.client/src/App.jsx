@@ -9,6 +9,7 @@ import Categories from './pages/categories/categories';
 import Recipe from './pages/recipe/recipe';
 import AllRecipes from './pages/allRecipes/allRecipes';
 import AddRecipe from './pages/addRecipe/addRecipe';
+import EditRecipe from './pages/editRecipe/editRecipe';
 const RecipeContext = createContext();
 
 function App() {
@@ -33,8 +34,7 @@ function App() {
     <div className="app">
       <header>
         <form>
-          <input>
-          </input>
+          <input className="header_searchbar" placeholder="Search..." />
         </form>
       </header>
 
@@ -67,6 +67,7 @@ function App() {
             <Route path="recipe/:id" element={<Recipe />} />
             <Route path="recipes" element={<AllRecipes />} />
             <Route path="addRecipe" element={<AddRecipe />} />
+            <Route path="editRecipe/:id" element={<EditRecipe />} />
           </Routes>
         </RecipeContext.Provider>
       </main>
