@@ -70,4 +70,16 @@
 
 .frontpage_new-recipe {
     grid-area: new_recipe;
+    background-color: #eee;
+    padding: 16px 16px;
+    margin: 8px 0;
+}
+
+.frontpage_new-recipe:hover {
+    background-color: #ddd;
+}
+
+.frontpage_new-recipe h2 {
+    text-align: center;
+    color: #000;
 }

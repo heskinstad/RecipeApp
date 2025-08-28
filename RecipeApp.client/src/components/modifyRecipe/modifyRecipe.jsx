@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import './modifyRecipe.css';
+import AddIngredient from '../addIngredient/addIngredient';
 
 function ModifyRecipe({
     formData,
     handleChange,
     handleSubmit,
+    handleDelete,
     isEditMode = false,
 }) {
     const [categories, setCategories] = useState([]);
@@ -17,13 +19,12 @@ function ModifyRecipe({
             .catch(console.error);
     }, []);
 
-    // 🛑 Don't render until categories are loaded
     if (categories.length === 0) {
-        return <p>Loading categories...</p>;
+        return;
     }
 
     const handleChanges = (e) => {
-        console.log("Changed:", e.target.name, e.target.value); // 🐞 Debug
+        console.log("Changed:", e.target.name, e.target.value);
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -49,13 +50,7 @@ function ModifyRecipe({
 
             <div className="modifyRecipe_ingredients">
                 <label>
-                    <h3>Ingredients:</h3>
-                    <br />
-                    <textarea
-                        name="ingredients"
-                        onChange={handleChange}
-                        value={formData.ingredients || ""}
-                    />
+                    <AddIngredient />
                 </label>
             </div>
 
@@ -99,6 +94,16 @@ function ModifyRecipe({
                             </option>
                         ))}
                     </select>
+                    <div>
+                        <br />
+                        <p>Or add a new category:</p>
+                        <input
+                            type="text"
+                            name="newCategory"
+                            onChange={handleChange}
+                            value={formData.newCategory || ""}
+                        />
+                    </div>
                 </label>
             </div>
 
@@ -117,6 +122,10 @@ function ModifyRecipe({
 
             <div className="modifyRecipe_submit">
                 <input type="submit" value={isEditMode ? "Update" : "Create"} />
+            </div>
+
+            <div className="modifyRecipe_delete">
+                <input type="submit" />
             </div>
         </form>
     );

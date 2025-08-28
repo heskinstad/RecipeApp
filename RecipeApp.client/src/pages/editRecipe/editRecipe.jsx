@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { RecipeContext } from '../../App';
 import ModifyRecipe from '../../components/modifyRecipe/modifyRecipe';
 
 function EditRecipe() {
@@ -21,6 +20,23 @@ function EditRecipe() {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const deleteRecipe = () => {
+        fetch(recipeUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .catch((err) => console.log(err))
+    }
+
+    const handleDelete = (event) => {
+        event.preventDefault();
+        deleteRecipe();
+        navigate('/');
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,6 +70,7 @@ function EditRecipe() {
             formData={formData}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            handleDelete={deleteRecipe}
             isEditMode={true}
         />
     );
