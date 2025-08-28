@@ -65,7 +65,7 @@ function App() {
             <Route path="/" element={<Frontpage />} />
             <Route path="category/:name" element={<Categories />} />
             <Route path="recipe/:id" element={<Recipe />} />
-            <Route path="recipes" element={<AllRecipes />} />
+            <Route path="recipes" element={<Recipes />} />
             <Route path="addRecipe" element={<AddRecipe />} />
             <Route path="editRecipe/:id" element={<EditRecipe />} />
           </Routes>
