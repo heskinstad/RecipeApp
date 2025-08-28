@@ -23,7 +23,10 @@ function Recipes() {
     return (
         <div className="recipes_content">
             <h1 className="recipes_capitalize">{keyword}</h1>
-            <Pagination url={recipesUrl} />
+            <Pagination
+            url={recipesUrl}
+            renderItem={(recipe) => <RecipeItem recipe={recipe} key={recipe.id} />}
+            />
         </div>
     )
 }

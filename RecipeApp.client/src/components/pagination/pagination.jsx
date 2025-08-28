@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import RecipeItem from '../recipeItem/recipeItem';
 
-const Pagination = (url) => {
+const Pagination = (url, renderItem) => {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -11,7 +12,7 @@ const Pagination = (url) => {
     
     const fetchData = async () => {
         try {
-            fetch(url)
+            fetch(url + `?pageNumber=${currentPage}`)
             .then((res) => {
                 return res.json();
             })
@@ -26,21 +27,19 @@ const Pagination = (url) => {
         }
     };
 
-
-
-    const fetchRecipes = () => {
-        fetch(recipesUrl)
-        .then((res) => {
-          return res.json();
-        })
-        .then((jsonData) => {
-          setRecipe(jsonData);
-        })
+    const goToPage = (page) => {
+        setCurrentPage(page);
     };
 
     return (
-        <>
-        </>
+        <div>
+            {data.map((item) => renderItem(item))}
+            <div>
+                {Array.from({ length: totalPages }).map((_, index) => (
+                    <button key={index + 1} onClick={() => goToPage(index + 1)}>{index + 1}</button>
+                ))}
+            </div>
+        </div>
     )
 }
 

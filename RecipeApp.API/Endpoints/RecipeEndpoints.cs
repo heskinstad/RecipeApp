@@ -180,8 +180,9 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> Search(IRepository<Recipe> repository, IMapper mapper, string? searchString, int?pageNumber)
+        public static async Task<IResult> Search(IRepository<Recipe> repository, IMapper mapper, string? searchString, int? pageNumber)
         {
+            int pageSize = 3;
             try
             {
                 if (searchString != null)
@@ -193,10 +194,9 @@ namespace RecipeApp.API.Endpoints
                     searchString = "";
                 }
 
-
-                    // Use the GetQueryable method to filter based on the name query parameter
-                    var recipes = await repository.GetQueryable(r =>
-                        string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
+                // Use the GetQueryable method to filter based on the name query parameter
+                var recipes = await repository.GetQueryable(r =>
+                    string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
 
                 var response = mapper.Map<List<RecipeGet>>(recipes);
 
