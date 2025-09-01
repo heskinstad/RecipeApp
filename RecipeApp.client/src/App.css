@@ -22,16 +22,35 @@ header {
   background-color: #ccc;
 }
 
-.header_searchbar {
+.header_search {
   width: 30em;
   height: 2.1em;
-  padding: 0.5em;
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, 25%);
   border: 0px;
-  font-size: medium;
+  background-color: red;
+}
+
+.header_searchbar {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0.5em;
+  background-color: #fff;
+}
+
+.header_searchButton {
+  position: absolute;
+  height: 100%;
+  right: 0em;
+  background-color: #bbb;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 aside {

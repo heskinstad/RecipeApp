@@ -1,31 +1,18 @@
+import { useContext } from 'react';
+import { RecipeContext } from '../../App';
 import Pagination from "../../components/pagination/pagination";
+import RecipeItem from "../../components/recipeItem/recipeItem";
 
 function Recipes() {
-    const { keyword } = useParams();
-
-    const recipesUrl = `https://localhost:63516/recipe/search?searchString=${keyword}`;
-    const [recipes, setRecipes] = useState([]);
-
-    const fetchRecipes = () => {
-        fetch(recipesUrl)
-        .then((res) => {
-          return res.json();
-        })
-        .then((jsonData) => {
-          setRecipes(jsonData);
-        })
-    };
-
-    useEffect(() => {
-        fetchRecipes();
-    }, [keyword]);
+    const { searchInput } = useContext(RecipeContext);
+    const recipesUrl = `https://localhost:63516/recipe/search`;
 
     return (
         <div className="recipes_content">
-            <h1 className="recipes_capitalize">{keyword}</h1>
             <Pagination
-            url={recipesUrl}
-            renderItem={(recipe) => <RecipeItem recipe={recipe} key={recipe.id} />}
+                url={recipesUrl}
+                searchString={searchInput}
+                renderItem={(recipe) => <RecipeItem recipe={recipe} key={recipe.id} />}
             />
         </div>
     )

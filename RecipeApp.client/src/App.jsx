@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link, Route, Routes } from "react-router-dom";
 import './App.css'
 import Frontpage from './pages/frontpage/frontpage'
+import { useNavigate } from 'react-router-dom';
 
 import { createContext } from 'react';
 import Collapsible from './components/collapsible/collapsible';
 import Categories from './pages/categories/categories';
 import Recipe from './pages/recipe/recipe';
-import AllRecipes from './pages/allRecipes/allRecipes';
+import Recipes from './pages/recipes/recipes';
 import AddRecipe from './pages/addRecipe/addRecipe';
 import EditRecipe from './pages/editRecipe/editRecipe';
 const RecipeContext = createContext();
@@ -15,6 +16,10 @@ const RecipeContext = createContext();
 function App() {
   const categoriesUrl = "https://localhost:63516/category";
   const [categories, setCategories] = useState([]);
+
+  const [searchInput, setSearchInput] = useState('');
+
+  const navigate = useNavigate();
 
   const fetchCategories = () => {
     fetch(categoriesUrl)
@@ -30,11 +35,25 @@ function App() {
     fetchCategories();
   }, []);
 
+  const search = (e) => {
+      e.preventDefault();
+      navigate(`/recipes`);
+      setSearchInput("");
+  };
+
   return (
     <div className="app">
       <header>
-        <form>
-          <input className="header_searchbar" placeholder="Search..." />
+        <form onSubmit={search}>
+          <div className="header_search">
+            <input
+            className="header_searchbar"
+            placeholder="Search..."
+            type="text"
+            onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <button type="submit" className="header_searchButton">Search!</button>
+          </div>
         </form>
       </header>
 
@@ -60,7 +79,7 @@ function App() {
       </aside>
 
       <main>
-        <RecipeContext.Provider value={{}}>
+        <RecipeContext.Provider value={{ searchInput }}>
           <Routes>
             <Route path="/" element={<Frontpage />} />
             <Route path="category/:name" element={<Categories />} />

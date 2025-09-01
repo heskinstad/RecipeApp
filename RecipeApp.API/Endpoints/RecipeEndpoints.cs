@@ -178,29 +178,41 @@ namespace RecipeApp.API.Endpoints
         //    }
         //}
 
+        //https://dotnetfullstackdev.substack.com/p/react-implementing-server-side-pagination-24-04-15
+
+        // Endpoint to search for a recipe. Includes pagination.
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> Search(IRepository<Recipe> repository, IMapper mapper, string? searchString, int? pageNumber)
+        public static async Task<IResult> Search(
+            IRepository<Recipe> repository,
+            IMapper mapper,
+            string searchString = "",
+            int pageNumber = 1,
+            int pageSize = 2)
         {
-            int pageSize = 3;
             try
             {
-                if (searchString != null)
-                {
-                    pageNumber = 1;
-                }
-                else
-                {
-                    searchString = "";
-                }
-
                 // Use the GetQueryable method to filter based on the name query parameter
-                var recipes = await repository.GetQueryable(r =>
-                    string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
+                var recipes = repository.GetQueryable(r =>
+                    string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower()))
+                    .Include(r => r.Uploader);
 
-                var response = mapper.Map<List<RecipeGet>>(recipes);
+                var totalCount = await recipes.CountAsync();
 
-                return TypedResults.Ok(response);
+                var paginatedRecipes = await recipes
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var responseItems = mapper.Map<List<RecipeGet>>(paginatedRecipes);
+
+                var paginatedResponse = new PaginatedResponse<RecipeGet>(
+                    responseItems,
+                    totalCount,
+                    pageSize
+                );
+
+                return TypedResults.Ok(paginatedResponse);
             }
             catch (Exception ex)
             {
