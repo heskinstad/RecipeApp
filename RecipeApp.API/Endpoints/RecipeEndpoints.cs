@@ -159,7 +159,7 @@ namespace RecipeApp.API.Endpoints
 
         //https://dotnetfullstackdev.substack.com/p/react-implementing-server-side-pagination-24-04-15
 
-        // Endpoint to search for a recipe. Includes pagination.
+        // Endpoint to search for a recipe. Includes pagination and sorting.
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> Search(
@@ -167,10 +167,13 @@ namespace RecipeApp.API.Endpoints
             IMapper mapper,
             string searchString = "",
             int pageNumber = 1,
-            int pageSize = 2)
+            int pageSize = 2,
+            string sortBy = "date")
         {
             try
             {
+
+
                 // Use the GetQueryable method to filter based on the name query parameter
                 var recipes = repository.GetQueryable(r =>
                     string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower()))
@@ -178,7 +181,30 @@ namespace RecipeApp.API.Endpoints
 
                 var totalCount = await recipes.CountAsync();
 
-                var paginatedRecipes = await recipes
+                var ordered_recipes = recipes.OrderBy(r => r.UpdatedAt);
+
+                switch (sortBy)
+                {
+                    case "date":
+                        break;
+                    case "date_desc":
+                        ordered_recipes = recipes.OrderByDescending(r => r.UpdatedAt);
+                        break;
+                    case "name":
+                        ordered_recipes = recipes.OrderBy(r => r.Name);
+                        break;
+                    case "name_desc":
+                        ordered_recipes = recipes.OrderByDescending(r => r.Name);
+                        break;
+                    case "rating":
+                        //TODO: implement
+                        break;
+                    case "rating_desc":
+                        //TODO: implement
+                        break;
+                }
+
+                var paginatedRecipes = await ordered_recipes
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
