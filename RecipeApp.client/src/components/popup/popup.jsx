@@ -1,22 +1,27 @@
 import { useState } from "react";
 import "./popup.css";
 
-function Popup() {
-    const [isOpen, setIsOpen] = useState(false);
+function Popup({message, handleAction, onClose, isOpen}) {
+    const clickConfirm = () => {
+        handleAction();
+        onClose();
+    }
 
-    const togglePopup = () => {
-        setIsOpen(!isOpen);
-    };
+    if (!isOpen)
+        return null;
 
     return (
         <>
             {isOpen && (
-                <div className="popup">
-                    <div className="popup-content">
-                        <span className="close" onClick={togglePopup}>&times;</span>
-                        <p>This is a popup!</p>
+            <dialog open={isOpen} className="popup">
+                <div className="popup_content">
+                    <h2>{message}</h2>
+                    <div className="popup_buttons">
+                        <button onClick={clickConfirm}>Confirm</button>
+                        <button onClick={onClose}>Cancel</button>
                     </div>
                 </div>
+            </dialog>
             )}
         </>
     )

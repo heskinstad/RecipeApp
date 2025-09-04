@@ -2,10 +2,12 @@ import { useState } from 'react';
 import './commentBlock.css';
 import upvote_svg from "../../resources/buttons/upvote.svg"
 import downvote_svg from "../../resources/buttons/downvote.svg"
+import Popup from '../popup/popup';
 
 function CommentBlock({comment, onCommentChange}) {
 
     const [localComment, setLocalComment] = useState(comment);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const date = new Date(comment.createdAt);
 
@@ -64,9 +66,16 @@ function CommentBlock({comment, onCommentChange}) {
         .catch((err) => console.log(err))
     }
 
-    const handleDelete = (event) => {
-        event.preventDefault();
+    const handleDelete = () => {
         deleteComment();
+    }
+
+    const openPopup = () => {
+        setIsPopupOpen(true);
+    }
+
+    const closePopup = () => {
+        setIsPopupOpen(false);
     }
 
     return (
@@ -93,9 +102,13 @@ function CommentBlock({comment, onCommentChange}) {
 
             <div className="commentBlock_delete">
                 {/* For future: only display button if user posted the comment */}
-                <form onSubmit={handleDelete}>
-                    <input type="submit" value="Delete comment" />
-                </form>
+                <button onClick={openPopup}>Delete comment</button>
+                <Popup
+                    message="Are you sure you want to delete this comment?"
+                    handleAction={handleDelete}
+                    onClose={closePopup}
+                    isOpen={isPopupOpen}
+                />
             </div>
         </div>
     );

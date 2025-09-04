@@ -32,8 +32,7 @@ function EditRecipe() {
         .catch((err) => console.log(err))
     }
 
-    const handleDelete = (event) => {
-        event.preventDefault();
+    const handleDelete = () => {
         deleteRecipe();
         navigate('/');
     }

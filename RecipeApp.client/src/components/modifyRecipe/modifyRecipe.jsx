@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './modifyRecipe.css';
 import AddIngredient from '../addIngredient/addIngredient';
+import Popup from '../popup/popup';
 
 function ModifyRecipe({
     formData,
@@ -11,6 +12,7 @@ function ModifyRecipe({
 }) {
     const [categories, setCategories] = useState([]);
     const categoriesUrl = "https://localhost:63516/category";
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         fetch(categoriesUrl)
@@ -21,6 +23,14 @@ function ModifyRecipe({
 
     if (categories.length === 0) {
         return;
+    }
+
+    const openPopup = () => {
+        setIsPopupOpen(true);
+    }
+
+    const closePopup = () => {
+        setIsPopupOpen(false);
     }
 
     return (
@@ -121,13 +131,16 @@ function ModifyRecipe({
             </form>
 
             {isEditMode && (
-            <form className="modifyRecipe_delete" onSubmit={handleDelete}>
-                <div>
-                    <input type="submit" value={"Delete recipe"}/>
-                </div>
-            </form>
+            <div className="modifyRecipe_delete">
+                <button onClick={openPopup}>Delete recipe</button>
+                <Popup
+                message="Are you sure you want to delete this recipe?"
+                handleAction={handleDelete}
+                onClose={closePopup}
+                isOpen={isPopupOpen}
+                />
+            </div>
             )}
-            
         </>
     );
 }

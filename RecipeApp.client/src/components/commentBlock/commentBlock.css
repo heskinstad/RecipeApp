@@ -55,3 +55,16 @@
     grid-area: delete;
     text-align: right;
 }
+
+.commentBlock_delete button {
+    background-color: #ddd;
+    cursor: pointer;
+    transition: none;
+    border: none;
+}
+
+.commentBlock_delete button:hover {
+    background-color: #ccc;
+    border: none;
+    transition: none;
+}
