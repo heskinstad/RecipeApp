@@ -40,7 +40,6 @@ function EditRecipe() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
             const dataToSend = {
             name: formData.name,
             summary: formData.summary,
@@ -70,7 +69,7 @@ function EditRecipe() {
             formData={formData}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
-            handleDelete={deleteRecipe}
+            handleDelete={handleDelete}
             isEditMode={true}
         />
     );

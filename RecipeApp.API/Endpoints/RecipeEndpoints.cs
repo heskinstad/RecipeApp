@@ -43,6 +43,7 @@ namespace RecipeApp.API.Endpoints
             recipes.MapGet("/{id}/ratingsCount", GetRatingsCount);
             recipes.MapGet("/{id}/averageRating", GetAverageRating);
 
+            recipes.MapPost("/{id}/comments", InsertComment);
             recipes.MapGet("/{id}/comments", GetComments);
         }
 
@@ -155,28 +156,6 @@ namespace RecipeApp.API.Endpoints
                 return TypedResults.Problem(ex.Message);
             }
         }
-
-
-
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public static async Task<IResult> Search(IRepository<Recipe> repository, IMapper mapper, string? name)
-        //{
-        //    try
-        //    {
-        //        // Use the GetQueryable method to filter based on the name query parameter
-        //        var recipes = await repository.GetQueryable(r =>
-        //            string.IsNullOrEmpty(name) || r.Name.ToLower().Contains(name.ToLower())).ToListAsync();
-
-        //        var response = mapper.Map<List<RecipeGet>>(recipes);
-
-        //        return TypedResults.Ok(response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return TypedResults.Problem(ex.Message);
-        //    }
-        //}
 
         //https://dotnetfullstackdev.substack.com/p/react-implementing-server-side-pagination-24-04-15
 
@@ -469,7 +448,25 @@ namespace RecipeApp.API.Endpoints
         //////////////
         // Comments //
         //////////////
-        
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> InsertComment(IRepository<UserComment> repository, IMapper mapper, UserCommentPost userComment)
+        {
+            try
+            {
+                var newUserComment = mapper.Map<UserComment>(userComment);
+
+                await repository.Insert(newUserComment);
+
+                return TypedResults.Created($"UserComment with id {newUserComment.Id} created!");
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> GetComments(IRepository<UserComment> repository, IMapper mapper, Guid id)

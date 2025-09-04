@@ -16,7 +16,6 @@ function AddRecipe() {
 
     const recipeUrl = "https://localhost:63516/recipe";
     
-
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

@@ -7,7 +7,7 @@
     "summary summary ingredients"
     "desc desc ingredients"
     "category uploadImg ingredients"
-    "submit submit delete";
+    "submit submit submit";
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto auto auto auto auto;
     gap: 30px;
@@ -80,5 +80,7 @@
 }
 
 .modifyRecipe_delete {
-    grid-area: delete;
+    width: 100%;
+    text-align: right;
+    padding: 10px;
 }

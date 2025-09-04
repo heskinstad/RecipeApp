@@ -7,6 +7,7 @@ import './recipe.css';
 import Collapsible from '../../components/collapsible/collapsible';
 import missing_image from "../../resources/buttons/missing_image.png";
 import { Link } from "react-router-dom";
+import AddComment from '../../components/addComment/addComment';
 
 function Recipe() {
     const { id } = useParams();
@@ -136,8 +137,9 @@ function Recipe() {
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">
+                    <AddComment recipeId={recipe.id} onCommentChange={fetchComments} />
                     {comments.map((comment) => (
-                        <CommentBlock comment={comment} key={comment.id} />
+                        <CommentBlock comment={comment} key={comment.id} onCommentChange={fetchComments} />
                     ))}
                 </Collapsible>
             </div>

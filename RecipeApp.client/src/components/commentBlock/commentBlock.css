@@ -1,10 +1,10 @@
 .commentBlock_commentBlock {
     display: grid;
     grid-template-areas:
-        "user date"
-        "comment comment"
-        "votes votes";
-    grid-template-columns: 1fr 1fr;
+        "user date date"
+        "comment comment comment"
+        "votes votes delete";
+    grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: 3em 3em;
     background-color: #eee;
     margin: 1em 0;
@@ -49,4 +49,9 @@
 .commentBlock_downvotes {
     color: #e53935;
     grid-area: downvote;
+}
+
+.commentBlock_delete {
+    grid-area: delete;
+    text-align: right;
 }

@@ -3,7 +3,7 @@ import './commentBlock.css';
 import upvote_svg from "../../resources/buttons/upvote.svg"
 import downvote_svg from "../../resources/buttons/downvote.svg"
 
-function CommentBlock({comment}) {
+function CommentBlock({comment, onCommentChange}) {
 
     const [localComment, setLocalComment] = useState(comment);
 
@@ -41,15 +41,33 @@ function CommentBlock({comment}) {
         .catch((err) => console.log(err))
     }
 
+    const commentUrl = `https://localhost:63516/userComment/${comment.id}`;
     const fetchComment = () => {
-        fetch(`https://localhost:63516/userComment/${comment.id}/`)
+        fetch(commentUrl)
         .then((res) => {
           return res.json();
         })
         .then((jsonData) => {
           setLocalComment(jsonData)
         })
-    };
+    }
+
+    const deleteComment = () => {
+        fetch(commentUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(localComment),
+        })
+        .then(() => onCommentChange())
+        .catch((err) => console.log(err))
+    }
+
+    const handleDelete = (event) => {
+        event.preventDefault();
+        deleteComment();
+    }
 
     return (
         <div className="commentBlock_commentBlock">
@@ -71,6 +89,13 @@ function CommentBlock({comment}) {
                     <img src={downvote_svg} alt="downvotes: " width="30" height="30" />
                     <h3>&nbsp;{localComment.downvotes}</h3>
                 </div>
+            </div>
+
+            <div className="commentBlock_delete">
+                {/* For future: only display button if user posted the comment */}
+                <form onSubmit={handleDelete}>
+                    <input type="submit" value="Delete comment" />
+                </form>
             </div>
         </div>
     );
