@@ -1,0 +1,37 @@
+.recipeItemGrid_link {
+    display: grid;
+    grid-template-areas:
+      "title image"
+      "rating image";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 50px auto;
+    padding: 6px 20px;
+    color: #000;
+    margin: 40px;
+    width: 50%;
+}
+
+.recipeItemGrid_title {
+    grid-area: title;
+}
+
+.recipeItemGrid_recipeImage {
+    max-height: 100px;
+    height: 100%;
+    width: 100%;
+    grid-area: image;
+    object-fit: contain;
+}
+
+.recipeItemGrid_rating {
+    grid-area: rating;
+}
+
+.recipeItemGrid_link:hover {
+    background-color: #eee;
+}
+
+.recipeItemGrid_link a {
+    text-decoration: none;
+    user-select: none;
+}
