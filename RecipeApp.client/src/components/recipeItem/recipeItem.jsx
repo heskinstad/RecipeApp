@@ -2,6 +2,7 @@ import './recipeItem.css';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import StarRatingDisplay from '../starRatingDisplay/starRatingDisplay';
+import missing_image from "../../resources/buttons/missing_image.png";
 
 function RecipeItem({recipe}) {
     const recipeRatingUrl = `https://localhost:63516/recipe/${recipe.id}/averageRating`;
@@ -41,7 +42,14 @@ function RecipeItem({recipe}) {
             <div className="recipeItem_link">
                 <h2 className="recipeItem_title">{recipe.name}</h2>
                 <p className="recipeItem_desc">{recipe.summary}</p>
-                <img src={recipe.imagePath} className="recipeItem_recipeImage" />
+                <img
+                src={recipe.imagePath}
+                className="recipeItem_recipeImage"
+                onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = missing_image;
+                            }}
+                />
                 <div className="recipeItem_uploader">
                     <br />
                     <h4 >Uploader: {recipe.uploaderName}</h4>

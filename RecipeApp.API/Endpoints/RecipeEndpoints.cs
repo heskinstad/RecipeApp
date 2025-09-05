@@ -167,8 +167,8 @@ namespace RecipeApp.API.Endpoints
             IMapper mapper,
             string searchString = "",
             int pageNumber = 1,
-            int pageSize = 2,
-            string sortBy = "date")
+            int pageSize = 4,
+            string sortBy = "date_desc")
         {
             try
             {
@@ -181,14 +181,14 @@ namespace RecipeApp.API.Endpoints
 
                 var totalCount = await recipes.CountAsync();
 
-                var ordered_recipes = recipes.OrderBy(r => r.UpdatedAt);
+                var ordered_recipes = recipes.OrderByDescending(r => r.UpdatedAt);
 
                 switch (sortBy)
                 {
-                    case "date":
-                        break;
                     case "date_desc":
-                        ordered_recipes = recipes.OrderByDescending(r => r.UpdatedAt);
+                        break;
+                    case "date":
+                        ordered_recipes = recipes.OrderBy(r => r.UpdatedAt);
                         break;
                     case "name":
                         ordered_recipes = recipes.OrderBy(r => r.Name);
