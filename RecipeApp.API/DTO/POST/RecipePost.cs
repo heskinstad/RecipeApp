@@ -15,5 +15,7 @@ namespace RecipeApp.API.DTO.POST
         public string ImagePath { get; set; }
         public Guid CategoryId { get; set; }
         public Guid UploaderId { get; set; }
+        public float AvgRating { get; set; }
+        public int Visits { get; set; }
     }
 }

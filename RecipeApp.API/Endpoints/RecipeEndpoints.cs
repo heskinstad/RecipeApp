@@ -34,6 +34,8 @@ namespace RecipeApp.API.Endpoints
             recipes.MapGet("/search", Search);
             recipes.MapGet("/category", GetByCategory);
 
+            recipes.MapPut("/{id}/addVisitor", AddVisitor);
+
             recipes.MapPost("{id}/ingredients", InsertIngredient);
             recipes.MapGet("{id}/ingredients", GetIngredients);
             recipes.MapDelete("{id}/ingredients/{ingredientId}", DeleteIngredient);
@@ -197,10 +199,16 @@ namespace RecipeApp.API.Endpoints
                         ordered_recipes = recipes.OrderByDescending(r => r.Name);
                         break;
                     case "rating":
-                        //TODO: implement
+                        ordered_recipes = recipes.OrderBy(r => r.AvgRating);
                         break;
                     case "rating_desc":
-                        //TODO: implement
+                        ordered_recipes = recipes.OrderByDescending(r => r.AvgRating);
+                        break;
+                    case "visits":
+                        ordered_recipes = recipes.OrderBy(r => r.Visits);
+                        break;
+                    case "visits_desc":
+                        ordered_recipes = recipes.OrderByDescending(r => r.Visits);
                         break;
                 }
 
@@ -218,6 +226,30 @@ namespace RecipeApp.API.Endpoints
                 );
 
                 return TypedResults.Ok(paginatedResponse);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem(ex.Message);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> AddVisitor(IRepository<Recipe> repository, Guid id)
+        {
+            try
+            {
+                var target = await repository.GetById(id);
+
+                if (target == null)
+                    return Results.NotFound();
+
+                target.Visits = target.Visits + 1;
+
+                await repository.Update(target);
+
+                return TypedResults.Created($"One visit added to {target.Id}!");
             }
             catch (Exception ex)
             {
@@ -392,13 +424,28 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> InsertRating(IRepository<Rating> repository, IMapper mapper, RatingPost rating, Guid id)
+        public static async Task<IResult> InsertRating(IRepository<Rating> ratingRepository, IRepository<Recipe> recipeRepository, IMapper mapper, RatingPost rating, Guid id)
         {
             try
             {
                 var newRating = mapper.Map<Rating>(rating);
 
-                await repository.Insert(newRating);
+                await ratingRepository.Insert(newRating);
+
+                var ratings = await ratingRepository
+                    .GetQueryable(r => r.RecipeId == id)
+                    .ToListAsync();
+
+                float newAverageRating = 0;
+                if (ratings.Count > 0)
+                    newAverageRating = (float)Math.Round(ratings.Average(r => r.Score), 1);
+
+                var recipe = await recipeRepository.GetById(id);
+                if (recipe == null)
+                    return Results.NotFound();
+
+                recipe.AvgRating = newAverageRating;
+                await recipeRepository.Update(recipe);
 
                 return TypedResults.Created($"New UserRecipeRating combination created!");
             }

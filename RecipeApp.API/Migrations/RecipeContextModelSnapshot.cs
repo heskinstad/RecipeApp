@@ -100,6 +100,9 @@ namespace RecipeApp.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<float>("AvgRating")
+                        .HasColumnType("real");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
@@ -127,6 +130,9 @@ namespace RecipeApp.API.Migrations
 
                     b.Property<Guid>("UploaderId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Visits")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

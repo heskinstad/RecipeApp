@@ -18,5 +18,7 @@ namespace RecipeApp.API.DTO.GET
         public string UploaderName { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public float AvgRating { get; set; }
+        public int Visits { get; set; }
     }
 }

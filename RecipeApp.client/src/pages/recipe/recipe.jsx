@@ -18,14 +18,23 @@ function Recipe() {
     const ingredientsUrl = `https://localhost:63516/recipe/${id}/ingredients`;
     const [ingredients, setIngredients] = useState([]);
 
-    const recipeRatingUrl = `https://localhost:63516/recipe/${id}/averageRating`;
-    const [recipeRating, setRecipeRating] = useState([]);
-
     const recipeRatingCountUrl = `https://localhost:63516/recipe/${id}/ratingsCount`;
     const [recipeRatingCount, setRecipeRatingCount] = useState([]);
 
     const commentsUrl = `https://localhost:63516/recipe/${id}/comments`;
     const [comments, setComments] = useState([]);
+
+    const visitsUrl = `https://localhost:63516/recipe/${id}/addVisitor`;
+
+    const addVisitor = () => {
+        fetch(visitsUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch(console.error);
+    };
 
     const fetchRecipes = () => {
         fetch(recipesUrl)
@@ -44,16 +53,6 @@ function Recipe() {
         })
         .then((jsonData) => {
             setIngredients(jsonData);
-        })
-    };
-
-    const fetchRecipeRating = () => {
-        fetch(recipeRatingUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((jsonData) => {
-            setRecipeRating(jsonData);
         })
     };
 
@@ -80,9 +79,9 @@ function Recipe() {
     useEffect(() => {
         fetchRecipes();
         fetchIngredients();
-        fetchRecipeRating();
         fetchRecipeRatingCount();
         fetchComments();
+        addVisitor();
     }, []);
 
     const groupedIngredients = ingredients.reduce((groups, ingredient) => {
@@ -133,7 +132,7 @@ function Recipe() {
                 <p>
                     Give this recipe a rating!
                 </p>
-                <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
+                <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">

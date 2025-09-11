@@ -55,8 +55,10 @@ const Pagination = ({url, renderItem, searchString}) => {
                     <option value="date_desc">Date descending</option>
                     <option value="name">Name</option>
                     <option value="name_desc">Name descending</option>
-                    <option value="rating">Rating</option>
-                    <option value="rating_desc">Rating descending</option>
+                    <option value="rating_desc">Highest rating</option>
+                    <option value="rating">Lowest rating</option>
+                    <option value="visits_desc">Most visited</option>
+                    <option value="visits">Least visited</option>
                 </select>
                 <label>Display mode: </label>
                 {/* <select value={displayMode} onChange={handleDisplayModeChange}> */}

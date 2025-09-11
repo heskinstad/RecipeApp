@@ -5,21 +5,8 @@ import StarRatingDisplay from '../starRatingDisplay/starRatingDisplay';
 import missing_image from "../../resources/buttons/missing_image.png";
 
 function RecipeItem({recipe}) {
-    const recipeRatingUrl = `https://localhost:63516/recipe/${recipe.id}/averageRating`;
-    const [recipeRating, setRecipeRating] = useState([]);
-
     const recipeRatingCountUrl = `https://localhost:63516/recipe/${recipe.id}/ratingsCount`;
     const [recipeRatingCount, setRecipeRatingCount] = useState([]);
-
-    const fetchRecipeRating = () => {
-        fetch(recipeRatingUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((jsonData) => {
-            setRecipeRating(jsonData);
-        })
-    };
 
     const fetchRecipeRatingCount = () => {
         fetch(recipeRatingCountUrl)
@@ -32,7 +19,6 @@ function RecipeItem({recipe}) {
     };
 
     useEffect(() => {
-        fetchRecipeRating();
         fetchRecipeRatingCount();
     }, [recipe]);
 
@@ -52,10 +38,14 @@ function RecipeItem({recipe}) {
                 />
                 <div className="recipeItem_uploader">
                     <br />
-                    <h4 >Uploader: {recipe.uploaderName}</h4>
+                    <h4>Uploader: {recipe.uploaderName}</h4>
                 </div>
                 <div className="recipeItem_rating">
-                    <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipeRating} />
+                    <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
+                </div>
+                <div className="recipeItem_visits">
+                    <br />
+                    <h4>Visits: {recipe.visits}</h4>
                 </div>
             </div>
         </Link>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './modifyRecipe.css';
 import AddIngredient from '../addIngredient/addIngredient';
 import Popup from '../popup/popup';
+import RichTextBox from '../richTextBox/richTextBox';
 
 function ModifyRecipe({
     formData,
@@ -13,6 +14,8 @@ function ModifyRecipe({
     const [categories, setCategories] = useState([]);
     const categoriesUrl = "https://localhost:63516/category";
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+
 
     useEffect(() => {
         fetch(categoriesUrl)
@@ -75,11 +78,12 @@ function ModifyRecipe({
                     <label>
                         <h3>Description:</h3>
                         <br />
-                        <textarea
+                        {/* <textarea
                             name="description"
                             onChange={handleChange}
                             value={formData.description}
-                        />
+                        /> */}
+                        <RichTextBox />
                     </label>
                 </div>
 
