@@ -66,6 +66,10 @@
     grid-area: submit;
 }
 
+.modifyRecipe_cancel {
+    margin-left: 10px;
+}
+
 .modifyRecipe_name input,
 .modifyRecipe_summary textarea,
 .modifyRecipe_desc textarea {

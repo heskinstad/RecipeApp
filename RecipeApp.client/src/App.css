@@ -7,11 +7,11 @@
 .app {
   display: grid;
   grid-template-areas:
-    "aside header"
-    "aside main"
-    "aside footer";
-  grid-template-columns: 1fr 5fr;
-  grid-template-rows: 50px auto 100px;
+    "header"
+    "main"
+    "footer";
+  grid-template-columns: 100%;
+  grid-template-rows: 50px minmax(calc(100vh - 150px), auto) 100px;
   width: 100vw;
   min-height: 100vh;
   background-color: #f3f3f3;

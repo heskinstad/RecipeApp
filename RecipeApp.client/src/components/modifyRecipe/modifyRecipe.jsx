@@ -52,6 +52,7 @@ function ModifyRecipe({
                             name="name"
                             onChange={handleChange}
                             value={formData.name}
+                            placeholder="Enter recipe name..."
                         />
                     </label>
                 </div>
@@ -70,6 +71,7 @@ function ModifyRecipe({
                             name="summary"
                             onChange={handleChange}
                             value={formData.summary}
+                            placeholder="Write a summary..."
                         />
                     </label>
                 </div>
@@ -131,6 +133,7 @@ function ModifyRecipe({
 
                 <div className="modifyRecipe_submit">
                     <input type="submit" value={isEditMode ? "Update" : "Create"} />
+                    <input type="button" value="Cancel" className="modifyRecipe_cancel" onClick={() => window.history.back()} />
                 </div>
             </form>
 

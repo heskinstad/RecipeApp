@@ -1,0 +1,35 @@
+.richTextBox_elements_button {
+    cursor: pointer;
+    color: #aaa;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 4px;
+    outline: none;
+}
+
+.richTextBox_elements_icon {
+    font-size: 18px;
+    vertical-align: text-bottom;
+}
+
+.richTextBox_elements_instruction {
+    white-space: pre-wrap;
+    margin: 0 -20px 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background: #f8f8e8;
+}
+
+.richTextBox_elements_menu {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.richTextBox_elements_toolbar {
+    position: relative;
+    padding: 1px 18px 17px;
+    margin: 0 -20px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
