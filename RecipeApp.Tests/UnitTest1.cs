@@ -5,6 +5,7 @@ using Moq;
 
 namespace RecipeApp.Tests
 {
+    [TestFixture]
     public class Tests
     {
         private WebApplicationFactory<Program> _factory;
@@ -20,6 +21,7 @@ namespace RecipeApp.Tests
         [TearDown]
         public void Dispose()
         {
+            _client?.Dispose();
             _factory?.Dispose();
         }
 
