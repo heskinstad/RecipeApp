@@ -30,7 +30,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newCategory);
 
-                return TypedResults.Created($"Category with id {newCategory.Id} created!");
+                return TypedResults.Created($"/category/{newCategory.Id}", newCategory);
             }
             catch (Exception ex)
             {

@@ -59,7 +59,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newRecipe);
 
-                return TypedResults.Created($"Recipe with id {newRecipe.Id} created!");
+                return TypedResults.Created($"/recipe/{newRecipe.Id}", newRecipe);
             }
             catch (Exception ex)
             {
@@ -132,7 +132,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Update(target);
 
-                return TypedResults.Created($"Recipe with id {target.Id} updated!");
+                return TypedResults.Ok(target);
             }
             catch (Exception ex)
             {
@@ -174,8 +174,6 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-
-
                 // Use the GetQueryable method to filter based on the name query parameter
                 var recipes = repository.GetQueryable(r =>
                     string.IsNullOrEmpty(searchString) || r.Name.ToLower().Contains(searchString.ToLower()))
@@ -245,11 +243,11 @@ namespace RecipeApp.API.Endpoints
                 if (target == null)
                     return Results.NotFound();
 
-                target.Visits = target.Visits + 1;
+                target.Visits += 1;
 
                 await repository.Update(target);
 
-                return TypedResults.Created($"One visit added to {target.Id}!");
+                return TypedResults.Ok(target.Visits);
             }
             catch (Exception ex)
             {
@@ -367,7 +365,8 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newRecipeIngredients);
 
-                return TypedResults.Created($"New RecipeIngredients combination created!");
+                //TODO: fix the URL
+                return TypedResults.Created($"/recipes/(recipe.Id)/ingredients", newRecipeIngredients);
             }
             catch (Exception ex)
             {
@@ -430,6 +429,7 @@ namespace RecipeApp.API.Endpoints
             {
                 var newRating = mapper.Map<Rating>(rating);
 
+                newRating.RecipeId = id;
                 await ratingRepository.Insert(newRating);
 
                 var ratings = await ratingRepository
@@ -447,7 +447,7 @@ namespace RecipeApp.API.Endpoints
                 recipe.AvgRating = newAverageRating;
                 await recipeRepository.Update(recipe);
 
-                return TypedResults.Created($"New UserRecipeRating combination created!");
+                return TypedResults.Created($"/recipe/{recipe.Id}/ratings", newAverageRating);
             }
             catch (Exception ex)
             {
@@ -532,7 +532,8 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newUserComment);
 
-                return TypedResults.Created($"UserComment with id {newUserComment.Id} created!");
+                //TODO: fix the URL
+                return TypedResults.Created($"/recipe/(recipe.Id)/comments", newUserComment);
             }
             catch (Exception ex)
             {

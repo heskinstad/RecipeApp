@@ -35,7 +35,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newUser);
 
-                return TypedResults.Created($"User with id {newUser.Id} created!");
+                return TypedResults.Created($"/user/{newUser.Id}", newUser);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Update(target);
 
-                return TypedResults.Created($"User with id {target.Id} updated!");
+                return TypedResults.Ok(target);
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newFavorites);
 
-                return TypedResults.Created($"Recipe added to favorites!");
+                return TypedResults.Created($"/user/{newFavorites.UserId}/AddFavorite", newFavorites);
             }
             catch (Exception ex)
             {

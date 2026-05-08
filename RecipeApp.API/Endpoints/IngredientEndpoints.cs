@@ -29,7 +29,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newIngredient);
 
-                return TypedResults.Created($"Ingredient with id {newIngredient.Id} created!");
+                return TypedResults.Created($"/ingredient/{newIngredient.Id}", newIngredient);
             }
             catch (Exception ex)
             {

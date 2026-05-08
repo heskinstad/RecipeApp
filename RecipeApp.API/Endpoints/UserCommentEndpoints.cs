@@ -33,7 +33,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newUserComment);
 
-                return TypedResults.Created($"UserComment with id {newUserComment.Id} created!");
+                return TypedResults.Created($"/userComment/{newUserComment.Id}", newUserComment);
             }
             catch (Exception ex)
             {
@@ -113,11 +113,11 @@ namespace RecipeApp.API.Endpoints
                 if (userComment == null)
                     return Results.NotFound();
 
-                userComment.upvotes = userComment.upvotes + 1;
+                userComment.upvotes += 1;
 
                 await repository.Update(userComment);
 
-                return TypedResults.Created("Comment upvoted!");
+                return TypedResults.Ok(userComment.upvotes);
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Update(userComment);
 
-                return TypedResults.Created("Comment upvoted!");
+                return TypedResults.Ok(userComment.downvotes);
             }
             catch (Exception ex)
             {
