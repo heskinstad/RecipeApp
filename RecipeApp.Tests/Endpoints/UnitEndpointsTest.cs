@@ -11,7 +11,7 @@ using RecipeApp.API.Models;
 namespace RecipeApp.Tests.Endpoints
 {
     [TestFixture]
-    public class CategoryEndpointsTest
+    public class UnitEndpointstest
     {
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
@@ -50,79 +50,79 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            Category category = new Category () { Name = "Bri'ish" };
+            Unit unit = new Unit() { Name = "Kg" };
 
             // Act
-            var response = await _client.PostAsJsonAsync("/category", category);
+            var response = await _client.PostAsJsonAsync("/unit", unit);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            var result = await response.Content.ReadFromJsonAsync<Category>();
-            Assert.That(result?.Name, Is.EqualTo("Bri'ish"));
+            var result = await response.Content.ReadFromJsonAsync<Unit>();
+            Assert.That(result?.Name, Is.EqualTo("Kg"));
         }
 
         [Test]
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
-            Category category2 = new Category() { Name = "French" };
+            Unit unit1 = new Unit() { Name = "Kg" };
+            Unit unit2 = new Unit() { Name = "L" };
 
-            await _client.PostAsJsonAsync("/category", category1);
-            await _client.PostAsJsonAsync("/category", category2);
+            await _client.PostAsJsonAsync("/unit", unit1);
+            await _client.PostAsJsonAsync("/unit", unit2);
 
             // Act
-            var response = await _client.GetAsync("/category");
+            var response = await _client.GetAsync("/unit");
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            var result = await response.Content.ReadFromJsonAsync<List<CategoryGet>>();
+            var result = await response.Content.ReadFromJsonAsync<List<UnitGet>>();
             Assert.That(result?.Count == 2);
-            Assert.That(result?[0].Name, Is.EqualTo("Bri'ish"));
-            Assert.That(result?[1].Name, Is.EqualTo("French"));
+            Assert.That(result?[0].Name, Is.EqualTo("Kg"));
+            Assert.That(result?[1].Name, Is.EqualTo("L"));
         }
 
         [Test]
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
+            Unit unit1 = new Unit() { Name = "Kg" };
 
-            var postResponse = await _client.PostAsJsonAsync("/category", category1);
+            var postResponse = await _client.PostAsJsonAsync("/unit", unit1);
 
             // Act
-            var response = await _client.GetAsync($"/category/{postResponse.Content.ReadFromJsonAsync<CategoryGet>().Result.Id}");
+            var response = await _client.GetAsync($"/unit/{postResponse.Content.ReadFromJsonAsync<UnitGet>().Result.Id}");
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            var result = await response.Content.ReadFromJsonAsync<CategoryGet>();
-            Assert.That(result?.Name, Is.EqualTo("Bri'ish"));
+            var result = await response.Content.ReadFromJsonAsync<UnitGet>();
+            Assert.That(result?.Name, Is.EqualTo("Kg"));
         }
 
         [Test]
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
+            Unit unit1 = new Unit() { Name = "Kg" };
 
-            await _client.PostAsJsonAsync("/category", category1);
+            await _client.PostAsJsonAsync("/unit", unit1);
 
-            var response = await _client.GetAsync("/category");
+            var response = await _client.GetAsync("/unit");
 
-            var result = await response.Content.ReadFromJsonAsync<List<CategoryGet>>();
+            var result = await response.Content.ReadFromJsonAsync<List<UnitGet>>();
             Assert.That(result?.Count == 1);
 
             // Act
-            response = await _client.DeleteAsync($"/category/{result?[0].Id}");
+            response = await _client.DeleteAsync($"/unit/{result?[0].Id}");
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            response = await _client.GetAsync("/category");
-            result = await response.Content.ReadFromJsonAsync<List<CategoryGet>>();
+            response = await _client.GetAsync("/unit");
+            result = await response.Content.ReadFromJsonAsync<List<UnitGet>>();
             Assert.That(result?.Count == 0);
         }
 
@@ -130,7 +130,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Delete_ReturnsNotFound()
         {
             // Act
-            var response = await _client.DeleteAsync($"/category/{new Guid()}");
+            var response = await _client.DeleteAsync($"/unit/{new Guid()}");
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));

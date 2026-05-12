@@ -116,11 +116,11 @@ namespace RecipeApp.API.Endpoints
                 if (userComment == null)
                     return Results.NotFound();
 
-                userComment.upvotes += 1;
+                userComment.Upvotes += 1;
 
                 await repository.Update(userComment);
 
-                return TypedResults.Ok(userComment.upvotes);
+                return TypedResults.Ok(userComment.Upvotes);
             }
             catch (Exception ex)
             {
@@ -140,11 +140,11 @@ namespace RecipeApp.API.Endpoints
                 if (userComment == null)
                     return Results.NotFound();
 
-                userComment.downvotes += 1;
+                userComment.Downvotes += 1;
 
                 await repository.Update(userComment);
 
-                return TypedResults.Ok(userComment.downvotes);
+                return TypedResults.Ok(userComment.Downvotes);
             }
             catch (Exception ex)
             {
