@@ -91,6 +91,9 @@ namespace RecipeApp.API.Endpoints
             {
                 var target = await repository.GetById(id);
 
+                if (target == null)
+                    return TypedResults.NotFound();
+
                 if (await repository.Delete(id) != null)
                     return TypedResults.Ok(target);
                 return TypedResults.NotFound();

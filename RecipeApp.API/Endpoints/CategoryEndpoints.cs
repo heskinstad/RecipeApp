@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
@@ -84,6 +85,9 @@ namespace RecipeApp.API.Endpoints
             try
             {
                 var target = await repository.GetById(id);
+
+                if (target == null)
+                    return TypedResults.NotFound();
 
                 if (await repository.Delete(id) != null)
                     return TypedResults.Ok(target);

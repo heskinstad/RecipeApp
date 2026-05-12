@@ -14,7 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<RecipeContext>();
+builder.Services.AddDbContext<RecipeContext>(options =>
+{
+    if (!builder.Environment.IsEnvironment("Testing"))
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+        options.UseNpgsql(connectionString);
+    }
+});
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile(new MappingProfile());
@@ -51,14 +58,17 @@ app.ConfigureIngredients();
 app.ConfigureUnits();
 
 // Initializer to seed db for empty tables
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<RecipeContext>();
-    DbInitializer.Initialize(context);
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<RecipeContext>();
+        DbInitializer.Initialize(context);
+    }
 }
 
-    app.UseCors(options =>
+app.UseCors(options =>
         options.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod());
