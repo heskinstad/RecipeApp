@@ -29,7 +29,7 @@ builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddScoped<IRepository<Rating>, Repository<Rating>>();
 builder.Services.AddScoped<IRepository<UserComment>, Repository<UserComment>>();
-builder.Services.AddScoped<IRepository<Favorites>, Repository<Favorites>>();
+builder.Services.AddScoped<IRepository<Favorite>, Repository<Favorite>>();
 builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
 builder.Services.AddScoped<IRepository<Unit>, Repository<Unit>>();
 builder.Services.AddScoped<IRepository<RecipeIngredients>, Repository<RecipeIngredients>>();

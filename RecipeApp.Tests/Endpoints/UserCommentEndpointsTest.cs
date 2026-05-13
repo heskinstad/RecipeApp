@@ -51,7 +51,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            UserComment userComment = new UserComment() { Message = "Wowie!" };
+            UserCommentPost userComment = new UserCommentPost() { Message = "Wowie!" };
 
             // Act
             var response = await _client.PostAsJsonAsync("/userComment", userComment);
@@ -59,7 +59,7 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            var result = await response.Content.ReadFromJsonAsync<UserComment>();
+            var result = await response.Content.ReadFromJsonAsync<UserCommentGet>();
             Assert.That(result?.Message, Is.EqualTo("Wowie!"));
         }
 
@@ -67,8 +67,8 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            UserComment userComment1 = new UserComment() { Message = "Wowie!" };
-            UserComment userComment2 = new UserComment() { Message = "ME LIKE!" };
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!" };
+            UserCommentPost userComment2 = new UserCommentPost() { Message = "ME LIKE!" };
 
             await _client.PostAsJsonAsync("/userComment", userComment1);
             await _client.PostAsJsonAsync("/userComment", userComment2);
@@ -119,10 +119,19 @@ namespace RecipeApp.Tests.Endpoints
         }
 
         [Test]
+        public async Task GetSingle_ReturnsNotFound()
+        {
+            // Act
+            var response = await _client.GetAsync($"/userComment/{new Guid()}");
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+        [Test]
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            UserComment userComment1 = new UserComment() { Message = "Wowie!" };
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!" };
 
             await _client.PostAsJsonAsync("/userComment", userComment1);
 

@@ -15,8 +15,9 @@ created_at
 }
 
 Entity favourite_list {
-*<u>user_id
-*<u>recipe_id
+<u>id
+*user_id
+*recipe_id
 }
 
 Entity ingredient {
@@ -25,8 +26,9 @@ name
 }
 
 Entity rating {
-*<u>user_id
-*<u>recipe_id
+<u>id
+*user_id
+*recipe_id
 score
 }
 

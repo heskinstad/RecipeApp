@@ -70,7 +70,7 @@ namespace RecipeApp.API.Data
             RecipeIngredients ri2 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient1.Id, Amount = 2, UnitId = unit2.Id, Section = "Other" };
             RecipeIngredients ri3 = new RecipeIngredients() { RecipeId = recipe1.Id, IngredientId = ingredient2.Id, Amount = 2, UnitId = unit2.Id, Section = "Sauce" };
 
-            Favorites fav1 = new Favorites() { UserId = user1.Id, RecipeId = recipe1.Id };
+            Favorite fav1 = new Favorite() { UserId = user1.Id, RecipeId = recipe1.Id };
 
             Rating rating1 = new Rating() { UserId = user1.Id, RecipeId = recipe1.Id, Score = 2 };
             Rating rating2 = new Rating() { UserId = user2.Id, RecipeId = recipe1.Id, Score = 5 };

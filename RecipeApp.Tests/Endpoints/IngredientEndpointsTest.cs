@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
+using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
 {
     [TestFixture]
-    public class IngredientEndpointstest
+    public class IngredientEndpointsTest
     {
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
@@ -50,7 +51,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            Ingredient ingredient = new Ingredient() { Name = "Cheese" };
+            IngredientPost ingredient = new IngredientPost() { Name = "Cheese" };
 
             // Act
             var response = await _client.PostAsJsonAsync("/ingredient", ingredient);
@@ -58,7 +59,7 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            var result = await response.Content.ReadFromJsonAsync<Ingredient>();
+            var result = await response.Content.ReadFromJsonAsync<IngredientGet>();
             Assert.That(result?.Name, Is.EqualTo("Cheese"));
         }
 
@@ -66,8 +67,8 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            Ingredient ingredient1 = new Ingredient() { Name = "Cheese" };
-            Ingredient ingredient2 = new Ingredient() { Name = "Tomato" };
+            IngredientPost ingredient1 = new IngredientPost() { Name = "Cheese" };
+            IngredientPost ingredient2 = new IngredientPost() { Name = "Tomato" };
 
             await _client.PostAsJsonAsync("/ingredient", ingredient1);
             await _client.PostAsJsonAsync("/ingredient", ingredient2);
@@ -88,7 +89,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
-            Ingredient ingredient1 = new Ingredient() { Name = "Cheese" };
+            IngredientPost ingredient1 = new IngredientPost() { Name = "Cheese" };
 
             var postResponse = await _client.PostAsJsonAsync("/ingredient", ingredient1);
 
@@ -103,10 +104,19 @@ namespace RecipeApp.Tests.Endpoints
         }
 
         [Test]
+        public async Task GetSingle_ReturnsNotFound()
+        {
+            // Act
+            var response = await _client.GetAsync($"/ingredient/{new Guid()}");
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+        [Test]
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            Ingredient ingredient1 = new Ingredient() { Name = "Cheese" };
+            IngredientPost ingredient1 = new IngredientPost() { Name = "Cheese" };
 
             await _client.PostAsJsonAsync("/ingredient", ingredient1);
 

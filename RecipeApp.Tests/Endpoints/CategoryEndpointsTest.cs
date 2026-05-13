@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
+using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
@@ -50,7 +51,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            Category category = new Category () { Name = "Bri'ish" };
+            CategoryPost category = new CategoryPost() { Name = "Bri'ish" };
 
             // Act
             var response = await _client.PostAsJsonAsync("/category", category);
@@ -58,7 +59,7 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            var result = await response.Content.ReadFromJsonAsync<Category>();
+            var result = await response.Content.ReadFromJsonAsync<CategoryGet>();
             Assert.That(result?.Name, Is.EqualTo("Bri'ish"));
         }
 
@@ -66,8 +67,8 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
-            Category category2 = new Category() { Name = "French" };
+            CategoryPost category1 = new CategoryPost() { Name = "Bri'ish" };
+            CategoryPost category2 = new CategoryPost() { Name = "French" };
 
             await _client.PostAsJsonAsync("/category", category1);
             await _client.PostAsJsonAsync("/category", category2);
@@ -88,7 +89,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
+            CategoryPost category1 = new CategoryPost() { Name = "Bri'ish" };
 
             var postResponse = await _client.PostAsJsonAsync("/category", category1);
 
@@ -103,10 +104,19 @@ namespace RecipeApp.Tests.Endpoints
         }
 
         [Test]
+        public async Task GetSingle_ReturnsNotFound()
+        {
+            // Act
+            var response = await _client.GetAsync($"/category/{new Guid()}");
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+        [Test]
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            Category category1 = new Category() { Name = "Bri'ish" };
+            CategoryPost category1 = new CategoryPost() { Name = "Bri'ish" };
 
             await _client.PostAsJsonAsync("/category", category1);
 

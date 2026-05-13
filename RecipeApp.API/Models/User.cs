@@ -10,6 +10,6 @@
         public List<Recipe> Recipes { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<UserComment> UserComments { get; set; }
-        public List<Favorites> FavoriteLists { get; set; }
+        public List<Favorite> FavoriteLists { get; set; }
     }
 }

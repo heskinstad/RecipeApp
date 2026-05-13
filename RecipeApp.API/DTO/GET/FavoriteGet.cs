@@ -1,9 +1,10 @@
 ﻿using RecipeApp.API.Models;
 
-namespace RecipeApp.API.DTO.POST
+namespace RecipeApp.API.DTO.GET
 {
-    public class FavoritesPost
+    public class FavoriteGet
     {
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid RecipeId { get; set; }
     }

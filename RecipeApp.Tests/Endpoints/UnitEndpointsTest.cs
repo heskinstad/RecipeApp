@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
+using RecipeApp.API.DTO.POST;
 using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
@@ -50,7 +51,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            Unit unit = new Unit() { Name = "Kg" };
+            UnitPost unit = new UnitPost() { Name = "Kg" };
 
             // Act
             var response = await _client.PostAsJsonAsync("/unit", unit);
@@ -58,7 +59,7 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            var result = await response.Content.ReadFromJsonAsync<Unit>();
+            var result = await response.Content.ReadFromJsonAsync<UnitGet>();
             Assert.That(result?.Name, Is.EqualTo("Kg"));
         }
 
@@ -66,8 +67,8 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            Unit unit1 = new Unit() { Name = "Kg" };
-            Unit unit2 = new Unit() { Name = "L" };
+            UnitPost unit1 = new UnitPost() { Name = "Kg" };
+            UnitPost unit2 = new UnitPost() { Name = "L" };
 
             await _client.PostAsJsonAsync("/unit", unit1);
             await _client.PostAsJsonAsync("/unit", unit2);
@@ -88,7 +89,7 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
-            Unit unit1 = new Unit() { Name = "Kg" };
+            UnitPost unit1 = new UnitPost() { Name = "Kg" };
 
             var postResponse = await _client.PostAsJsonAsync("/unit", unit1);
 
@@ -103,10 +104,19 @@ namespace RecipeApp.Tests.Endpoints
         }
 
         [Test]
+        public async Task GetSingle_ReturnsNotFound()
+        {
+            // Act
+            var response = await _client.GetAsync($"/unit/{new Guid()}");
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+        [Test]
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            Unit unit1 = new Unit() { Name = "Kg" };
+            UnitPost unit1 = new UnitPost() { Name = "Kg" };
 
             await _client.PostAsJsonAsync("/unit", unit1);
 
