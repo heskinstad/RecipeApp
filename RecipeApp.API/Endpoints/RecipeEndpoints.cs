@@ -257,7 +257,7 @@ namespace RecipeApp.API.Endpoints
             try
             {
                 var recipes = await repository.GetQueryable(r =>
-                    string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower())).Include(r => r.Uploader).ToListAsync();
+                    string.IsNullOrEmpty(name) || r.Category.Name.ToLower().Equals(name.ToLower())).Include(r => r.Category).Include(r => r.Uploader).ToListAsync();
 
                 if (string.IsNullOrEmpty(name))
                     recipes = [];

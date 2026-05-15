@@ -12,7 +12,7 @@ namespace RecipeApp.API.DTO.POST
         public Guid UserId { get; set; }
         public Guid RecipeId { get; set; }
         public string Message { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
+        public int Upvotes { get; set; } = 0;
+        public int Downvotes { get; set; } = 0;
     }
 }

@@ -12,7 +12,7 @@
         public Guid UploaderId { get; set; }
         public User Uploader { get; set; }
         public float AvgRating { get; set; }
-        public int Visits { get; set; }
+        public int Visits { get; set; } = 0;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public List<RecipeIngredients> RecipeIngredients { get; set; }

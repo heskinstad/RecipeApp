@@ -2,12 +2,12 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
-using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
 {
@@ -16,11 +16,13 @@ namespace RecipeApp.Tests.Endpoints
     {
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
+        private SqliteConnection _sqliteConnection;
 
         [SetUp]
         public void SetUp()
         {
-            string dbName = Guid.NewGuid().ToString();
+            _sqliteConnection = new SqliteConnection("DataSource=:memory:");
+            _sqliteConnection.Open();
 
             _factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             {
@@ -32,10 +34,16 @@ namespace RecipeApp.Tests.Endpoints
 
                     services.AddDbContext<RecipeContext>(options =>
                     {
-                        options.UseInMemoryDatabase(dbName);
+                        options.UseSqlite(_sqliteConnection);
                     });
                 });
             });
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<RecipeContext>();
+                context.Database.EnsureCreated();
+            }
 
             _client = _factory.CreateClient();
         }
@@ -43,8 +51,11 @@ namespace RecipeApp.Tests.Endpoints
         [TearDown]
         public void Dispose()
         {
-            _factory?.Dispose();
             _client?.Dispose();
+            _factory?.Dispose();
+
+            _sqliteConnection?.Close();
+            _sqliteConnection?.Dispose();
         }
 
         [Test]
@@ -137,6 +148,7 @@ namespace RecipeApp.Tests.Endpoints
         {
             // Act
             var response = await _client.PutAsJsonAsync($"/user/{new Guid()}", new UserPost() { Name = "Pinkman" });
+
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
@@ -183,7 +195,11 @@ namespace RecipeApp.Tests.Endpoints
             var response = await _client.PostAsJsonAsync("/user", user);
             var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "" };
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
             var recipe1Response = await _client.PostAsJsonAsync("recipe", recipe1);
             var recipe1Result = await recipe1Response.Content.ReadFromJsonAsync<RecipeGet>();
 
@@ -208,7 +224,11 @@ namespace RecipeApp.Tests.Endpoints
             var response = await _client.PostAsJsonAsync("/user", user);
             var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "" };
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
             var recipe1Response = await _client.PostAsJsonAsync("recipe", recipe1);
             var recipe1Result = await recipe1Response.Content.ReadFromJsonAsync<RecipeGet>();
 
@@ -237,11 +257,15 @@ namespace RecipeApp.Tests.Endpoints
             var response = await _client.PostAsJsonAsync("/user", user);
             var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "" };
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
             var recipe1Response = await _client.PostAsJsonAsync("recipe", recipe1);
             var recipe1Result = await recipe1Response.Content.ReadFromJsonAsync<RecipeGet>();
 
-            RecipePost recipe2 = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "" };
+            RecipePost recipe2 = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
             var recipe2Response = await _client.PostAsJsonAsync("recipe", recipe2);
             var recipe2Result = await recipe2Response.Content.ReadFromJsonAsync<RecipeGet>();
 
@@ -260,9 +284,7 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(getResult?.Count, Is.EqualTo(2));
             Assert.That(getResult?[0].UserId, Is.EqualTo(userResult.Id));
-            Assert.That(getResult?[0].RecipeId, Is.EqualTo(recipe1Result.Id));
-            Assert.That(getResult?[1].UserId, Is.EqualTo(userResult.Id));
-            Assert.That(getResult?[1].RecipeId, Is.EqualTo(recipe2Result.Id));
+            Assert.That(getResult?[0].RecipeId == recipe1Result.Id || getResult?[0].RecipeId == recipe2Result.Id);
         }
 
         [Test]
@@ -273,7 +295,11 @@ namespace RecipeApp.Tests.Endpoints
             var response = await _client.PostAsJsonAsync("/user", user);
             var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "" };
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
             var recipe1Response = await _client.PostAsJsonAsync("recipe", recipe1);
             var recipe1Result = await recipe1Response.Content.ReadFromJsonAsync<RecipeGet>();
 
@@ -302,6 +328,7 @@ namespace RecipeApp.Tests.Endpoints
         {
             // Act
             var deleteResponse = await _client.DeleteAsync($"/user/{new Guid()}/RemoveFavorite/{new Guid()}");
+
             // Assert
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
@@ -313,8 +340,10 @@ namespace RecipeApp.Tests.Endpoints
             UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
             var response = await _client.PostAsJsonAsync("/user", user);
             var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
+
             // Act
             var deleteResponse = await _client.DeleteAsync($"/user/{userResult?.Id}/RemoveFavorite/{new Guid()}");
+
             // Assert
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }

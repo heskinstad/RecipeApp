@@ -2,12 +2,12 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
-using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
 {
@@ -16,11 +16,13 @@ namespace RecipeApp.Tests.Endpoints
     {
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
+        private SqliteConnection _sqliteConnection;
 
         [SetUp]
         public void SetUp()
         {
-            string dbName = Guid.NewGuid().ToString();
+            _sqliteConnection = new SqliteConnection("DataSource=:memory:");
+            _sqliteConnection.Open();
 
             _factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             {
@@ -32,10 +34,16 @@ namespace RecipeApp.Tests.Endpoints
 
                     services.AddDbContext<RecipeContext>(options =>
                     {
-                        options.UseInMemoryDatabase(dbName);
+                        options.UseSqlite(_sqliteConnection);
                     });
                 });
             });
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<RecipeContext>();
+                context.Database.EnsureCreated();
+            }
 
             _client = _factory.CreateClient();
         }
@@ -43,18 +51,35 @@ namespace RecipeApp.Tests.Endpoints
         [TearDown]
         public void Dispose()
         {
-            _factory?.Dispose();
             _client?.Dispose();
+            _factory?.Dispose();
+
+            _sqliteConnection?.Close();
+            _sqliteConnection?.Dispose();
         }
 
         [Test]
         public async Task Insert_ReturnsValue()
         {
             // Arrange
-            UserCommentPost userComment = new UserCommentPost() { Message = "Wowie!" };
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
+
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
+
+            await _client.PostAsJsonAsync("/userComment", userComment1);
 
             // Act
-            var response = await _client.PostAsJsonAsync("/userComment", userComment);
+            var response = await _client.PostAsJsonAsync("/userComment", userComment1);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
@@ -67,8 +92,20 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetAll_ReturnsMultipleElements()
         {
             // Arrange
-            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!" };
-            UserCommentPost userComment2 = new UserCommentPost() { Message = "ME LIKE!" };
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
+
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
+            UserCommentPost userComment2 = new UserCommentPost() { Message = "ME LIKE!", RecipeId = recipeResult.Id, UserId = userResult.Id };
 
             await _client.PostAsJsonAsync("/userComment", userComment1);
             await _client.PostAsJsonAsync("/userComment", userComment2);
@@ -89,20 +126,21 @@ namespace RecipeApp.Tests.Endpoints
         public async Task GetSingle_ReturnsSingle()
         {
             // Arrange
-            UserPost user1 = new UserPost() { Name = "John Doe", PasswordHash = "password123" };
-            var userPostResponse = await _client.PostAsJsonAsync("/user", user1);
-            var userResult = await userPostResponse.Content.ReadFromJsonAsync<UserGet>();
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti" };
-            var recipePostResponse = await _client.PostAsJsonAsync("recipe", recipe1);
-            var recipeResult = await recipePostResponse.Content.ReadFromJsonAsync<RecipeGet>();
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
 
-            UserCommentPost userComment1 = new UserCommentPost()
-            {
-                UserId = userResult.Id,
-                RecipeId = recipeResult.Id,
-                Message = "Wowie!"
-            };
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
+
+            await _client.PostAsJsonAsync("/userComment", userComment1);
 
             var postResponse = await _client.PostAsJsonAsync("/userComment", userComment1);
             var commentResult = await postResponse.Content.ReadFromJsonAsync<UserCommentGet>();
@@ -131,7 +169,19 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Delete_ReturnsOk()
         {
             // Arrange
-            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!" };
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
+
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
 
             await _client.PostAsJsonAsync("/userComment", userComment1);
 
@@ -165,20 +215,21 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Upvote_ReturnsScore()
         {
             // Arrange
-            UserPost user1 = new UserPost() { Name = "John Doe", PasswordHash = "password123" };
-            var userPostResponse = await _client.PostAsJsonAsync("/user", user1);
-            var userResult = await userPostResponse.Content.ReadFromJsonAsync<UserGet>();
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti" };
-            var recipePostResponse = await _client.PostAsJsonAsync("recipe", recipe1);
-            var recipeResult = await recipePostResponse.Content.ReadFromJsonAsync<RecipeGet>();
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
 
-            UserCommentPost userComment1 = new UserCommentPost()
-            {
-                UserId = userResult.Id,
-                RecipeId = recipeResult.Id,
-                Message = "Wowie!"
-            };
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
+
+            await _client.PostAsJsonAsync("/userComment", userComment1);
 
             var postResponse = await _client.PostAsJsonAsync("/userComment", userComment1);
             var commentResult = await postResponse.Content.ReadFromJsonAsync<UserCommentGet>();
@@ -198,20 +249,21 @@ namespace RecipeApp.Tests.Endpoints
         public async Task Downvote_ReturnsScore()
         {
             // Arrange
-            UserPost user1 = new UserPost() { Name = "John Doe", PasswordHash = "password123" };
-            var userPostResponse = await _client.PostAsJsonAsync("/user", user1);
-            var userResult = await userPostResponse.Content.ReadFromJsonAsync<UserGet>();
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var userResponse = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await userResponse.Content.ReadFromJsonAsync<UserGet>();
 
-            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti" };
-            var recipePostResponse = await _client.PostAsJsonAsync("recipe", recipe1);
-            var recipeResult = await recipePostResponse.Content.ReadFromJsonAsync<RecipeGet>();
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
 
-            UserCommentPost userComment1 = new UserCommentPost()
-            {
-                UserId = userResult.Id,
-                RecipeId = recipeResult.Id,
-                Message = "Wowie!"
-            };
+            RecipePost recipe = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", UploaderId = userResult.Id, CategoryId = categoryResult.Id };
+            var recipeResponse = await _client.PostAsJsonAsync("/recipe", recipe);
+            var recipeResult = await recipeResponse.Content.ReadFromJsonAsync<RecipeGet>();
+
+            UserCommentPost userComment1 = new UserCommentPost() { Message = "Wowie!", RecipeId = recipeResult.Id, UserId = userResult.Id };
+
+            await _client.PostAsJsonAsync("/userComment", userComment1);
 
             var postResponse = await _client.PostAsJsonAsync("/userComment", userComment1);
             var commentResult = await postResponse.Content.ReadFromJsonAsync<UserCommentGet>();

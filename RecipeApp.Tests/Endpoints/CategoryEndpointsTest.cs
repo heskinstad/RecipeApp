@@ -2,12 +2,12 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeApp.API.Data;
 using RecipeApp.API.DTO.GET;
 using RecipeApp.API.DTO.POST;
-using RecipeApp.API.Models;
 
 namespace RecipeApp.Tests.Endpoints
 {
@@ -16,11 +16,13 @@ namespace RecipeApp.Tests.Endpoints
     {
         private WebApplicationFactory<Program> _factory;
         private HttpClient _client;
+        private SqliteConnection _sqliteConnection;
 
         [SetUp]
         public void SetUp()
         {
-            string dbName = Guid.NewGuid().ToString();
+            _sqliteConnection = new SqliteConnection("DataSource=:memory:");
+            _sqliteConnection.Open();
 
             _factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             {
@@ -32,10 +34,16 @@ namespace RecipeApp.Tests.Endpoints
 
                     services.AddDbContext<RecipeContext>(options =>
                     {
-                        options.UseInMemoryDatabase(dbName);
+                        options.UseSqlite(_sqliteConnection);
                     });
                 });
             });
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<RecipeContext>();
+                context.Database.EnsureCreated();
+            }
 
             _client = _factory.CreateClient();
         }
@@ -43,8 +51,11 @@ namespace RecipeApp.Tests.Endpoints
         [TearDown]
         public void Dispose()
         {
-            _factory?.Dispose();
             _client?.Dispose();
+            _factory?.Dispose();
+
+            _sqliteConnection?.Close();
+            _sqliteConnection?.Dispose();
         }
 
         [Test]
