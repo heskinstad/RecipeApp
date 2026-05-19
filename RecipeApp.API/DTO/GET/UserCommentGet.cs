@@ -11,7 +11,6 @@ namespace RecipeApp.API.DTO.GET
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public string UserName { get; set; }
         public string Message { get; set; }
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }

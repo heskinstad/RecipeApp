@@ -352,7 +352,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> InsertIngredient(IRepository<RecipeIngredients> repository, IMapper mapper, RecipeIngredientsPost recipeIngredients)
+        public static async Task<IResult> InsertIngredient(IRepository<RecipeIngredients> repository, IMapper mapper, RecipeIngredientsPost recipeIngredients, Guid id)
         {
             try
             {
@@ -360,8 +360,15 @@ namespace RecipeApp.API.Endpoints
 
                 await repository.Insert(newRecipeIngredients);
 
-                //TODO: fix the URL
-                return TypedResults.Created($"/recipes/(recipe.Id)/ingredients", newRecipeIngredients);
+                var savedEntity = await repository
+                    .GetQueryable(r => r.RecipeId == id)
+                    .Include(r => r.Ingredient)
+                    .Include(r => r.Unit)
+                    .FirstOrDefaultAsync();
+
+                var responseDto = mapper.Map<RecipeIngredientsGet>(savedEntity);
+
+                return TypedResults.Created($"/recipe/{id}/ingredients", responseDto);
             }
             catch (Exception ex)
             {
@@ -390,7 +397,6 @@ namespace RecipeApp.API.Endpoints
             }
         }
 
-        //UNFINISHED
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -398,14 +404,16 @@ namespace RecipeApp.API.Endpoints
         {
             try
             {
-                var recipeIngredients = await repository.GetQueryable(r => r.RecipeId == id).ToListAsync();
-
-                var target = await repository.GetById(id);
+                var target = await repository
+                    .GetQueryable(r => r.RecipeId == id)
+                    .Include(r => r.Ingredient)
+                    .Include(r => r.Unit)
+                    .FirstOrDefaultAsync();
 
                 if (target == null)
                     return TypedResults.NotFound();
 
-                if (await repository.Delete(id) != null)
+                if (await repository.Delete(target.Id) != null)
                     return TypedResults.Ok(target);
                 return TypedResults.NotFound();
             }
@@ -522,7 +530,7 @@ namespace RecipeApp.API.Endpoints
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public static async Task<IResult> InsertComment(IRepository<UserComment> repository, IMapper mapper, UserCommentPost userComment)
+        public static async Task<IResult> InsertComment(IRepository<UserComment> repository, IMapper mapper, UserCommentPost userComment, Guid id)
         {
             try
             {
@@ -531,7 +539,7 @@ namespace RecipeApp.API.Endpoints
                 await repository.Insert(newUserComment);
 
                 //TODO: fix the URL
-                return TypedResults.Created($"/recipe/(recipe.Id)/comments", newUserComment);
+                return TypedResults.Created($"/recipe/{id}/comments", newUserComment);
             }
             catch (Exception ex)
             {

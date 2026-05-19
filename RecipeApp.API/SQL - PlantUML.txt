@@ -43,8 +43,9 @@ image_path
 }
 
 Entity recipe_ingredients {
-*<u>recipe_id
-*<u>ingredient_id
+<u>id
+*recipe_id
+*ingredient_id
 amount
 *unit_id
 segment

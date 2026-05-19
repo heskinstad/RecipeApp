@@ -347,5 +347,56 @@ namespace RecipeApp.Tests.Endpoints
             // Assert
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
+
+        [Test]
+        public async Task GetRatings_ReturnRatings()
+        {
+            // Arrange
+            UserPost user = new UserPost() { Name = "Jesse", PasswordHash = "123" };
+            var response = await _client.PostAsJsonAsync("/user", user);
+            var userResult = await response.Content.ReadFromJsonAsync<UserGet>();
+
+            CategoryPost category = new CategoryPost() { Name = "Italian" };
+            var categoryResponse = await _client.PostAsJsonAsync("/category", category);
+            var categoryResult = await categoryResponse.Content.ReadFromJsonAsync<CategoryGet>();
+
+            RecipePost recipe1 = new RecipePost() { Name = "Spaghetti", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
+            var recipe1Response = await _client.PostAsJsonAsync("recipe", recipe1);
+            var recipe1Result = await recipe1Response.Content.ReadFromJsonAsync<RecipeGet>();
+
+            RecipePost recipe2 = new RecipePost() { Name = "Pizza", Summary = "", Description = "", ImagePath = "", CategoryId = categoryResult.Id, UploaderId = userResult.Id };
+            var recipe2Response = await _client.PostAsJsonAsync("recipe", recipe1);
+            var recipe2Result = await recipe2Response.Content.ReadFromJsonAsync<RecipeGet>();
+
+            RatingPost rating1 = new RatingPost() { UserId = userResult.Id, RecipeId = recipe1Result.Id, Score = 4 };
+            RatingPost rating2 = new RatingPost() { UserId = userResult.Id, RecipeId = recipe1Result.Id, Score = 2 };
+
+            await _client.PostAsJsonAsync($"/recipe/{recipe1Result?.Id}/ratings", rating1);
+            await _client.PostAsJsonAsync($"/recipe/{recipe2Result?.Id}/ratings", rating2);
+
+            // Act
+            var getResponse = await _client.GetAsync($"/user/{userResult?.Id}/GetRatings");
+            Assert.That(getResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+            var getResult = await getResponse.Content.ReadFromJsonAsync<List<RatingGet>>();
+
+            // Assert
+            Assert.That(getResult?.Count, Is.EqualTo(2));
+            Assert.That(getResult?[0].UserId, Is.EqualTo(userResult.Id));
+            Assert.That(getResult?[0].Score == rating1.Score || getResult?[0].Score == rating2.Score);
+        }
+
+        [Test]
+        public async Task GetRatingsFromNoUser_ReturnNoRatings()
+        {
+            // Act
+            var getResponse = await _client.GetAsync($"/user/{new Guid()}/GetRatings");
+
+            Assert.That(getResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            var getResult = await getResponse.Content.ReadFromJsonAsync<List<RatingGet>>();
+
+            // Assert
+            Assert.That(getResult?.Count, Is.EqualTo(0));
+        }
     }
 }
