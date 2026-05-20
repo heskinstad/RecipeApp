@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import { createEditor, Editor } from 'slate'
+import { createEditor, Editor, Transforms } from 'slate'
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
 import './richTextBox.css'
 
@@ -52,14 +52,63 @@ const CustomEditor = {
     } else {
       Editor.addMark(editor, 'strikethrough', true)
     }
+  },
+
+  isListActive(editor) {
+    const [match] = Editor.nodes(editor, {
+      match: n => n.type === 'bulleted-list',
+    })
+    return !!match
+  },
+
+  isNumberedListActive(editor) {
+    const [match] = Editor.nodes(editor, {
+      match: n => n.type === 'numbered-list',
+    })
+    return !!match
+  },
+
+  toggleBulletList(editor) {
+    const isActive = CustomEditor.isListActive(editor)
+
+    Transforms.unwrapNodes(editor, {
+      match: n => n.type === 'bulleted-list',
+      split: true,
+    })
+
+    Transforms.setNodes(editor, {
+      type: isActive ? 'paragraph' : 'list-item',
+    })
+
+    if (!isActive) {
+      const block = { type: 'bulleted-list', children: [] }
+      Transforms.wrapNodes(editor, block)
+    }
+  },
+
+  toggleNumberedList(editor) {
+    const isActive = CustomEditor.isNumberedListActive(editor)
+
+    // Clean up both list types before toggling
+    Transforms.unwrapNodes(editor, {
+      match: n => n.type === 'bulleted-list' || n.type === 'numbered-list',
+      split: true,
+    })
+
+    Transforms.setNodes(editor, {
+      type: isActive ? 'paragraph' : 'list-item',
+    })
+
+    if (!isActive) {
+      const block = { type: 'numbered-list', children: [] }
+      Transforms.wrapNodes(editor, block)
+    }
   }
 }
 
 export const RichTextBox = () => {
-  // Create a Slate editor object that won't change across renders
   const editor = useMemo(() => withReact(createEditor()), [])
   
-  // Define the initial state with standard JS objects
   const [initialValue, setValue] = useState([
     {
       type: 'paragraph',
@@ -69,6 +118,19 @@ export const RichTextBox = () => {
 
   const renderLeaf = useCallback(props => {
     return <Leaf {...props} />
+  }, [])
+
+  const renderElement = useCallback(props => {
+    switch (props.element.type) {
+      case 'bulleted-list':
+        return <ul {...props.attributes}>{props.children}</ul>
+      case 'numbered-list':
+        return <ol {...props.attributes}>{props.children}</ol>
+      case 'list-item':
+        return <li {...props.attributes}>{props.children}</li>
+      default:
+        return <p {...props.attributes}>{props.children}</p>
+    }
   }, [])
 
   return (
@@ -125,10 +187,35 @@ export const RichTextBox = () => {
             </div>
           </span>
         </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleBulletList(editor)
+            }}
+          >
+            <div>
+              UL
+            </div>
+          </span>
+        </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleNumberedList(editor)
+            }}
+          >
+            <div>1.2.3.</div>
+          </span>
+        </div>
       </div>
       <div className="richTextBox">
         <Editable 
           renderLeaf={renderLeaf}
+          renderElement={renderElement}
           onKeyDown={event => {
               if (!event.ctrlKey) {
                   return
