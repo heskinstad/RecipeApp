@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { createEditor, Editor } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
+import './richTextBox.css'
 
 const CustomEditor = {
   isBoldMarkActive(editor) {
@@ -14,6 +15,10 @@ const CustomEditor = {
   isUnderlineMarkActive(editor) {
     const marks = Editor.marks(editor)
     return marks ? marks.underline === true : false
+  },
+  isStrikethroughMarkActive(editor) {
+    const marks = Editor.marks(editor)
+    return marks ? marks.strikethrough === true : false
   },
 
   toggleBoldMark(editor) {
@@ -40,6 +45,14 @@ const CustomEditor = {
       Editor.addMark(editor, 'underline', true)
     }
   },
+  toggleStrikethroughMark(editor) {
+    const isActive = CustomEditor.isStrikethroughMarkActive(editor)
+    if (isActive) {
+      Editor.removeMark(editor, 'strikethrough')
+    } else {
+      Editor.addMark(editor, 'strikethrough', true)
+    }
+  }
 }
 
 export const RichTextBox = () => {
@@ -59,12 +72,66 @@ export const RichTextBox = () => {
   }, [])
 
   return (
-    <Slate editor={editor} initialValue={initialValue} onChange={newValue => setValue(newValue)}>
-      <Editable 
-        renderLeaf={renderLeaf}
-        onKeyDown={event => {
-            if (!event.ctrlKey) {
-                return
+    <Slate
+      editor={editor}
+      initialValue={initialValue}
+      onChange={newValue => setValue(newValue)}>
+      <div>
+        <span
+          role="button"
+          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
+          onMouseDown={event => {
+            event.preventDefault()
+            CustomEditor.toggleBoldMark(editor)
+          }}
+        >
+          <div>
+            <b>B</b>
+          </div>
+        </span>
+        <span
+          role="button"
+          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
+          onMouseDown={event => {
+            event.preventDefault()
+            CustomEditor.toggleItalicMark(editor)
+          }}
+        >
+          <div>
+            <i>I</i>
+          </div>
+        </span>
+        <span
+          role="button"
+          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
+          onMouseDown={event => {
+            event.preventDefault()
+            CustomEditor.toggleUnderlineMark(editor)
+          }}
+        >
+          <div>
+            <u>U</u>
+          </div>
+        </span>
+        <span
+          role="button"
+          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
+          onMouseDown={event => {
+            event.preventDefault()
+            CustomEditor.toggleStrikethroughMark(editor)
+          }}
+        >
+          <div>
+            <s>S</s>
+          </div>
+        </span>
+      </div>
+      <div className="richTextBox">
+        <Editable 
+          renderLeaf={renderLeaf}
+          onKeyDown={event => {
+              if (!event.ctrlKey) {
+                  return
             }
 
             switch (event.key) {
@@ -83,26 +150,31 @@ export const RichTextBox = () => {
                     CustomEditor.toggleUnderlineMark(editor)
                     break
                 }
-            }
-        }}
-      />
+              }
+          }}
+        />
+      </div>
     </Slate>
   )
 }
 
 const Leaf = props => {
-    return (
-        <span
-            {...props.attributes}
-            style={{ 
-                fontWeight: props.leaf.bold ? 'bold' : 'normal',
-                fontStyle: props.leaf.italic ? 'italic' : 'normal',
-                textDecoration: props.leaf.underline ? 'underline' : 'none'
-            }}
-        >
-            {props.children}
-        </span>
-    )
+  const decorations = [];
+  if (props.leaf.underline) decorations.push('underline');
+  if (props.leaf.strikethrough) decorations.push('line-through');
+
+  return (
+    <span
+      {...props.attributes}
+      style={{ 
+        fontWeight: props.leaf.bold ? 'bold' : 'normal',
+        fontStyle: props.leaf.italic ? 'italic' : 'normal',
+        textDecoration: decorations.length ? decorations.join(' ') : 'none'
+      }}
+    >
+      {props.children}
+    </span>
+  )
 }
 
 export default RichTextBox;
