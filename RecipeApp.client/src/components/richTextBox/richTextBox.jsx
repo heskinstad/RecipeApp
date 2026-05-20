@@ -77,54 +77,54 @@ export const RichTextBox = () => {
       initialValue={initialValue}
       onChange={newValue => setValue(newValue)}>
       <div>
-        <span
-          role="button"
-          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
-          onMouseDown={event => {
-            event.preventDefault()
-            CustomEditor.toggleBoldMark(editor)
-          }}
-        >
-          <div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleBoldMark(editor)
+            }}
+          >
             <b>B</b>
-          </div>
-        </span>
-        <span
-          role="button"
-          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
-          onMouseDown={event => {
-            event.preventDefault()
-            CustomEditor.toggleItalicMark(editor)
-          }}
-        >
-          <div>
+          </span>
+        </div>
+          <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleItalicMark(editor)
+            }}
+          >
             <i>I</i>
-          </div>
-        </span>
-        <span
-          role="button"
-          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
-          onMouseDown={event => {
-            event.preventDefault()
-            CustomEditor.toggleUnderlineMark(editor)
-          }}
-        >
-          <div>
-            <u>U</u>
-          </div>
-        </span>
-        <span
-          role="button"
-          style={{ cursor: 'pointer', padding: '5px', margin: '0 2px', display: 'inline-block', userSelect: 'none' }}
-          onMouseDown={event => {
-            event.preventDefault()
-            CustomEditor.toggleStrikethroughMark(editor)
-          }}
-        >
-          <div>
-            <s>S</s>
-          </div>
-        </span>
+          </span>
+        </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleUnderlineMark(editor)
+            }}
+          >
+            <div>
+              <u>U</u>
+            </div>
+          </span>
+        </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleStrikethroughMark(editor)
+            }}
+          >
+            <div>
+              <s>S</s>
+            </div>
+          </span>
+        </div>
       </div>
       <div className="richTextBox">
         <Editable 
