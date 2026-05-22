@@ -2,16 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModifyRecipe from '../../components/modifyRecipe/modifyRecipe';
 
+
+
 function AddRecipe() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: "",
         summary: "",
-        description: "",
+        description: [
+            {
+            type: "paragraph",
+            children: [{ text: "" }],
+            },
+        ],
         categoryId: "",
         imagePath: "",
-        uploaderId: "0198a3ae-a9d7-7dfe-9031-12e95619f54f",
+        uploaderId: "019e2028-a994-7750-96d3-78323ac84807",
     });
 
     const recipeUrl = "https://localhost:63516/recipe";

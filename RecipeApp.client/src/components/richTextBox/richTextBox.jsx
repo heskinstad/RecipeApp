@@ -106,15 +106,19 @@ const CustomEditor = {
   }
 }
 
-export const RichTextBox = () => {
+export const RichTextBox = ({ value, onChange, name}) => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  
-  const [initialValue, setValue] = useState([
+
+  const emptyValue = [
     {
       type: 'paragraph',
-      children: [{ text: 'A line of text in a paragraph.' }],
+      children: [{ text: '' }],
     },
-  ])
+  ]
+  
+  const [editorValue, setEditorValue] = useState(
+    value && value.length > 0 ? value : emptyValue
+  )
 
   const renderLeaf = useCallback(props => {
     return <Leaf {...props} />
@@ -136,8 +140,17 @@ export const RichTextBox = () => {
   return (
     <Slate
       editor={editor}
-      initialValue={initialValue}
-      onChange={newValue => setValue(newValue)}>
+      initialValue={emptyValue}
+      value={editorValue}
+      onChange={newValue => {
+        setEditorValue(newValue)
+        onChange({
+          target: {
+            name: name,
+            value: newValue
+          }
+        })
+      }}>
       <div>
         <div className="toolbar">
           <span
