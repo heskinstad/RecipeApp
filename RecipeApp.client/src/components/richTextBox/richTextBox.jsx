@@ -2,6 +2,14 @@ import React, { useState, useMemo, useCallback } from 'react'
 import { createEditor, Editor, Transforms } from 'slate'
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
 import './richTextBox.css'
+import { BoldIcon } from '../tiptap-icons/bold-icon'
+import { ItalicIcon } from '../tiptap-icons/italic-icon'
+import { UnderlineIcon } from '../tiptap-icons/underline-icon'
+import { StrikeIcon } from '../tiptap-icons/strike-icon'
+import { ListIcon } from '../tiptap-icons/list-icon'
+import { ListOrderedIcon } from '../tiptap-icons/list-ordered-icon'
+import { HeadingIcon } from '../tiptap-icons/heading-icon'
+import { HeadingTwoIcon } from '../tiptap-icons/heading-two-icon'
 
 const CustomEditor = {
   isBoldMarkActive(editor) {
@@ -160,7 +168,7 @@ export const RichTextBox = ({ value, onChange, name}) => {
               CustomEditor.toggleBoldMark(editor)
             }}
           >
-            <b>B</b>
+            <BoldIcon />
           </span>
         </div>
           <div className="toolbar">
@@ -171,7 +179,7 @@ export const RichTextBox = ({ value, onChange, name}) => {
               CustomEditor.toggleItalicMark(editor)
             }}
           >
-            <i>I</i>
+            <ItalicIcon />
           </span>
         </div>
         <div className="toolbar">
@@ -183,7 +191,7 @@ export const RichTextBox = ({ value, onChange, name}) => {
             }}
           >
             <div>
-              <u>U</u>
+              <UnderlineIcon />
             </div>
           </span>
         </div>
@@ -196,7 +204,7 @@ export const RichTextBox = ({ value, onChange, name}) => {
             }}
           >
             <div>
-              <s>S</s>
+              <StrikeIcon />
             </div>
           </span>
         </div>
@@ -209,7 +217,7 @@ export const RichTextBox = ({ value, onChange, name}) => {
             }}
           >
             <div>
-              UL
+              <ListIcon />
             </div>
           </span>
         </div>
@@ -221,7 +229,35 @@ export const RichTextBox = ({ value, onChange, name}) => {
               CustomEditor.toggleNumberedList(editor)
             }}
           >
-            <div>1.2.3.</div>
+            <div>
+              <ListOrderedIcon />
+            </div>
+          </span>
+        </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleNumberedList(editor)
+            }}
+          >
+            <div>
+              <HeadingIcon />
+            </div>
+          </span>
+        </div>
+        <div className="toolbar">
+          <span
+            role="button"
+            onMouseDown={event => {
+              event.preventDefault()
+              CustomEditor.toggleNumberedList(editor)
+            }}
+          >
+            <div>
+              <HeadingTwoIcon />
+            </div>
           </span>
         </div>
       </div>
@@ -256,6 +292,33 @@ export const RichTextBox = ({ value, onChange, name}) => {
       </div>
     </Slate>
   )
+
+  renderNode = (props, editor, next) => {
+    switch (props.node.type) {
+      case 'paragraph':
+        return (
+          <p {...props.attributes} className={props.node.data.get('className')}>
+            {props.children}
+          </p>
+        )
+      default:
+        return next()
+    }
+  }
+
+  renderMark = (props, editor, next) => {
+    const { mark, attributes } = props
+    switch (mark.type) {
+      case 'bold':
+        return <strong {...attributes}>{props.children}</strong>
+      case 'italic':
+        return <em {...attributes}>{props.children}</em>
+      case 'underline':
+        return <u {...attributes}>{props.children}</u>
+      default:
+        return next()
+    }
+  }
 }
 
 const Leaf = props => {
@@ -276,5 +339,7 @@ const Leaf = props => {
     </span>
   )
 }
+
+
 
 export default RichTextBox;

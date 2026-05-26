@@ -1,12 +1,12 @@
 .toolbar {
-   cursor: pointer;
+  cursor: pointer;
   font-size: x-large;
   background-color: #eee;
-  padding: 0.25em 0.5em;
+  padding: 0.1em 0.4em;
   margin: 0 0.5em 0.25em 0;
   display: inline-block;
   user-select: none;
-  width: 2.5em;
+  width: 2em;
   text-align: center;
   color: #000;
 }
