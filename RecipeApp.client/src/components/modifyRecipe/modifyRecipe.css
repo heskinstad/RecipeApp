@@ -54,6 +54,11 @@
     grid-area: desc;
 }
 
+.modifyRecipe_desc label * {
+    background-color: #eee;
+    border: none;
+}
+
 .modifyRecipe_category {
     grid-area: category;
 }
@@ -71,11 +76,10 @@
 }
 
 .modifyRecipe_name input,
-.modifyRecipe_summary textarea,
-.modifyRecipe_desc textarea {
+.modifyRecipe_summary textarea {
     resize: none;
     background-color: #eee;
-    border: 1px solid #aaa;
+    border: none;
 }
 
 .modifyRecipe_delete {

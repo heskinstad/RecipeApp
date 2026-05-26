@@ -1,30 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Node } from 'slate'
 import './modifyRecipe.css';
 import AddIngredient from '../addIngredient/addIngredient';
 import Popup from '../popup/popup';
 import RichTextBox from '../richTextBox/richTextBox';
-
-// Define a serializing function that takes a value and returns a string.
-const serialize = value => {
-  return (
-    value
-      // Return the string content of each paragraph in the value's children.
-      .map(n => Node.string(n))
-      // Join them all with line breaks denoting paragraphs.
-      .join('\n')
-  )
-}
-
-// Define a deserializing function that takes a string and returns a value.
-const deserialize = string => {
-  // Return a value array of children derived by splitting the string.
-  return string.split('\n').map(line => {
-    return {
-      children: [{ text: line }],
-    }
-  })
-}
 
 function ModifyRecipe({
     formData,
@@ -36,6 +14,8 @@ function ModifyRecipe({
     const [categories, setCategories] = useState([]);
     const categoriesUrl = "https://localhost:63516/category";
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+
 
     useEffect(() => {
         fetch(categoriesUrl)

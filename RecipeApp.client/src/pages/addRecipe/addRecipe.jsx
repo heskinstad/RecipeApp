@@ -10,12 +10,7 @@ function AddRecipe() {
     const [formData, setFormData] = useState({
         name: "",
         summary: "",
-        description: [
-            {
-            type: "paragraph",
-            children: [{ text: "" }],
-            },
-        ],
+        description: "<p><b>te</b>te</p>",
         categoryId: "",
         imagePath: "",
         uploaderId: "019e2028-a994-7750-96d3-78323ac84807",
