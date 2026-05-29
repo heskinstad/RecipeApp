@@ -1,0 +1,15 @@
+.hidden-button {
+    visibility: hidden;
+    padding: 0;
+    margin: 0;
+    position:absolute;
+}
+
+.button-group button {
+    padding: 0.2rem 0.64rem;
+    line-height: 2.2rem;
+}
+
+.button-group button > * {
+    vertical-align: center;
+}
