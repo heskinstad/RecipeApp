@@ -12,8 +12,8 @@ export function menuBarStateSelector(ctx) {
 
     // Block types
     isParagraph: ctx.editor.isActive('paragraph') ?? false,
-    isHeading1: ctx.editor.isActive('heading', { level: 1 }) ?? false,
-    isHeading2: ctx.editor.isActive('heading', { level: 2 }) ?? false,
+    isHeading1: ctx.editor.isActive('heading', { level: 3 }) ?? false,
+    isHeading2: ctx.editor.isActive('heading', { level: 4 }) ?? false,
 
     // Lists and blocks
     isBulletList: ctx.editor.isActive('bulletList') ?? false,

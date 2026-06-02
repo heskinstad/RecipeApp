@@ -43,7 +43,7 @@ export default ({ value, onChange, name = 'description' }) => {
   return (
     <>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="richTextBox" />
     </>
   )
 }

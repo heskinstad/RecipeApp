@@ -49,6 +49,22 @@
     grid-area: description;
 }
 
+.recipeDescription h3 {
+    font-size: 1.75em;
+    padding-bottom: 0.5em;
+}
+
+.recipeDescription h4 {
+    font-size: 1.2em;
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+}
+
+.recipeDescription ul, .recipeDescription ol {
+    padding-left: 1em;
+    padding-bottom: 1em;
+}
+
 .recipeRating {
     grid-area: rating;
     object-fit: contain;

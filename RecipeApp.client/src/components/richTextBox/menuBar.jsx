@@ -61,22 +61,22 @@ export const MenuBar = ({ editor }) => {
         </button>
         <button
           type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           className={editorState.isHeading1 ? 'is-active' : ''}
         >
           <HeadingOneIcon />
         </button>
         <button
           type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
           className={editorState.isHeading2 ? 'is-active' : ''}
         >
           <HeadingTwoIcon />
         </button>
         <button
           type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={editorState.isHeading3 ? 'is-active' : ''}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editorState.isBulletList ? 'is-active' : ''}
         >
           <ListIcon />
         </button>

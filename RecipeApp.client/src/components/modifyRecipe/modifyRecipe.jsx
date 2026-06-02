@@ -151,22 +151,27 @@ function ModifyRecipe({
                 </div>
 
                 <div className="modifyRecipe_submit">
-                    <input type="submit" value={isEditMode ? "Update" : "Create"} />
-                    <input type="button" value="Cancel" className="modifyRecipe_cancel" onClick={() => window.history.back()} />
+                    <button type="submit" value={isEditMode ? "Update" : "Create"} onClick={() => window.history.back()}>
+                        {isEditMode ? "Update" : "Create"}
+                    </button>
+                    <button type="button" value="Cancel" className="modifyRecipe_cancel" onClick={() => window.history.back()}>
+                        Cancel
+                    </button>
                 </div>
+                {isEditMode && (
+                <div className="modifyRecipe_delete">
+                    <button onClick={openPopup}>Delete recipe</button>
+                    <Popup
+                    message="Are you sure you want to delete this recipe?"
+                    handleAction={handleDelete}
+                    onClose={closePopup}
+                    isOpen={isPopupOpen}
+                    />
+                </div>
+                )}
             </form>
 
-            {isEditMode && (
-            <div className="modifyRecipe_delete">
-                <button onClick={openPopup}>Delete recipe</button>
-                <Popup
-                message="Are you sure you want to delete this recipe?"
-                handleAction={handleDelete}
-                onClose={closePopup}
-                isOpen={isPopupOpen}
-                />
-            </div>
-            )}
+            
         </>
     );
 }

@@ -125,9 +125,7 @@ function Recipe() {
                     </div>
                 ))}
             </div>
-            <div className="recipeDescription">
-                {recipe.description}
-            </div>
+            <div className="recipeDescription" dangerouslySetInnerHTML={{ __html: recipe.description }} />
             <div className="recipeRating">
                 <p>
                     Give this recipe a rating!
