@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModifyRecipe from '../../components/modifyRecipe/modifyRecipe';
 
-
-
 function AddRecipe() {
     const navigate = useNavigate();
 

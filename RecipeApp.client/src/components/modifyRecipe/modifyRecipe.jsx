@@ -1,24 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Node } from 'slate'
+import Select from 'react-select';
 import './modifyRecipe.css';
 import AddIngredient from '../addIngredient/addIngredient';
 import Popup from '../popup/popup';
 import RichTextBox from '../richTextBox/richTextBox';
 
-// Define a serializing function that takes a value and returns a string.
 const serialize = value => {
   return (
     value
-      // Return the string content of each paragraph in the value's children.
       .map(n => Node.string(n))
-      // Join them all with line breaks denoting paragraphs.
       .join('\n')
   )
 }
 
-// Define a deserializing function that takes a string and returns a value.
 const deserialize = string => {
-  // Return a value array of children derived by splitting the string.
   return string.split('\n').map(line => {
     return {
       children: [{ text: line }],
@@ -36,6 +32,24 @@ function ModifyRecipe({
     const [categories, setCategories] = useState([]);
     const categoriesUrl = "https://localhost:63516/category";
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const formattedOptions = categories.map((category) => ({
+    value: category.id.toString(),
+    label: category.name
+    }));
+
+    const currentSelectValue = formattedOptions.find(
+    (option) => option.value === formData.categoryId?.toString()
+    ) || null;
+
+    const handleSelectChange = (selectedOption) => {
+        handleChange({
+            target: {
+                name: 'categoryId',
+                value: selectedOption ? selectedOption.value : ''
+            }
+        });
+    };
 
     useEffect(() => {
         fetch(categoriesUrl)
@@ -112,18 +126,16 @@ function ModifyRecipe({
                     <label>
                         <h3>Category:</h3>
                         <br />
-                        <select
-                            name="categoryId"
-                            onChange={handleChange}
-                            value={formData.categoryId?.toString() || ""}
-                        >
-                            <option value="">-- Select Category --</option>
-                            {categories.map((category) => (
-                                <option value={category.id.toString()} key={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="select-wrapper">
+                            <Select
+                                name="categoryId"
+                                options={formattedOptions}
+                                value={currentSelectValue}
+                                onChange={handleSelectChange}
+                                placeholder="-- Select Category --"
+                                isClearable // Allows users to clear selection back to empty placeholder
+                            />
+                        </div>
                         <div>
                             <br />
                             <p>Or add a new category:</p>
@@ -159,7 +171,7 @@ function ModifyRecipe({
                     </button>
                 </div>
                 {isEditMode && (
-                <div className="modifyRecipe_delete">
+                <div className="modifyRecipe_delete"> {/*TODO: check why this popup closes immediately*/}
                     <button onClick={openPopup}>Delete recipe</button>
                     <Popup
                     message="Are you sure you want to delete this recipe?"
