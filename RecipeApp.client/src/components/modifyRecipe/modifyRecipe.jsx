@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Node } from 'slate'
+import { Node } from 'slate';
 import Select from 'react-select';
 import './modifyRecipe.css';
 import AddIngredient from '../addIngredient/addIngredient';
@@ -7,20 +7,14 @@ import Popup from '../popup/popup';
 import RichTextBox from '../richTextBox/richTextBox';
 
 const serialize = value => {
-  return (
-    value
-      .map(n => Node.string(n))
-      .join('\n')
-  )
-}
+  return value.map(n => Node.string(n)).join('\n');
+};
 
 const deserialize = string => {
   return string.split('\n').map(line => {
-    return {
-      children: [{ text: line }],
-    }
-  })
-}
+    return { children: [{ text: line }] };
+  });
+};
 
 function ModifyRecipe({
     formData,
@@ -34,12 +28,12 @@ function ModifyRecipe({
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const formattedOptions = categories.map((category) => ({
-    value: category.id.toString(),
-    label: category.name
+        value: category.id.toString(),
+        label: category.name
     }));
 
     const currentSelectValue = formattedOptions.find(
-    (option) => option.value === formData.categoryId?.toString()
+        (option) => option.value === formData.categoryId?.toString()
     ) || null;
 
     const handleSelectChange = (selectedOption) => {
@@ -59,16 +53,30 @@ function ModifyRecipe({
     }, []);
 
     if (categories.length === 0) {
-        return;
+        return null; // Fixed: Functional components should return null instead of empty undefined
     }
 
     const openPopup = () => {
         setIsPopupOpen(true);
-    }
+    };
 
     const closePopup = () => {
         setIsPopupOpen(false);
-    }
+    };
+
+    // --- FORM VALIDATION LOGIC ---
+    // Verifies required string fields are not empty or just whitespace
+    const hasName = formData.name?.trim();
+    const hasSummary = formData.summary?.trim();
+    const hasImagePath = formData.imagePath?.trim();
+    
+    // Verifies a category selection exists OR a custom new category string is typed
+    const hasCategory = formData.categoryId?.toString().trim() || formData.newCategory?.trim();
+
+    // Verifies Slate Rich Text editor content is not empty or just a blank HTML tag
+    const hasDescription = formData.description?.trim() && formData.description !== "<p></p>";
+
+    const isFormValid = hasName && hasSummary && hasImagePath && hasCategory && hasDescription;
 
     return (
         <>
@@ -115,9 +123,9 @@ function ModifyRecipe({
                         <h3>Description:</h3>
                         <br />
                         <RichTextBox 
-                        name="description"
-                        onChange={handleChange}
-                        value={formData.description}
+                            name="description"
+                            onChange={handleChange}
+                            value={formData.description}
                         />
                     </label>
                 </div>
@@ -134,16 +142,6 @@ function ModifyRecipe({
                                 onChange={handleSelectChange}
                                 placeholder="-- Select Category --"
                                 isClearable // Allows users to clear selection back to empty placeholder
-                            />
-                        </div>
-                        <div>
-                            <br />
-                            <p>Or add a new category:</p>
-                            <input
-                                type="text"
-                                name="newCategory"
-                                onChange={handleChange}
-                                value={formData.newCategory || ""}
                             />
                         </div>
                     </label>
@@ -163,27 +161,28 @@ function ModifyRecipe({
                 </div>
 
                 <div className="modifyRecipe_submit">
-                    <button type="submit" value={isEditMode ? "Update" : "Create"} onClick={() => window.history.back()}>
+                    {/* FIXED: Added 'disabled' property, removed window.history.back() from click */}
+                    <button type="submit" disabled={!isFormValid}>
                         {isEditMode ? "Update" : "Create"}
                     </button>
-                    <button type="button" value="Cancel" className="modifyRecipe_cancel" onClick={() => window.history.back()}>
+                    <button type="button" className="modifyRecipe_cancel" onClick={() => window.history.back()}>
                         Cancel
                     </button>
                 </div>
+                
                 {isEditMode && (
-                <div className="modifyRecipe_delete"> {/*TODO: check why this popup closes immediately*/}
-                    <button onClick={openPopup}>Delete recipe</button>
-                    <Popup
-                    message="Are you sure you want to delete this recipe?"
-                    handleAction={handleDelete}
-                    onClose={closePopup}
-                    isOpen={isPopupOpen}
-                    />
-                </div>
+                    <div className="modifyRecipe_delete">
+                        {/* FIXED: Changed type to "button" so clicking this doesn't accidentally trigger form submit */}
+                        <button type="button" onClick={openPopup}>Delete recipe</button>
+                        <Popup
+                            message="Are you sure you want to delete this recipe?"
+                            handleAction={handleDelete}
+                            onClose={closePopup}
+                            isOpen={isPopupOpen}
+                        />
+                    </div>
                 )}
             </form>
-
-            
         </>
     );
 }
