@@ -22,3 +22,55 @@
     font-size: larger;
     font-weight: 700;
 }
+
+/* Container wrapper setup */
+.pagination_items_container {
+    display: grid;
+    gap: 20px; /* Space between the cards */
+    margin: 20px 0;
+}
+
+/* GRID MODE: Responsive 2 to 3 cards per row */
+.pagination_items_container.cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* COMPACT LIST MODE: Can be 2 columns or smaller list shapes */
+.pagination_items_container.compact_list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* STANDARD LIST MODE: 1 full-width item per row */
+.pagination_items_container.list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+/* Tablet responsiveness: Drop grid mode from 3 columns down to 2 columns */
+@media (max-width: 900px) {
+    .pagination_items_container.cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Mobile responsiveness: Force all display modes to 1 card per row */
+@media (max-width: 600px) {
+    .pagination_items_container.cards,
+    .pagination_items_container.compact_list {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+/* Optional: Align control selectors neatly side-by-side */
+.pagination_controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.pagination_sortSelect, 
+.pagination_displaySelect {
+    min-width: 180px;
+}

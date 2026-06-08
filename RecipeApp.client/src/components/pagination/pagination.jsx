@@ -9,8 +9,8 @@ const Pagination = ({url, renderItem, searchString}) => {
     const [pageSize, setPageSize] = useState(8);
     const [sortBy, setSortBy] = useState('date_desc');
     const [totalCount, setTotalCount] = useState(0);
+    const [displayMode, setDisplayMode] = useState('cards'); 
 
-    // Set current page to 1 when new search is made
     useEffect(() => {
         setCurrentPage(1);
     }, [searchString, sortBy]);
@@ -25,10 +25,10 @@ const Pagination = ({url, renderItem, searchString}) => {
             const jsonData = await response.json();
             
             setTotalCount(jsonData.totalCount);
-            const { items, totalCount, pageSize } = jsonData;
+            const { items, totalCount, pageSize: apiPageSize } = jsonData;
 
             setData(items);
-            setTotalPages(Math.ceil(totalCount / pageSize));
+            setTotalPages(Math.ceil(totalCount / (apiPageSize || pageSize)));
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -38,14 +38,6 @@ const Pagination = ({url, renderItem, searchString}) => {
     const goToPage = (page) => {
         setCurrentPage(page);
     };
-
-    const handleSortChange = (e) => {
-        setSortBy(e.target.value);
-    }
-
-    // const handleDisplayModeChange = (e) => {
-    //     setPageSize(e.target.value === 'grid' ? 16 : e.target.value === 'compact_list' ? 16 : 6);
-    // }
 
     const sortOptions = [
         { value: 'date', label: 'Date' },
@@ -58,18 +50,18 @@ const Pagination = ({url, renderItem, searchString}) => {
         { value: 'visits', label: 'Least visited' }
     ];
 
+    const displayOptions = [
+        { value: 'list', label: 'List' },
+        { value: 'compact_list', label: 'Compact list' },
+        { value: 'cards', label: 'Cards' }
+    ];
+
     const currentSelectValueSort = sortOptions.find(
         (option) => option.value === sortBy
     ) || null;
 
-    const displayOptions = [
-        { value: 'list', label: 'List' },
-        { value: 'compact_list', label: 'Compact list' },
-        { value: 'grid', label: 'Grid' }
-    ];
-
     const currentSelectValueDisplay = displayOptions.find(
-        (option) => option.value === 'list'
+        (option) => option.value === displayMode
     ) || null;
 
     return (
@@ -87,17 +79,19 @@ const Pagination = ({url, renderItem, searchString}) => {
                     className="pagination_displaySelect"
                     options={displayOptions}
                     value={currentSelectValueDisplay}
-                    onChange={(selectedOption) => setDisplayMode(selectedOption ? selectedOption.value : '')}
+                    onChange={(selectedOption) => setDisplayMode(selectedOption ? selectedOption.value : 'cards')}
                 />
                 <label className="pagination_controls_text">(Total results: {totalCount})</label>
             </div>
-            <div>
+            
+            <div className={`pagination_items_container ${displayMode}`}>
                 {data.map((item) => renderItem(item))}
-                <div className="pagination_navigation">
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                        <button key={index + 1} onClick={() => goToPage(index + 1)}>{index + 1}</button>
-                    ))}
-                </div>
+            </div>
+
+            <div className="pagination_navigation">
+                {Array.from({ length: totalPages }).map((_, index) => (
+                    <button key={index + 1} onClick={() => goToPage(index + 1)}>{index + 1}</button>
+                ))}
             </div>
         </div>
     )

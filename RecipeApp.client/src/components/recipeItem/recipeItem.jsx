@@ -24,7 +24,6 @@ function RecipeItem({recipe}) {
 
     return (
         <Link to={`/recipe/${recipe.id}`.toLowerCase()}>
-            <hr />
             <div className="recipeItem_link">
                 <h2 className="recipeItem_title">{recipe.name}</h2>
                 <p className="recipeItem_desc">{recipe.summary}</p>

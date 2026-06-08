@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. DEFAULT / LIST VIEW (Your original layout - kept exactly unchanged)
+   ========================================================================== */
 .recipeItem_link {
     display: grid;
     grid-template-areas:
@@ -8,45 +11,121 @@
     grid-template-rows: 50px auto auto;
     padding: 20px;
     color: #000;
+    border-bottom: 1px solid #ddd; /* Replaces your JSX <hr /> cleanly for lists */
 }
 
-.recipeItem_title {
-    grid-area: title;
-}
-
-.recipeItem_desc {
-    grid-area: desc;
-}
-
+.recipeItem_title { grid-area: title; }
+.recipeItem_desc { grid-area: desc; }
 .recipeItem_recipeImage {
     height: 100%;
     width: 100%;
     grid-area: image;
     object-fit: contain;
+    max-height: 150px; /* Prevents huge image blowouts */
 }
+.recipeItem_uploader { grid-area: uploader; text-align: center; }
+.recipeItem_rating { grid-area: rating; width: 100%; display: flex; justify-content: center; }
+.recipeItem_visits { grid-area: visits; text-align: center; }
+.recipeItem_link:hover { background-color: #eee; }
+.recipeItem_link a { text-decoration: none; user-select: none; }
 
-.recipeItem_uploader {
-    grid-area: uploader;
-    text-align: center;
-}
 
-.recipeItem_rating {
-    grid-area: rating;
-    width: 100%;
+/* ==========================================================================
+   2. GRID VIEW OVERRIDES (Cards: 2-3 per row)
+   ========================================================================== */
+.grid .recipeItem_link {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack vertically like a card box */
+    height: 100%;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.recipeItem_visits {
+/* Fix image behavior inside a vertical box card */
+.grid .recipeItem_recipeImage {
+    order: -1; /* Forces image to move to the very top of the card */
+    height: 160px;
+    object-fit: cover; /* Crops cleanly inside card bounds */
+    margin-bottom: 12px;
+}
+
+/* HIDE DESCRIPTION IN GRID VIEW */
+.grid .recipeItem_desc {
+    display: none;
+}
+
+/* Optional grid alignment fixes for footer items */
+.grid .recipeItem_uploader, 
+.grid .recipeItem_visits {
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+
+/* ==========================================================================
+   3. COMPACT LIST VIEW OVERRIDES (Dense, small listings - 1 per row)
+   ========================================================================== */
+.compact_list .recipeItem_link {
+    display: grid;
+    /* Arranges image, text details, and stats neatly across one line */
+    grid-template-areas:
+      "image title rating uploader visits";
+    grid-template-columns: 70px 2fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 15px;
+    padding: 10px 15px;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    align-items: center; /* Vertically aligns all elements perfectly center */
+}
+
+/* Shrink image for tiny row view */
+.compact_list .recipeItem_recipeImage {
+    grid-area: image;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.compact_list .recipeItem_title {
+    grid-area: title;
+    font-size: 1.1rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Safely cuts off text if the title is too long */
+}
+
+.compact_list .recipeItem_rating {
+    grid-area: rating;
+    justify-content: flex-start; /* Aligns stars nicely in its column */
+}
+
+.compact_list .recipeItem_uploader {
+    grid-area: uploader;
+    text-align: left;
+}
+
+.compact_list .recipeItem_visits {
     grid-area: visits;
-    text-align: center;
+    text-align: left;
 }
 
-.recipeItem_link:hover {
-    background-color: #eee;
+/* HIDE DESCRIPTION AND EXTRA BREAKS IN COMPACT VIEW */
+.compact_list .recipeItem_desc,
+.compact_list .recipeItem_uploader br,
+.compact_list .recipeItem_visits br {
+    display: none;
 }
 
-.recipeItem_link a {
-    text-decoration: none;
-    user-select: none;
+.compact_list .recipeItem_uploader h4,
+.compact_list .recipeItem_visits h4 {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: normal;
 }
