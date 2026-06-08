@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Select from 'react-select';
 import './pagination.css';
 
 const Pagination = ({url, renderItem, searchString}) => {
@@ -46,29 +47,51 @@ const Pagination = ({url, renderItem, searchString}) => {
     //     setPageSize(e.target.value === 'grid' ? 16 : e.target.value === 'compact_list' ? 16 : 6);
     // }
 
+    const sortOptions = [
+        { value: 'date', label: 'Date' },
+        { value: 'date_desc', label: 'Date descending' },
+        { value: 'name', label: 'Name' },
+        { value: 'name_desc', label: 'Name descending' },
+        { value: 'rating_desc', label: 'Highest rating' },
+        { value: 'rating', label: 'Lowest rating' },
+        { value: 'visits_desc', label: 'Most visited' },
+        { value: 'visits', label: 'Least visited' }
+    ];
+
+    const currentSelectValueSort = sortOptions.find(
+        (option) => option.value === sortBy
+    ) || null;
+
+    const displayOptions = [
+        { value: 'list', label: 'List' },
+        { value: 'compact_list', label: 'Compact list' },
+        { value: 'grid', label: 'Grid' }
+    ];
+
+    const currentSelectValueDisplay = displayOptions.find(
+        (option) => option.value === 'list'
+    ) || null;
+
     return (
         <div>
+            <div className="pagination_controls">
+                <label className="pagination_controls_text">Sort by:</label>
+                <Select
+                    className="pagination_sortSelect"
+                    options={sortOptions}
+                    value={currentSelectValueSort}
+                    onChange={(selectedOption) => setSortBy(selectedOption ? selectedOption.value : '')}
+                />
+                <label className="pagination_controls_text">Display mode:</label>
+                <Select
+                    className="pagination_displaySelect"
+                    options={displayOptions}
+                    value={currentSelectValueDisplay}
+                    onChange={(selectedOption) => setDisplayMode(selectedOption ? selectedOption.value : '')}
+                />
+                <label className="pagination_controls_text">(Total results: {totalCount})</label>
+            </div>
             <div>
-                <label>Sort by: </label>
-                <select value={sortBy} onChange={handleSortChange}>
-                    <option value="date">Date</option>
-                    <option value="date_desc">Date descending</option>
-                    <option value="name">Name</option>
-                    <option value="name_desc">Name descending</option>
-                    <option value="rating_desc">Highest rating</option>
-                    <option value="rating">Lowest rating</option>
-                    <option value="visits_desc">Most visited</option>
-                    <option value="visits">Least visited</option>
-                </select>
-                <label>Display mode: </label>
-                {/* <select value={displayMode} onChange={handleDisplayModeChange}> */}
-                <select>
-                    <option value="list">List</option>
-                    <option value="compact_list">Compact list</option>
-                    <option value="grid">Grid</option>
-                </select>
-                <label> (Total results: {totalCount})</label>
-
                 {data.map((item) => renderItem(item))}
                 <div className="pagination_navigation">
                     {Array.from({ length: totalPages }).map((_, index) => (

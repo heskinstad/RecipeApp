@@ -53,7 +53,7 @@ function ModifyRecipe({
     }, []);
 
     if (categories.length === 0) {
-        return null; // Fixed: Functional components should return null instead of empty undefined
+        return null;
     }
 
     const openPopup = () => {
@@ -64,16 +64,12 @@ function ModifyRecipe({
         setIsPopupOpen(false);
     };
 
-    // --- FORM VALIDATION LOGIC ---
-    // Verifies required string fields are not empty or just whitespace
     const hasName = formData.name?.trim();
     const hasSummary = formData.summary?.trim();
     const hasImagePath = formData.imagePath?.trim();
     
-    // Verifies a category selection exists OR a custom new category string is typed
     const hasCategory = formData.categoryId?.toString().trim() || formData.newCategory?.trim();
 
-    // Verifies Slate Rich Text editor content is not empty or just a blank HTML tag
     const hasDescription = formData.description?.trim() && formData.description !== "<p></p>";
 
     const isFormValid = hasName && hasSummary && hasImagePath && hasCategory && hasDescription;
@@ -161,7 +157,6 @@ function ModifyRecipe({
                 </div>
 
                 <div className="modifyRecipe_submit">
-                    {/* FIXED: Added 'disabled' property, removed window.history.back() from click */}
                     <button type="submit" disabled={!isFormValid}>
                         {isEditMode ? "Update" : "Create"}
                     </button>
@@ -172,7 +167,6 @@ function ModifyRecipe({
                 
                 {isEditMode && (
                     <div className="modifyRecipe_delete">
-                        {/* FIXED: Changed type to "button" so clicking this doesn't accidentally trigger form submit */}
                         <button type="button" onClick={openPopup}>Delete recipe</button>
                         <Popup
                             message="Are you sure you want to delete this recipe?"
