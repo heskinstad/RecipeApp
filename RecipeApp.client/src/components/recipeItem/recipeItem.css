@@ -11,7 +11,6 @@
     grid-template-rows: 50px auto auto;
     padding: 20px;
     color: #000;
-    border-bottom: 1px solid #ddd; /* Replaces your JSX <hr /> cleanly for lists */
 }
 
 .recipeItem_title { grid-area: title; }
@@ -24,44 +23,41 @@
     max-height: 150px; /* Prevents huge image blowouts */
 }
 .recipeItem_uploader { grid-area: uploader; text-align: center; }
-.recipeItem_rating { grid-area: rating; width: 100%; display: flex; justify-content: center; }
+.recipeItem_rating { grid-area: rating; width: 100%; display: flex; justify-content: left; }
 .recipeItem_visits { grid-area: visits; text-align: center; }
-.recipeItem_link:hover { background-color: #eee; }
+.recipeItem_link:hover { background-color: #eee !important; }
 .recipeItem_link a { text-decoration: none; user-select: none; }
 
 
 /* ==========================================================================
    2. GRID VIEW OVERRIDES (Cards: 2-3 per row)
    ========================================================================== */
-.grid .recipeItem_link {
+.cards .recipeItem_link {
     display: flex;
     flex-direction: column; /* Stack vertically like a card box */
     height: 100%;
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    padding: 1rem;
     background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 /* Fix image behavior inside a vertical box card */
-.grid .recipeItem_recipeImage {
-    order: -1; /* Forces image to move to the very top of the card */
+.cards .recipeItem_recipeImage {
+    order: 0; /* Forces image to move to the very top of the card */
     height: 160px;
     object-fit: cover; /* Crops cleanly inside card bounds */
-    margin-bottom: 12px;
+    margin-bottom: 0.5rem;
 }
 
 /* HIDE DESCRIPTION IN GRID VIEW */
-.grid .recipeItem_desc {
+.cards .recipeItem_desc {
     display: none;
 }
 
 /* Optional grid alignment fixes for footer items */
-.grid .recipeItem_uploader, 
-.grid .recipeItem_visits {
+.cards .recipeItem_uploader, 
+.cards .recipeItem_visits {
     font-size: 0.85rem;
-    margin-top: 5px;
+    margin-top: 0.25rem;
 }
 
 
@@ -77,8 +73,6 @@
     grid-template-rows: auto;
     gap: 15px;
     padding: 10px 15px;
-    border: 1px solid #eaeaea;
-    border-radius: 6px;
     align-items: center; /* Vertically aligns all elements perfectly center */
 }
 
@@ -88,7 +82,6 @@
     height: 55px;
     width: 55px;
     object-fit: cover;
-    border-radius: 4px;
 }
 
 .compact_list .recipeItem_title {

@@ -4,7 +4,7 @@ import "./addComment.css";
 
 function AddComment({recipeId, onCommentChange}) {
     const [formData, setFormData] = useState({
-            userId: "0198a3ae-a9d7-7dfe-9031-12e95619f54f",
+            userId: "019e2028-a994-7750-96d3-78323ac84807",
             recipeId: recipeId,
             message: "",
             upvotes: 0,

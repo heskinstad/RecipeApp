@@ -1,0 +1,111 @@
+/* Container layout */
+.ratingBlock_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  font-family: sans-serif;
+  position: relative;
+}
+
+.ratingBlock_block {
+  width: 64px;
+  height: 64px;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Remove hover effects from standard block, then add these: */
+.ratingBlock_clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ratingBlock_clickable:hover {
+  background-color: #d1d5db;
+}
+
+
+.ratingBlock_labelText {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+}
+
+/* Modal Popup Styles */
+.ratingBlock_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ratingBlock_modal {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.ratingBlock_modal h3 {
+  font-size: 2rem;
+  color: #1f2937;
+}
+
+/* 1-10 Grid Layout */
+.ratingBlock_grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 2 rows of 5 items */
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ratingBlock_numOption {
+  width: 4rem;
+  height: 4rem;
+  background-color: #eee;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+}
+
+.ratingBlock_numOption:hover {
+  background-color: #ddd;
+  border: none;
+}
+
+/* Cancel Button Styles */
+.ratingBlock_cancelBtn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ratingBlock_cancelBtn:hover {
+  color: #1f2937;
+}

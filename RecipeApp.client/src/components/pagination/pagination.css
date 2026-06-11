@@ -23,11 +23,20 @@
     font-weight: 700;
 }
 
-/* Container wrapper setup */
-.pagination_items_container {
+.pagination_items_container.cards {
     display: grid;
-    gap: 20px; /* Space between the cards */
-    margin: 20px 0;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.pagination_items_container.compact_list {
+    display: grid;
+    margin: 1rem;
+}
+
+.pagination_items_container.list {
+    display: grid;
+    margin: 1rem;
 }
 
 /* GRID MODE: Responsive 2 to 3 cards per row */
@@ -38,7 +47,6 @@
 /* COMPACT LIST MODE: Can be 2 columns or smaller list shapes */
 .pagination_items_container.compact_list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 12px;
 }
 
 /* STANDARD LIST MODE: 1 full-width item per row */

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import StarRatingDisplay from '../starRatingDisplay/starRatingDisplay';
 import missing_image from "../../resources/buttons/missing_image.png";
+import RatingBlock from '../ratingBlock/ratingBlock';
 
 function RecipeItem({recipe}) {
     const recipeRatingCountUrl = `https://localhost:63516/recipe/${recipe.id}/ratingsCount`;
@@ -40,11 +41,11 @@ function RecipeItem({recipe}) {
                     <h4>Uploader: {recipe.uploaderName}</h4>
                 </div>
                 <div className="recipeItem_rating">
-                    <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
+                    <RatingBlock recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
                 </div>
                 <div className="recipeItem_visits">
                     <br />
-                    <h4>Visits: {recipe.visits}</h4>
+                    <h4> {recipe.visits} visits</h4>
                 </div>
             </div>
         </Link>

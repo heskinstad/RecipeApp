@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import IngredientListItem from '../../components/ingredientListItem/ingredientListItem';
-import StarRatingDisplay from '../../components/starRatingDisplay/starRatingDisplay';
+import RatingBlock from '../../components/ratingBlock/ratingBlock';
 import CommentBlock from '../../components/commentBlock/commentBlock';
 import './recipe.css';
 import Collapsible from '../../components/collapsible/collapsible';
@@ -26,12 +26,25 @@ function Recipe() {
 
     const visitsUrl = `https://localhost:63516/recipe/${id}/addVisitor`;
 
+    const ratingUrl = `https://localhost:63516/recipe/${id}/ratings`;
+
     const addVisitor = () => {
         fetch(visitsUrl, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
+        })
+        .catch(console.error);
+    };
+
+    const addRecipeRating = (rating) => {
+        fetch(ratingUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ rating })
         })
         .catch(console.error);
     };
@@ -130,7 +143,7 @@ function Recipe() {
                 <p>
                     Give this recipe a rating!
                 </p>
-                <StarRatingDisplay name={`rating-${recipe.id}`} recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
+                <RatingBlock recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} interactive={true} />
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">
