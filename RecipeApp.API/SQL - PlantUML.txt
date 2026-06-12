@@ -1,88 +1,102 @@
 @startuml
 skinparam linetype ortho
 
-Entity category {
-<u>id
-name
+Entity Category {
+<u>Id
+Name
 }
 
-Entity user_comment {
-<u>id
-*user_id
-*recipe_id
-msg
-created_at
+Entity FavouriteList {
+<u>Id
+*UserId
+*RecipeId
 }
 
-Entity favourite_list {
-<u>id
-*user_id
-*recipe_id
+Entity Ingredient {
+<u>Id
+Name
 }
 
-Entity ingredient {
-<u>id
-name
+Entity Rating {
+<u>Id
+*UserId
+*RecipeId
+Score
 }
 
-Entity rating {
-<u>id
-*user_id
-*recipe_id
-score
+Entity Recipe {
+<u>Id
+Name
+Summary
+Description
+*CategoryId
+ImagePath
+*UploaderId
 }
 
-Entity recipe {
-<u>id
-name
-summary
-description
-*category_id
-image_path
-*uploader_id
+Entity RecipeIngredients {
+<u>Id
+*RecipeId
+*IngredientId
+Amount
+*UnitId
+Segment
 }
 
-Entity recipe_ingredients {
-<u>id
-*recipe_id
-*ingredient_id
-amount
-*unit_id
-segment
+Entity Unit {
+<u>Id
+Name
 }
 
-Entity unit {
-<u>id
-name
+Entity User {
+<u>Id
+Name
+CreatedAt
+UpdatedAt
 }
 
-Entity user {
-<u>id
-name
-created_at
-updated_at
+Entity UserComment {
+<u>Id
+*UserId
+*RecipeId
+Msg
+CreatedAt
+}
+
+Entity UserCommentVote {
+<u>Id
+*UserId
+*CommentId
+Upvote
+Downvote
+CreatedAt
+UpdatedAt
 }
 
 
-recipe }|-|| category
+Recipe }|-|| Category
 
-recipe ||--|{ user_comment
+Recipe ||--|{ UserComment
 
-recipe }|--|| user 
+Recipe }|--|| User 
 
-user ||---|{ user_comment
+User ||---|{ UserComment
 
-recipe ||--|{ favourite_list
+Recipe ||--|{ FavouriteList
 
-user ||--|{ favourite_list
+User ||--|{ FavouriteList
 
-recipe ||--|{ rating
+Recipe ||--|{ Rating
 
-rating }|-|| user
+Rating }|-|| User
 
-recipe ||--|{ recipe_ingredients
+Recipe ||--|{ RecipeIngredients
 
-unit ||--|{ recipe_ingredients
+Unit ||--|{ RecipeIngredients
 
-ingredient ||--|{ recipe_ingredients
+User ||--|| UserCommentVote
+
+UserComment ||-|| UserCommentVote
+
+Ingredient ||--|{ RecipeIngredients
 @enduml
