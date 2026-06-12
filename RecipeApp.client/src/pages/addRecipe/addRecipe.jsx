@@ -11,7 +11,7 @@ function AddRecipe() {
         description: "<p></p>",
         categoryId: "",
         imagePath: "",
-        uploaderId: "019e2028-a994-7750-96d3-78323ac84807",
+        uploaderId: "019ebb49-0925-7cdc-9693-3fe9fb1315f1",
     });
 
     const recipeUrl = "https://localhost:63516/recipe";

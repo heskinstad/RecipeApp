@@ -6,22 +6,6 @@ import missing_image from "../../resources/buttons/missing_image.png";
 import RatingBlock from '../ratingBlock/ratingBlock';
 
 function RecipeItem({recipe}) {
-    const recipeRatingCountUrl = `https://localhost:63516/recipe/${recipe.id}/ratingsCount`;
-    const [recipeRatingCount, setRecipeRatingCount] = useState([]);
-
-    const fetchRecipeRatingCount = () => {
-        fetch(recipeRatingCountUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((jsonData) => {
-            setRecipeRatingCount(jsonData);
-        })
-    };
-
-    useEffect(() => {
-        fetchRecipeRatingCount();
-    }, [recipe]);
 
     return (
         <Link to={`/recipe/${recipe.id}`.toLowerCase()}>
@@ -41,7 +25,7 @@ function RecipeItem({recipe}) {
                     <h4>Uploader: {recipe.uploaderName}</h4>
                 </div>
                 <div className="recipeItem_rating">
-                    <RatingBlock recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} />
+                    <RatingBlock recipeRating={recipe.avgRating} recipeId={recipe.id} />
                 </div>
                 <div className="recipeItem_visits">
                     <br />

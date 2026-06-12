@@ -18,9 +18,6 @@ function Recipe() {
     const ingredientsUrl = `https://localhost:63516/recipe/${id}/ingredients`;
     const [ingredients, setIngredients] = useState([]);
 
-    const recipeRatingCountUrl = `https://localhost:63516/recipe/${id}/ratingsCount`;
-    const [recipeRatingCount, setRecipeRatingCount] = useState([]);
-
     const commentsUrl = `https://localhost:63516/recipe/${id}/comments`;
     const [comments, setComments] = useState([]);
 
@@ -34,17 +31,6 @@ function Recipe() {
             headers: {
                 'Content-Type': 'application/json',
             },
-        })
-        .catch(console.error);
-    };
-
-    const addRecipeRating = (rating) => {
-        fetch(ratingUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ rating })
         })
         .catch(console.error);
     };
@@ -69,16 +55,6 @@ function Recipe() {
         })
     };
 
-    const fetchRecipeRatingCount = () => {
-        fetch(recipeRatingCountUrl)
-        .then((res) => {
-            return res.json();
-        })
-        .then((jsonData) => {
-            setRecipeRatingCount(jsonData);
-        })
-    };
-
     const fetchComments = () => {
         fetch(commentsUrl)
         .then((res) => {
@@ -92,7 +68,6 @@ function Recipe() {
     useEffect(() => {
         fetchRecipes();
         fetchIngredients();
-        fetchRecipeRatingCount();
         fetchComments();
         addVisitor();
     }, []);
@@ -143,7 +118,7 @@ function Recipe() {
                 <p>
                     Give this recipe a rating!
                 </p>
-                <RatingBlock recipeRatingCount={recipeRatingCount} recipeRating={recipe.avgRating} interactive={true} />
+                <RatingBlock recipeRating={recipe.avgRating} recipeId={recipe.id} onRatingChange={fetchRecipes} interactive={true} />
             </div>
             <div className="recipeComments">
                 <Collapsible label="Comments">

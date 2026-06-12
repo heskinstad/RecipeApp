@@ -2,7 +2,19 @@ import { useEffect, useState } from "react";
 import './ratingBlock.css';
 
 // Added the 'interactive' prop with a default value of false
-function RatingBlock({ recipeRatingCount, recipeRating, interactive = false }) {
+function RatingBlock({ recipeRating, recipeId, onRatingChange, interactive = false }) {
+  const recipeRatingCountUrl = `https://localhost:63516/recipe/${recipeId}/ratingsCount`;
+  const [recipeRatingCount, setRecipeRatingCount] = useState(0);
+
+  const recipeRatingScoreUrl = `https://localhost:63516/recipe/${recipeId}/ratings`;
+  const [recipeRatingScore, setRecipeRatingScore] = useState(0);
+
+  const [formData, setFormData] = useState({
+    userId: "019ebb49-0925-7cdc-9693-3fe9fb1315f1",
+    recipeId: recipeId,
+    score: 0,
+  });
+  
   const [selectedRating, setSelectedRating] = useState(
     Number(recipeRating).toFixed(1)
   );
@@ -14,10 +26,43 @@ function RatingBlock({ recipeRatingCount, recipeRating, interactive = false }) {
     }
   }, [recipeRating]);
 
-  const handleVoteSubmit = (userVote) => {
-    console.log(`User voted: ${userVote}`);
-    setIsEditing(false); 
+  const addRecipeRating = (rating) => {
+    const payload = {
+        userId: "019ebb49-0925-7cdc-9693-3fe9fb1315f1",
+        recipeId: recipeId,
+        score: rating,
+    };
+
+    fetch(recipeRatingScoreUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then (() => {
+      setIsEditing(false);
+      fetchRecipeRatingCount();
+      onRatingChange();
+    })
+    .catch(console.error);
   };
+
+  const fetchRecipeRatingCount = () => {
+      fetch(recipeRatingCountUrl)
+      .then((res) => {
+          return res.json();
+      })
+      .then((jsonData) => {
+          setRecipeRatingCount(jsonData);
+      })
+  };
+
+  useEffect(() => {
+    if (!recipeId) return;
+
+    fetchRecipeRatingCount();
+}, [recipeId]);
 
   // Scenario A: Render Interactive Button with Popups
   if (interactive) {
@@ -49,9 +94,10 @@ function RatingBlock({ recipeRatingCount, recipeRating, interactive = false }) {
               <div className="ratingBlock_grid">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                   <button
+                    name="score"
                     key={num}
                     className="ratingBlock_numOption"
-                    onClick={() => handleVoteSubmit(num)}
+                    onClick={() => addRecipeRating(num)}
                   >
                     {num}
                   </button>

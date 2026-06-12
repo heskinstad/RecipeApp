@@ -436,24 +436,48 @@ namespace RecipeApp.API.Endpoints
                 var newRating = mapper.Map<Rating>(rating);
 
                 newRating.RecipeId = id;
-                await ratingRepository.Insert(newRating);
 
-                var ratings = await ratingRepository
+                var existingRating = await ratingRepository.GetQueryable(
+                    r => r.RecipeId == id && 
+                    r.UserId == newRating.UserId)
+                    .FirstOrDefaultAsync();
+
+                int resultsType;
+
+                if (existingRating == null)
+                {
+                    await ratingRepository.Insert(newRating);
+                    resultsType = 0;
+                }
+                else
+                {
+                    if (newRating.Score != null)
+                        existingRating.Score = newRating.Score;
+                    existingRating.UpdatedAt = DateTime.UtcNow;
+
+                    await ratingRepository.Update(existingRating);
+                    resultsType = 1;
+                }
+
+            var ratings = await ratingRepository
                     .GetQueryable(r => r.RecipeId == id)
                     .ToListAsync();
 
-                float newAverageRating = 0;
-                if (ratings.Count > 0)
-                    newAverageRating = (float)Math.Round(ratings.Average(r => r.Score), 1);
+            float newAverageRating = 0;
+            if (ratings.Count > 0)
+                newAverageRating = (float)Math.Round(ratings.Average(r => r.Score), 1);
 
-                var recipe = await recipeRepository.GetById(id);
-                if (recipe == null)
-                    return Results.NotFound();
+            var recipe = await recipeRepository.GetById(id);
+            if (recipe == null)
+                return Results.NotFound();
 
-                recipe.AvgRating = newAverageRating;
-                await recipeRepository.Update(recipe);
+            recipe.AvgRating = newAverageRating;
+            await recipeRepository.Update(recipe);
 
+            if (resultsType == 0)
                 return TypedResults.Created($"/recipe/{recipe.Id}/ratings", newAverageRating);
+            else
+                return TypedResults.Ok(newAverageRating);
             }
             catch (Exception ex)
             {
